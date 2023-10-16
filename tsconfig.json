@@ -5,8 +5,10 @@
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
-      "@config/*": ["src/repositories/*"],
+      "@config/*": ["src/config/*"],
+      "@contexts/*": ["src/contexts/*"],
       "@hooks/*": ["src/hooks/*"],
+      "@interfaces/*": ["src/interfaces/*"],
       "@routes/*": ["src/routes/*"],
       "@screens/*": ["src/screens/*"],
       "@services/*": ["src/services/*"],

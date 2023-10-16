@@ -1,11 +1,21 @@
+import { Button } from '@components/Button';
+import { AppView } from '@components/View';
+import { Text } from '@components/Text';
+import { ParamListBase } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { Text, View } from 'react-native';
 
-const SignUp: React.FC = () => {
+const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
   return (
-    <View>
+    <AppView>
       <Text>SignUp</Text>
-    </View>
+      <Button
+        title="Já tenho conta"
+        onPress={() => navigation.replace('Login')}
+      />
+    </AppView>
   );
 };
 

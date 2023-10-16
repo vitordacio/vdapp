@@ -1,20 +1,23 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Login from '@screens/Login';
+import SignUp from '@screens/SignUp';
+import Welcome from '@screens/Welcome';
 
 import React from 'react';
 
-import Welcome from '@screens/Welcome';
-import SignUp from '@screens/SignUp';
-import Login from '@screens/Login';
-
-const Stack = createNativeStackNavigator();
+const Auth = createNativeStackNavigator();
 
 const AuthRoutes: React.FC = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Welcome" component={Welcome} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="Login" component={Login} />
-    </Stack.Navigator>
+    <Auth.Navigator initialRouteName="Welcome">
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="Welcome"
+        component={Welcome}
+      />
+      <Auth.Screen name="Login" component={Login} />
+      <Auth.Screen name="SignUp" component={SignUp} />
+    </Auth.Navigator>
   );
 };
 

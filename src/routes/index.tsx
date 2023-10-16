@@ -1,10 +1,17 @@
-import { NavigationContainer } from '@react-navigation/native';
-import TabRoutes from './app.routes';
+import React from 'react';
 
-export default function Routes() {
-  return (
-    <NavigationContainer>
-      <TabRoutes />
-    </NavigationContainer>
-  );
-}
+import useAuth from '@contexts/auth';
+import AuthRoutes from './auth.routes';
+import AppRoutes from './app.routes';
+
+const Routes: React.FC = () => {
+  const { signed } = useAuth();
+
+  // if (loading) {
+  //   return <View />
+  // }
+
+  return signed ? <AppRoutes /> : <AuthRoutes />;
+};
+
+export default Routes;
