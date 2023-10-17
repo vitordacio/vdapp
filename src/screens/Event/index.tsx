@@ -4,19 +4,22 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const handleTest = async () => {
-    console.log(navigation);
-    navigation.navigate('Event');
+    navigation.push('Home');
+  };
+  const handleTest2 = async () => {
+    navigation.push('Profile');
   };
   return (
     <View>
-      <Text>Profile</Text>
-      <Button onPress={handleTest} title="Go to Event" />
+      <Text>Event</Text>
+      <Button onPress={handleTest} title="Go to Home" />
+      <Button onPress={handleTest2} title="Go to Profile" />
     </View>
   );
 };
 
-export default Profile;
+export default Event;

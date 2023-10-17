@@ -1,9 +1,13 @@
-// import { Feather } from '@expo/vector-icons';
 import Feather from 'react-native-vector-icons/Feather';
 import React, { useState } from 'react';
-import { TextInputProps, TextInput as NativeTextInput } from 'react-native';
+import {
+  TextInputProps,
+  TextInput as NativeTextInput,
+  TouchableOpacity,
+} from 'react-native';
 import { Text } from '@components/Text';
 import { View } from '@components/View';
+import { Control, FieldValues, FieldError, Controller } from 'react-hook-form';
 import colors from '@styles/colors';
 import styles from './styles';
 
@@ -11,46 +15,54 @@ export type ITextInputProps = TextInputProps & {
   icon?: React.ComponentProps<typeof Feather>['name'];
   value?: string;
   title?: string;
+  status?: {
+    valid: boolean;
+  };
 };
 
-export function TextInput({ icon, value, title, ...rest }: ITextInputProps) {
+const TextInput = ({
+  icon,
+  value,
+  title,
+  status,
+  ...rest
+}: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+  const [isSecurity, setIsSecurity] = useState(rest.secureTextEntry);
+  const [isValid, setIsValid] = useState(false);
 
   function handleInputFocus() {
     setIsFocused(true);
   }
 
   function handleInputBlur() {
+    if (status) setIsValid(status.valid);
     setIsFocused(false);
     setIsFilled(!!value);
   }
 
   return (
     <>
-      <Text style={styles.title}>{title}</Text>
+      {title && <Text style={styles.title}>{title}</Text>}
       <View style={styles.container}>
-        <View
-          style={[
-            styles.icon_container,
-            isFocused && styles.icon_container_focused,
-          ]}
-        >
-          <Feather
-            name={icon}
-            size={24}
-            color={
-              isFocused || isFilled
-                ? `${colors.WHITE}`
-                : `${colors.GRAY_INPUT_PLACEHOLDER}`
-            }
-          />
-        </View>
+        {icon && (
+          <View style={[styles.icon_container, styles.icon]}>
+            <Feather
+              name={icon}
+              size={24}
+              color={
+                isFocused || isFilled
+                  ? `${colors.WHITE}`
+                  : `${colors.GRAY_INPUT_PLACEHOLDER}`
+              }
+            />
+          </View>
+        )}
 
         <NativeTextInput
           style={[
             styles.input_text,
-            isFocused && styles.input_text_focused,
             {
               color: `${
                 isFocused || isFilled
@@ -61,10 +73,64 @@ export function TextInput({ icon, value, title, ...rest }: ITextInputProps) {
           ]}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          // value={value}
           {...rest}
+          secureTextEntry={isSecurity}
         />
+
+        {rest.secureTextEntry && (
+          <TouchableOpacity
+            style={[styles.icon_container, styles.secret]}
+            onPress={() => setIsSecurity(!isSecurity)}
+          >
+            <Feather
+              name={isSecurity ? 'eye' : 'eye-off'}
+              size={24}
+              color={
+                isFocused || isFilled
+                  ? `${colors.WHITE}`
+                  : `${colors.GRAY_INPUT_PLACEHOLDER}`
+              }
+            />
+          </TouchableOpacity>
+        )}
+
+        {status && (
+          <View
+            style={[
+              styles.icon_container,
+              styles.secret,
+              { backgroundColor: `${isValid ? 'green' : 'red'}` },
+            ]}
+          ></View>
+        )}
       </View>
+    </>
+  );
+};
+
+type IControlledTextInputProps = ITextInputProps & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<FieldValues>;
+  name: string;
+  error?: FieldError;
+};
+
+export function ControlledTextInput({
+  control,
+  name,
+  error,
+  ...rest
+}: IControlledTextInputProps) {
+  return (
+    <>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <TextInput onChangeText={onChange} value={value} {...rest} />
+        )}
+      />
+      {error && <Text style={styles.error}>{error.message}</Text>}
     </>
   );
 }

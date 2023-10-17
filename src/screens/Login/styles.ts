@@ -2,6 +2,10 @@ import colors from '@styles/colors';
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+  container: {
+    paddingTop: 48,
+    paddingBottom: 48,
+  },
   transition: {
     display: 'flex',
     alignItems: 'center',
@@ -19,5 +23,12 @@ export default StyleSheet.create({
     color: '#fff',
     marginLeft: 16,
     marginRight: 16,
+  },
+  signup_text: {
+    textAlign: 'center',
+    color: `${colors.TEXT_DEFAULT}`,
+  },
+  signup_link: {
+    color: `${colors.BLUE_LINK}`,
   },
 });

@@ -16,13 +16,14 @@ interface IButtonProps extends PressableProps {
 export function Button({ title, onPress, type, ...rest }: IButtonProps) {
   return (
     <Pressable
+      onPress={onPress}
+      {...rest}
       style={({ pressed }) => [
         styles.container,
         type && styles[`${type}_container`],
         pressed && styles.pressed_container,
+        rest.style,
       ]}
-      onPress={onPress}
-      {...rest}
     >
       {({ pressed }) => {
         return (
