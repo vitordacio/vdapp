@@ -29,6 +29,8 @@ export default StyleSheet.create({
     color: `${colors.TEXT_DEFAULT}`,
   },
   signup_link: {
+    alignItems: 'center',
+    justifyContent: 'center',
     color: `${colors.BLUE_LINK}`,
   },
 });

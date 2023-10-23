@@ -7,9 +7,6 @@ export const View = (props: ViewProps) => {
   return <NativeView {...props} />;
 };
 
-// export const AppView = (props: ViewProps) => {
-//   return <NativeView {...props} style={[styles.app_view, props.style]} />;
-// };
 export const AppView = (props: ViewProps) => {
   return (
     <>

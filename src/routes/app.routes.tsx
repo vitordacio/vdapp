@@ -1,36 +1,13 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import Home from '@screens/Home';
-import Profile from '@screens/Profile';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import Event from '@screens/Event';
-import colors from '@styles/colors';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
-const TopTab = createMaterialTopTabNavigator();
-
-const TopRoutes: React.FC = () => {
-  return (
-    <TopTab.Navigator
-      screenOptions={{
-        tabBarLabelStyle: {
-          textTransform: 'capitalize',
-          fontWeight: 'bold',
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: `${colors.GOLD}`,
-        },
-      }}
-    >
-      <TopTab.Screen name="main" component={Home} />
-      <TopTab.Screen name="Latest" component={Profile} />
-    </TopTab.Navigator>
-  );
-};
+import OwnProfile from '@screens/Profile/OwnProfile';
+// import HomeRoutes from './home.routes';
 
 const BottomTab = createBottomTabNavigator();
 
-const TabRoutes: React.FC = () => {
+const BottomTabRoutes: React.FC = () => {
   return (
     <BottomTab.Navigator
       // initialRouteName="Home"
@@ -47,16 +24,46 @@ const TabRoutes: React.FC = () => {
             <Ionicons name={iconName as 'key'} size={size} color={color} />
           );
         },
-        tabBarActiveTintColor: `${colors.GOLD}`,
-        tabBarInactiveTintColor: `${colors.WHITE}`,
+        tabBarInactiveBackgroundColor: 'black',
+        tabBarActiveBackgroundColor: 'black',
+        tabBarActiveTintColor: 'yellow',
+        tabBarInactiveTintColor: 'white',
+        // tabBarActiveTintColor: `${colors.GOLD}`,
+        // tabBarInactiveTintColor: `${colors.WHITE}`,
       })}
     >
-      <BottomTab.Screen name="Home" component={TopRoutes} />
-      <BottomTab.Screen name="Profile" component={Profile} />
       {/* <BottomTab.Screen
-        name="HomeRoutes"
+        name="Home"
         component={HomeRoutes}
-        options={{ headerShown: false }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="home" color={color} size={size} />
+          ),
+          tabBarLabel: 'Início',
+        }}
+      /> */}
+
+      <BottomTab.Screen
+        name="Profile"
+        component={OwnProfile}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="user" color={color} size={size} />
+          ),
+          tabBarLabel: 'Perfil',
+          headerShown: false,
+        }}
+      />
+      {/* <BottomTab.Screen
+        name="Profile"
+        component={OwnProfile}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="user" color={color} size={size} />
+          ),
+          tabBarLabel: 'Perfil',
+          headerShown: false,
+        }}
       /> */}
     </BottomTab.Navigator>
   );
@@ -67,7 +74,11 @@ const App = createNativeStackNavigator();
 const AppRoutes: React.FC = () => {
   return (
     <App.Navigator>
-      <App.Screen name="TabRoutes" component={TabRoutes} />
+      <App.Screen
+        name="BottomTabRoutes"
+        component={BottomTabRoutes}
+        options={{ headerShown: false }}
+      />
       <App.Screen name="Event" component={Event} />
     </App.Navigator>
   );

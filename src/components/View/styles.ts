@@ -5,6 +5,10 @@ export default StyleSheet.create({
   app_view: {
     backgroundColor: `${colors.VIEW_BACKGROUND}`,
     flex: 1,
-    padding: 8,
+    // padding: 8,
+    paddingLeft: 14,
+    paddingRight: 14,
+    paddingTop: 14,
+    paddingBottom: 32,
   },
 });

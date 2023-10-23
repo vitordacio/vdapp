@@ -20,7 +20,7 @@ type LoginFormData = yup.InferType<typeof schema>;
 const FormLogin: React.FC = () => {
   const { SignIn } = useAuth();
   const handleLogin = async (data: LoginFormData) => {
-    console.log(data);
+    console.log('login form', data);
 
     // return;
     SignIn();

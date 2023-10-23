@@ -16,20 +16,9 @@ import { Icon } from '@components/Icon';
 
 import styles from './styles';
 
-interface IUser {
-  username: 'string';
-  friendship_count: number;
-  emoji_count: number;
-  location: string;
-  bio: string;
-  private: boolean;
-}
-
-interface IProfile extends NativeStackScreenProps<ParamListBase> {
-  user: IUser;
-}
-
-const Profile: React.FC<IProfile> = ({ navigation, user }) => {
+const OwnProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
   console.log(navigation);
 
   const handleEditProfile = async () => {
@@ -50,12 +39,12 @@ const Profile: React.FC<IProfile> = ({ navigation, user }) => {
         <View style={styles.container}>
           <CoverPhoto />
           <Picture />
-          <Text style={styles.username}>{user.username}</Text>
+          <Text style={styles.username}>@nomedeusuario</Text>
           <Socials socials={['instagram', 'twitter', 'tiktok', 'twitch']} />
           <View style={styles.counts}>
-            <Counts number={user.friendship_count} description="Amigos" />
+            <Counts number={87} description="Amigos" />
             <LineY />
-            <Counts number={user.emoji_count} description="Emotes" />
+            <Counts number={85} description="Emotes" />
           </View>
           <View style={styles.buttons}>
             <Button
@@ -68,15 +57,13 @@ const Profile: React.FC<IProfile> = ({ navigation, user }) => {
           </View>
           <View style={styles.location}>
             <Icon name="location" style={{ height: 19, width: 11.83 }} />
-            <Text style={styles.text}>{user.location}</Text>
+            <Text style={styles.text}>Petrolina-PE</Text>
           </View>
-          <Text style={styles.text}>{user.bio}</Text>
+          <Text style={styles.text}>
+            Adsadas dsiadiasj sdalpwldpq dpwldpakdq dqpkdqpw dqkpwqk
+          </Text>
           <View style={styles.private}>
-            <Feather
-              name={user.private ? 'lock' : 'unlock'}
-              size={24}
-              color={`${colors.TEXT_DEFAULT}`}
-            />
+            <Feather name="lock" size={24} color={`${colors.TEXT_DEFAULT}`} />
           </View>
         </View>
       </ScrollView>
@@ -84,4 +71,4 @@ const Profile: React.FC<IProfile> = ({ navigation, user }) => {
   );
 };
 
-export default Profile;
+export default OwnProfile;

@@ -8,10 +8,10 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const handleTest = async () => {
-    navigation.push('Home');
+    navigation.navigate('Home');
   };
   const handleTest2 = async () => {
-    navigation.push('Profile');
+    navigation.navigate('Profile');
   };
   return (
     <View>

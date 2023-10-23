@@ -19,4 +19,5 @@ export default {
   BUTTON_BORDER: '#FFFFFF',
   BUTTON_TEXT: '#000000',
   LINE: '#FFFFFF',
+  NO_CONTENT_PICTURE: '#D9D9D9',
 };

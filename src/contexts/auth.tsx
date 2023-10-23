@@ -38,9 +38,10 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
 
   const SignIn = async () => {
     const response = await auth.SignIn();
-    console.log('resposta do clique', response);
+    console.log('auth context', response);
     // const { token, user } = response;
     setUser(response.user);
+    console.log(user);
 
     // api.defaults.headers.options.Authorization = `Bearer ${response.token}`;
 

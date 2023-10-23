@@ -5,6 +5,7 @@ import React from 'react';
 
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter';
+import { AuthProvider } from '@contexts/auth';
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -15,5 +16,9 @@ export default function App() {
     <AppLoading />;
   }
 
-  return <Routes />;
+  return (
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
+  );
 }

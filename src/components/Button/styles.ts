@@ -10,6 +10,8 @@ const commonStyles: {
   container: {
     width: '100%',
     height: 40,
+    flexDirection: 'row',
+    gap: 8,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
