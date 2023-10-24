@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import Event from '@screens/Event';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import OwnProfile from '@screens/Profile/OwnProfile';
+import ProfileRoutes from './profile.routes';
 // import HomeRoutes from './home.routes';
 
 const BottomTab = createBottomTabNavigator();
@@ -44,8 +44,8 @@ const BottomTabRoutes: React.FC = () => {
       /> */}
 
       <BottomTab.Screen
-        name="Profile"
-        component={OwnProfile}
+        name="User"
+        component={ProfileRoutes}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />

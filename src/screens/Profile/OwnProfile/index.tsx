@@ -13,20 +13,26 @@ import { ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import colors from '@styles/colors';
 import { Icon } from '@components/Icon';
+import { ProfileTopTabRoutes } from '@routes/profile.routes';
 
 import styles from './styles';
 
 const OwnProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  console.log(navigation);
+  const handleFriends = async () => {
+    navigation.navigate('Friends');
+  };
 
+  const handleEmotes = async () => {
+    navigation.navigate('Emotes');
+  };
   const handleEditProfile = async () => {
-    console.log('go to profile');
+    navigation.navigate('EditProfile');
   };
 
   const handleInbox = async () => {
-    console.log('go to inbox');
+    navigation.navigate('Inbox');
   };
 
   return (
@@ -42,9 +48,9 @@ const OwnProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           <Text style={styles.username}>@nomedeusuario</Text>
           <Socials socials={['instagram', 'twitter', 'tiktok', 'twitch']} />
           <View style={styles.counts}>
-            <Counts number={87} description="Amigos" />
+            <Counts number={87} description="Amigos" onPress={handleFriends} />
             <LineY />
-            <Counts number={85} description="Emotes" />
+            <Counts number={85} description="Emotes" onPress={handleEmotes} />
           </View>
           <View style={styles.buttons}>
             <Button
@@ -65,6 +71,9 @@ const OwnProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           <View style={styles.private}>
             <Feather name="lock" size={24} color={`${colors.TEXT_DEFAULT}`} />
           </View>
+        </View>
+        <View style={{ minHeight: 500 }}>
+          <ProfileTopTabRoutes />
         </View>
       </ScrollView>
     </AppView>

@@ -9,13 +9,13 @@ interface ICountProps extends TextProps {
   description: string;
 }
 
-export const Counts: React.FC<ICountProps> = ({ number, description }) => {
-  const handleTest = async () => {
-    console.log('picture');
-  };
-
+export const Counts: React.FC<ICountProps> = ({
+  number,
+  description,
+  ...props
+}) => {
   return (
-    <Pressable onPress={handleTest} style={styles.container}>
+    <Pressable {...props} style={styles.container}>
       <Text style={styles.number}>{number}</Text>
       <Text style={styles.description}>{description}</Text>
     </Pressable>
