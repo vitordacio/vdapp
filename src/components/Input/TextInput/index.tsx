@@ -115,11 +115,6 @@ const TextInput = ({
             )}
           </View>
         )}
-        {/* {isValid && (
-          <View style={[styles.icon_container, styles.right]}>
-            <Feather name="check" size={24} color="green" />
-          </View>
-        )} */}
       </View>
     </>
   );

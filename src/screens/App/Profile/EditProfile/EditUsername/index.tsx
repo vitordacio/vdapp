@@ -28,7 +28,6 @@ const EditUsername = () => {
 
   const handleUsername = async (data: UsernameFormData) => {
     const valid = await handleValid(data.username);
-    console.log('valid', valid);
     if (!valid) return;
     setForm(data);
     setConfirm(true);
@@ -60,7 +59,6 @@ const EditUsername = () => {
       </>
       <Button
         onPress={handleSubmit(handleUsername)}
-        // onPress={handleSubmit(handleUsername)}
         title="Salvar"
         type="blue"
       />

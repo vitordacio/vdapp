@@ -12,6 +12,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 120,
   },
+  picture_container: {
+    position: 'relative',
+  },
+  camera: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+  },
   edit_username: {
     gap: 16,
     display: 'flex',
@@ -25,36 +33,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: `${colors.TEXT_DEFAULT}`,
   },
-  counts: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 27,
-    marginBottom: 21,
-  },
-  buttons: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 5,
-    marginBottom: 21,
-  },
-  location: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 8,
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: 16,
-    color: `${colors.TEXT_DEFAULT}`,
-    marginBottom: 8,
-    maxWidth: 250,
-  },
-  private: {
-    width: '100%',
-    alignItems: 'flex-end',
-    marginBottom: 5,
+  options: {
+    gap: 16,
   },
 });
 
