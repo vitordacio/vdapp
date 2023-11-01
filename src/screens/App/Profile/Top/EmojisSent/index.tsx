@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Custom = () => {
+const EmojisSent = () => {
   return (
     <View>
-      <Text>Custom</Text>
+      <Text>EmojisSent</Text>
     </View>
   );
 };
 
-export default Custom;
+export default EmojisSent;

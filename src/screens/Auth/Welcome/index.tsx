@@ -5,8 +5,8 @@ import React from 'react';
 import { ImageBackground, View } from 'react-native';
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
+import welcome from '@assets/welcome.svg';
 import styles from './styles';
-import welcome from '../../assets/welcome.svg';
 
 const Welcome: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,

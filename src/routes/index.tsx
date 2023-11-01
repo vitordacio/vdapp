@@ -9,6 +9,8 @@ import useAuth from '@contexts/auth';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 // import AppRoutes from './app.routes';
 // import SignedRoutes from './signed.routes';
+import { SafeAreaView } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppRoutes from './app.routes';
 import AuthRoutes from './auth.routes';
 
@@ -22,12 +24,21 @@ const Routes: React.FC = () => {
   // const currentTheme = useColorScheme();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer
-      // theme={currentTheme === 'dark' ? DarkTheme : DefaultTheme}
-      >
-        {/* <StatusBar style="auto" /> */}
-        {!signed ? <AppRoutes /> : <AuthRoutes />}
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: 'transparent',
+          }}
+        >
+          <NavigationContainer
+          // theme={currentTheme === 'dark' ? DarkTheme : DefaultTheme}
+          >
+            {/* <StatusBar style="auto" /> */}
+            {!signed ? <AppRoutes /> : <AuthRoutes />}
+          </NavigationContainer>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 };

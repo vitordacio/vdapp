@@ -1,8 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import Event from '@screens/Event';
+import Event from '@screens/App/Event';
+import User from '@screens/App/User';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProfileRoutes from './profile.routes';
+import colors from '@styles/colors';
+import AppProfileRoutes from './profile.routes';
 // import HomeRoutes from './home.routes';
 
 const BottomTab = createBottomTabNavigator();
@@ -24,12 +26,10 @@ const BottomTabRoutes: React.FC = () => {
             <Ionicons name={iconName as 'key'} size={size} color={color} />
           );
         },
-        tabBarInactiveBackgroundColor: 'black',
-        tabBarActiveBackgroundColor: 'black',
-        tabBarActiveTintColor: 'yellow',
-        tabBarInactiveTintColor: 'white',
-        // tabBarActiveTintColor: `${colors.GOLD}`,
-        // tabBarInactiveTintColor: `${colors.WHITE}`,
+        tabBarInactiveBackgroundColor: `${colors.BLACK}`,
+        tabBarActiveBackgroundColor: `${colors.BLACK}`,
+        tabBarActiveTintColor: `${colors.GOLD}`,
+        tabBarInactiveTintColor: `${colors.TEXT_DEFAULT}`,
       })}
     >
       {/* <BottomTab.Screen
@@ -44,8 +44,8 @@ const BottomTabRoutes: React.FC = () => {
       /> */}
 
       <BottomTab.Screen
-        name="User"
-        component={ProfileRoutes}
+        name="AppProfile"
+        component={AppProfileRoutes}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
@@ -80,6 +80,7 @@ const AppRoutes: React.FC = () => {
         options={{ headerShown: false }}
       />
       <App.Screen name="Event" component={Event} />
+      <App.Screen name="User" component={User} />
     </App.Navigator>
   );
 };

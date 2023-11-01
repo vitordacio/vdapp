@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Custom = () => {
+const Inbox = () => {
   return (
     <View>
-      <Text>Custom</Text>
+      <Text>Inbox</Text>
     </View>
   );
 };
 
-export default Custom;
+export default Inbox;

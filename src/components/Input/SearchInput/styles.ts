@@ -2,47 +2,30 @@ import colors from '@styles/colors';
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  title: {
-    fontSize: 16,
-    color: `${colors.TEXT_DEFAULT}`,
-    marginBottom: 15,
-  },
   container: {
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 17,
+    marginBottom: 34,
     minHeight: 40,
-    marginLeft: 8,
-    marginRight: 8,
   },
   input_text: {
     flex: 1,
     borderRadius: 8,
     backgroundColor: `${colors.GRAY_INPUT_BACKGROUND}`,
-    paddingLeft: 56,
+    paddingLeft: 25,
     paddingRight: 56,
-    // paddingLeft: 48,
-    // paddingRight: 48,
   },
   icon_container: {
     position: 'absolute',
+    right: 16,
     height: 40,
     width: 40,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: `${colors.GRAY_INPUT_BACKGROUND}`,
   },
-  left: {
-    left: 0,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-  },
-  right: {
-    right: 0,
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
-  },
+
   error: {
     color: `${colors.RED}`,
     textAlign: 'center',

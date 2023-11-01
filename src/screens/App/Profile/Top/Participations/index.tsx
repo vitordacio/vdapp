@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Custom = () => {
+const Participations = () => {
   return (
     <View>
-      <Text>Custom</Text>
+      <Text>Participations</Text>
     </View>
   );
 };
 
-export default Custom;
+export default Participations;

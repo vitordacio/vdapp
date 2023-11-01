@@ -19,6 +19,8 @@ interface IButtonProps extends PressableProps {
   title?: string;
   type?: string;
   icon?: React.ComponentProps<typeof Feather>['name'];
+  iconSize?: number;
+  iconColor?: string;
   svg?: keyof typeof svgMapping;
   onPress?: (e: GestureResponderEvent) => void;
 }
@@ -28,6 +30,8 @@ export function Button({
   onPress,
   type,
   icon,
+  iconSize,
+  iconColor,
   svg,
   ...rest
 }: IButtonProps) {
@@ -56,7 +60,13 @@ export function Button({
                 {title}
               </Text>
             )}
-            {icon && <Feather name={icon} size={24} color="black" />}
+            {icon && (
+              <Feather
+                name={icon}
+                size={iconSize || 24}
+                color={iconColor || 'black'}
+              />
+            )}
             {svg && (
               <ImageBackground
                 style={{ width: 24, height: 24 }}

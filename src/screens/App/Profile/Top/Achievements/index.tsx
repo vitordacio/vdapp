@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Custom = () => {
+const Achievements = () => {
   return (
     <View>
-      <Text>Custom</Text>
+      <Text>Achievements</Text>
     </View>
   );
 };
 
-export default Custom;
+export default Achievements;

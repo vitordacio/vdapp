@@ -1,6 +1,5 @@
 import React from 'react';
-import { View as NativeView, ViewProps, SafeAreaView } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { View as NativeView, ViewProps } from 'react-native';
 import styles from './styles';
 
 export const View = (props: ViewProps) => {
@@ -8,18 +7,5 @@ export const View = (props: ViewProps) => {
 };
 
 export const AppView = (props: ViewProps) => {
-  return (
-    <>
-      <SafeAreaProvider>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            backgroundColor: 'transparent',
-          }}
-        >
-          <NativeView {...props} style={[styles.app_view, props.style]} />
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </>
-  );
+  return <NativeView {...props} style={[styles.app_view, props.style]} />;
 };
