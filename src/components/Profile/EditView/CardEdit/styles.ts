@@ -3,29 +3,34 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%',
     padding: 26,
+    gap: 32,
+
     borderRadius: 8,
     backgroundColor: `${colors.GRAY_CARD}`,
-    paddingLeft: 65,
+  },
+  option: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    gap: 10,
   },
   title: {
     fontSize: 14,
     color: `${colors.GRAY_DESCRIPTION}`,
-    marginBottom: 10,
   },
   description: {
+    // marginTop: 10,
+
     fontSize: 16,
     color: `${colors.TEXT_DEFAULT}`,
-    marginBottom: 10,
   },
   icon: {
     position: 'absolute',
-    right: 26,
-    bottom: 26,
+    right: 0,
+    bottom: 0,
   },
 });
 

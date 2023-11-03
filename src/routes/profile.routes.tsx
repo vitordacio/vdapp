@@ -11,6 +11,13 @@ import Achievements from '@screens/App/Profile/Top/Achievements';
 import EmojisSent from '@screens/App/Profile/Top/EmojisSent';
 import Events from '@screens/App/Profile/Top/Events';
 import Participations from '@screens/App/Profile/Top/Participations';
+import EditBio from '@screens/App/Profile/EditProfile/EditBio';
+import EditEmail from '@screens/App/Profile/EditProfile/EditEmail';
+import EditGender from '@screens/App/Profile/EditProfile/EditGender';
+import EditLocation from '@screens/App/Profile/EditProfile/EditLocation';
+import EditName from '@screens/App/Profile/EditProfile/EditName';
+import EditPrivacy from '@screens/App/Profile/EditProfile/EditPrivacy';
+import EditSocials from '@screens/App/Profile/EditProfile/EditSocials';
 
 const EditProfileStackTab = createNativeStackNavigator();
 
@@ -34,6 +41,16 @@ export const EditProfileRoutes: React.FC = () => {
         name="EditUsername"
         component={EditUsername}
       />
+      <EditProfileStackTab.Screen name="EditName" component={EditName} />
+      <EditProfileStackTab.Screen name="EditBio" component={EditBio} />
+      <EditProfileStackTab.Screen
+        name="EditLocation"
+        component={EditLocation}
+      />
+      <EditProfileStackTab.Screen name="EditGender" component={EditGender} />
+      <EditProfileStackTab.Screen name="EditSocials" component={EditSocials} />
+      <EditProfileStackTab.Screen name="EditPrivacy" component={EditPrivacy} />
+      <EditProfileStackTab.Screen name="EditEmail" component={EditEmail} />
       <EditProfileStackTab.Screen
         name="EditPassword"
         component={EditPassword}
@@ -48,9 +65,9 @@ export const ProfileTopTabRoutes: React.FC = () => {
   return (
     <ProfileTopTab.Navigator
       screenOptions={{
-        tabBarLabelStyle: { color: 'white' }, // Cor do texto da aba
-        tabBarStyle: { backgroundColor: 'black' }, // Cor de fundo da aba
-        tabBarIndicatorStyle: { backgroundColor: 'yellow' }, // Cor de fundo da aba selecionada
+        tabBarLabelStyle: { color: 'white' },
+        tabBarStyle: { backgroundColor: 'black' },
+        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
       }}
     >
       <ProfileTopTab.Screen

@@ -16,7 +16,7 @@ const schema = yup.object({
 
 type UsernameFormData = yup.InferType<typeof schema>;
 
-const EditUsername = () => {
+const EditUsername: React.FC = () => {
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
@@ -50,8 +50,8 @@ const EditUsername = () => {
         <ControlledTextInput
           name="username"
           control={control}
-          icon="user"
-          placeholder="@nomedeusuario"
+          icon="at-sign"
+          placeholder="@"
           autoCapitalize="none"
           error={errors.username}
           status={handleValid}

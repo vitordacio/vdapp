@@ -27,11 +27,19 @@ export const CardEdit: React.FC<IConfirmEditProps> = ({
     <View style={styles.container}>
       {options &&
         options.map(option => (
-          <Pressable onPress={() => navigation.navigate(option.redirect)}>
+          <Pressable
+            style={styles.option}
+            key={option.title}
+            onPress={() => navigation.navigate(option.redirect)}
+          >
             <Text style={styles.title}>{option.title}</Text>
-            <Text style={styles.description}>{option.description}</Text>
+
+            {option.description && (
+              <Text style={styles.description}>{option.description}</Text>
+            )}
+
             <View style={styles.icon}>
-              <Feather name={option.icon || 'edit'} size={30} color="white" />
+              <Feather name={option.icon || 'edit'} size={19} color="white" />
             </View>
           </Pressable>
         ))}

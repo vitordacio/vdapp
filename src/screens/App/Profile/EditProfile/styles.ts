@@ -6,11 +6,12 @@ const styles = StyleSheet.create({
     position: 'relative',
     paddingLeft: 8,
     paddingRight: 8,
+    paddingBottom: 32,
+    paddingTop: 120,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    paddingTop: 120,
   },
   picture_container: {
     position: 'relative',
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
     color: `${colors.TEXT_DEFAULT}`,
   },
   options: {
+    width: '100%',
     gap: 16,
   },
 });

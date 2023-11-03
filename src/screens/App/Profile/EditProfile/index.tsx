@@ -5,7 +5,7 @@ import { Picture } from '@components/Profile/Picture';
 import { AppView, View } from '@components/View';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import {
   ICardEditOption,
@@ -17,78 +17,56 @@ import styles from './styles';
 const EditProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  const [options, setOptions] = useState(
-    {} as {
-      name: ICardEditOption;
-      bio: ICardEditOption;
-      location: ICardEditOption;
-      gender: ICardEditOption;
-      socials: ICardEditOption;
-      privacy: ICardEditOption;
-      email: ICardEditOption;
-      password: ICardEditOption;
-    },
-  );
-
-  // const handleEditUsername = async () => {
-  //   navigation.navigate('EditUsername');
-  // };
-
-  useEffect(() => {
-    const name: ICardEditOption = {
+  const options = {
+    name: {
       title: 'Name',
-      redirect: 'EditUsername',
+      redirect: 'EditName',
       description: 'Nome do Usuário',
-    };
-    const bio: ICardEditOption = {
+    },
+    bio: {
       title: 'Biografia',
       redirect: 'EditBio',
       description: 'Alguma biografia aqui',
-    };
-    const location: ICardEditOption = {
-      title: 'Name',
+    },
+    location: {
+      title: 'Localização',
       redirect: 'EditLocation',
       description: 'Petrolina - PE',
-    };
-    const gender: ICardEditOption = {
+    },
+    gender: {
       title: 'Gênero',
       redirect: 'EditGender',
       icon: 'arrow-right',
-    };
-    const socials: ICardEditOption = {
+    },
+    socials: {
       title: 'Ligação a redes sociais',
       redirect: 'EditSocials',
       icon: 'plus',
-    };
-    const privacy: ICardEditOption = {
+    },
+    privacy: {
       title: 'Privacidade',
       redirect: 'EditPrivacy',
       description: 'Seu perfil é público',
       icon: 'arrow-right',
-    };
-    const email: ICardEditOption = {
+    },
+    email: {
       title: 'E-mail',
       redirect: 'EditEmail',
-    };
-    const password: ICardEditOption = {
+    },
+    password: {
       title: 'Senha',
       redirect: 'EditPassword',
-    };
-    setOptions({
-      name,
-      bio,
-      location,
-      gender,
-      socials,
-      privacy,
-      email,
-      password,
-    });
-  }, []);
-
-  // const handleEditPassword = async () => {
-  //   navigation.navigate('EditPassword');
-  // };
+    },
+  } as {
+    name: ICardEditOption;
+    bio: ICardEditOption;
+    location: ICardEditOption;
+    gender: ICardEditOption;
+    socials: ICardEditOption;
+    privacy: ICardEditOption;
+    email: ICardEditOption;
+    password: ICardEditOption;
+  };
 
   return (
     <AppView
@@ -118,11 +96,17 @@ const EditProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             </TouchableOpacity>
           </View>
           <View style={styles.options}>
-            <CardEdit options={[options.name, options.bio, options.location]} />
-            <CardEdit options={[options.gender]} />
-            <CardEdit options={[options.socials]} />
-            <CardEdit options={[options.privacy]} />
-            <CardEdit options={[options.email, options.password]} />
+            <CardEdit
+              navigation={navigation}
+              options={[options.name, options.bio, options.location]}
+            />
+            <CardEdit navigation={navigation} options={[options.gender]} />
+            <CardEdit navigation={navigation} options={[options.socials]} />
+            <CardEdit navigation={navigation} options={[options.privacy]} />
+            <CardEdit
+              navigation={navigation}
+              options={[options.email, options.password]}
+            />
           </View>
         </View>
       </ScrollView>
