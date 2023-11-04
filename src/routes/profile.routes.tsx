@@ -36,7 +36,10 @@ export const EditProfileRoutes: React.FC = () => {
         headerTitleAlign: 'center',
       }}
     >
-      <EditProfileStackTab.Screen name="EditProfile" component={EditProfile} />
+      <EditProfileStackTab.Screen
+        name="EditProfileScreen"
+        component={EditProfile}
+      />
       <EditProfileStackTab.Screen
         name="EditUsername"
         component={EditUsername}

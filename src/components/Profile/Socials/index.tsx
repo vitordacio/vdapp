@@ -10,6 +10,7 @@ const assetMapping: Record<string, ImageSourcePropType> = {
   tiktok: assets.tiktok,
   twitter: assets.twitter,
   twitch: assets.twitch,
+  youtube: assets.youtube,
 };
 
 interface ISocialProps {

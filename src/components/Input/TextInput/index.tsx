@@ -17,6 +17,7 @@ export type ITextInputProps = TextInputProps & {
   value?: string;
   title?: string;
   status?: (data: string) => Promise<boolean>;
+  lengthMax?: number;
 };
 
 const TextInput = ({
@@ -25,19 +26,14 @@ const TextInput = ({
   title,
   status,
   onChange,
+  lengthMax,
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [isSecurity, setIsSecurity] = useState(rest.secureTextEntry);
   const [isValid, setIsValid] = useState(false);
-
-  // async function handleChangeText() {
-  //   console.log('on change');
-  //   console.log('value', value);
-  //   teste();
-  //   if (status) setIsValid(value ? await status(value) : false);
-  // }
+  const [lengthCount, setLengthCount] = useState(0);
 
   function handleInputFocus() {
     setIsFocused(true);
@@ -52,7 +48,7 @@ const TextInput = ({
   return (
     <>
       {title && <Text style={styles.title}>{title}</Text>}
-      <View style={styles.container}>
+      <View style={[styles.container]}>
         {icon && (
           <View style={[styles.icon_container, styles.left]}>
             <Feather
@@ -77,16 +73,25 @@ const TextInput = ({
                   : `${colors.GRAY_INPUT_PLACEHOLDER}`
               }`,
             },
+            lengthMax && { height: 96, paddingTop: 8 },
+            icon
+              ? { paddingLeft: 48, paddingRight: 48 }
+              : { paddingLeft: 16, paddingRight: 16 },
           ]}
+          // maxLength={maxLength}
+          maxLength={lengthMax || undefined}
+          textAlignVertical={lengthMax ? 'top' : 'auto'}
+          multiline={!!lengthMax}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           onChangeText={async e => {
             onChange(e);
             setIsFilled(!!e);
             if (status) setIsValid(await status(e));
+            if (lengthMax) setLengthCount(e.length);
           }}
-          secureTextEntry={isSecurity}
           {...rest}
+          secureTextEntry={isSecurity}
         />
 
         {rest.secureTextEntry && (
@@ -113,6 +118,14 @@ const TextInput = ({
             ) : (
               <Feather name="x" size={24} color="red" />
             )}
+          </View>
+        )}
+
+        {lengthMax && (
+          <View style={styles.bottom_right}>
+            <Text style={styles.length_count}>
+              {lengthCount}/{lengthMax}
+            </Text>
           </View>
         )}
       </View>

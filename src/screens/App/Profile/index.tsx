@@ -46,7 +46,9 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           <CoverPhoto />
           <Picture />
           <Text style={styles.username}>@nomedeusuario</Text>
-          <Socials socials={['instagram', 'twitter', 'tiktok', 'twitch']} />
+          <Socials
+            socials={['instagram', 'twitter', 'tiktok', 'twitch', 'youtube']}
+          />
           <View style={styles.counts}>
             <Counts number={87} description="Amigos" onPress={handleFriends} />
             <LineY />

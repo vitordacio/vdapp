@@ -5,14 +5,14 @@ import User from '@screens/App/User';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import colors from '@styles/colors';
 import AppProfileRoutes from './profile.routes';
-// import HomeRoutes from './home.routes';
+import HomeRoutes from './home.routes';
 
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabRoutes: React.FC = () => {
   return (
     <BottomTab.Navigator
-      // initialRouteName="Home"
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, focused, size }) => {
           let iconName: string;
@@ -32,7 +32,7 @@ const BottomTabRoutes: React.FC = () => {
         tabBarInactiveTintColor: `${colors.TEXT_DEFAULT}`,
       })}
     >
-      {/* <BottomTab.Screen
+      <BottomTab.Screen
         name="Home"
         component={HomeRoutes}
         options={{
@@ -41,7 +41,7 @@ const BottomTabRoutes: React.FC = () => {
           ),
           tabBarLabel: 'Início',
         }}
-      /> */}
+      />
 
       <BottomTab.Screen
         name="AppProfile"

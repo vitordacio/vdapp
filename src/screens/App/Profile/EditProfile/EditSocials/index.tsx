@@ -6,6 +6,7 @@ import { EditView } from '@components/Profile/EditView';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { ConfirmEdit } from '@components/Profile/EditView/ConfirmEdit';
+import { Socials } from '@components/Profile/Socials';
 
 const schema = yup.object({
   socials: yup.string(),
@@ -35,6 +36,9 @@ const EditSocials: React.FC = () => {
       name="Ligações a redes sociais"
       description="Você pode editar a suas ligações a qualquer momento."
     >
+      <Socials
+        socials={['instagram', 'twitter', 'tiktok', 'twitch', 'youtube']}
+      />
       <>
         <ControlledTextInput
           name="socials"

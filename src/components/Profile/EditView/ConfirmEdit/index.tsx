@@ -25,6 +25,7 @@ export const ConfirmEdit: React.FC<IConfirmEditProps> = ({
     console.log('confirm');
     console.log('type', type);
     console.log('data', data);
+    setConfirm(false);
   };
 
   return (

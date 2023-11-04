@@ -35,15 +35,14 @@ const EditBio: React.FC = () => {
       name="Biografia"
       description="Você pode editar a sua biografia a qualquer momento."
     >
-      <>
-        <ControlledTextInput
-          name="bio"
-          control={control}
-          icon="user"
-          placeholder="Nome"
-          error={errors.bio}
-        />
-      </>
+      <ControlledTextInput
+        name="bio"
+        control={control}
+        placeholder="Biografia"
+        error={errors.bio}
+        lengthMax={80}
+      />
+
       <Button onPress={handleSubmit(handleBio)} title="Salvar" type="blue" />
       {confirm && (
         <ConfirmEdit

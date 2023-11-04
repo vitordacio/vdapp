@@ -42,7 +42,7 @@ const EditName: React.FC = () => {
         <ControlledTextInput
           name="name"
           control={control}
-          icon="user"
+          // icon="user"
           placeholder="Nome"
           error={errors.name}
         />

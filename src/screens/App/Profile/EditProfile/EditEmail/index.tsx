@@ -35,7 +35,6 @@ const EditEmail: React.FC = () => {
       <>
         <ControlledTextInput
           name="email"
-          title="E-mail"
           control={control}
           icon="mail"
           placeholder="E-mail"

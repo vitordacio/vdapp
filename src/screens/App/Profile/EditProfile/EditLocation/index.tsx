@@ -39,9 +39,9 @@ const EditLocation: React.FC = () => {
         <ControlledTextInput
           name="location"
           control={control}
-          icon="user"
-          placeholder="Nome"
+          placeholder="Localização"
           error={errors.location}
+          lengthMax={80}
         />
       </>
       <Button
