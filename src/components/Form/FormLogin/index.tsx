@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@components/Button';
+import { Text } from '@components/Text';
 import useAuth from '@contexts/auth';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import styles from './styles';
@@ -18,12 +19,13 @@ const schema = yup.object({
 type LoginFormData = yup.InferType<typeof schema>;
 
 const FormLogin: React.FC = () => {
-  const { SignIn } = useAuth();
-  const handleLogin = async (data: LoginFormData) => {
-    console.log('login form', data);
+  const { SignIn, status } = useAuth();
 
-    // return;
-    SignIn();
+  const handleLogin = async (data: LoginFormData) => {
+    await SignIn({
+      email: data.email,
+      password: data.password,
+    });
   };
 
   const {
@@ -58,7 +60,9 @@ const FormLogin: React.FC = () => {
         secureTextEntry
         error={errors.password}
       />
-
+      {status && (
+        <Text style={{ color: 'red', textAlign: 'center' }}>{status}</Text>
+      )}
       <Button
         title="Entrar"
         onPress={handleSubmit(handleLogin)}

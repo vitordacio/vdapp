@@ -1,12 +1,19 @@
 import React, { createContext, useContext, useState } from 'react';
-import * as auth from '@services/auth';
-// import api from '@services/api';
+import { Login } from '@services/Auth/Login';
+import api from '@config/api';
+// import * as auth from '@services/auth';
+
+interface ISignIn {
+  email: string;
+  password: string;
+}
 
 interface IAuthContextData {
   loading: boolean;
   signed: boolean;
   user: object | null;
-  SignIn(): Promise<void>;
+  status: string | null;
+  SignIn(data: ISignIn): Promise<void>;
   SignOut(): void;
 }
 
@@ -18,6 +25,7 @@ const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
 export const AuthProvider: React.FC<IProps> = ({ children }) => {
   const [user, setUser] = useState<object | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   // useEffect(()=>{
@@ -36,12 +44,19 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
   //   loadStorageData()
   // }, [])
 
-  const SignIn = async () => {
-    const response = await auth.SignIn();
-    console.log('auth context', response);
-    // const { token, user } = response;
-    setUser(response.user);
-    console.log(user);
+  const SignIn = async (data: ISignIn) => {
+    setStatus(null);
+    try {
+      const response = await Login(data);
+      const { accessToken, user: responseUser } = response.data;
+      setUser(responseUser);
+      api.defaults.headers.options.Authorization = `Bearer ${accessToken}`;
+    } catch (error) {
+      setStatus(error.response.data.message);
+    }
+    // console.log('auth context', response);
+    // console.log(response);
+    // console.log(user);
 
     // api.defaults.headers.options.Authorization = `Bearer ${response.token}`;
 
@@ -57,7 +72,7 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ loading, signed: !!user, user, SignIn, SignOut }}
+      value={{ loading, signed: !!user, user, SignIn, status, SignOut }}
     >
       {children}
     </AuthContext.Provider>

@@ -13,8 +13,8 @@ export default StyleSheet.create({
     // display: 'flex',
     // flexDirection: 'row',
     marginBottom: 17,
-    // marginLeft: 8,
-    // marginRight: 8,
+    marginLeft: 8,
+    marginRight: 8,
 
     // borderWidth: 1,
     // borderColor: 'green',

@@ -22,7 +22,7 @@ const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView behavior="position" enabled>
-            <FormSignUp />
+            <FormSignUp navigation={navigation} />
 
             <Text style={styles.login_text}>
               Já tem uma conta?

@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@components/Button';
+import { Text } from '@components/Text';
 import { ControlledTextInput } from '@components/Input/TextInput';
+import { CreateUser } from '@services/User/CreateUser';
 import styles from './styles';
 
 const schema = yup.object({
-  name: yup.string().required('Informe o seu nome'),
-  username: yup.string().required('Informe o nome de usuário'),
+  name: yup.string().min(3).max(30).required('Informe o seu nome'),
+  username: yup.string().min(4).max(15).required('Informe o nome de usuário'),
   email: yup.string().email('E-mail inválido').required('Informe o e-mail'),
   password: yup
     .string()
@@ -22,9 +24,21 @@ const schema = yup.object({
 
 type SignUpFormData = yup.InferType<typeof schema>;
 
-const FormSignUp: React.FC = () => {
+const FormSignUp = ({ navigation }) => {
+  const [errorMsg, setErrorMsg] = useState();
+
   const handleSignUp = async (data: SignUpFormData) => {
-    console.log(data);
+    try {
+      await CreateUser({
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
+      navigation.replace('Login');
+    } catch (error) {
+      setErrorMsg(error.response.data.message);
+    }
   };
 
   const {
@@ -90,7 +104,9 @@ const FormSignUp: React.FC = () => {
         secureTextEntry
         error={errors.password_confirm}
       />
-
+      {errorMsg && (
+        <Text style={{ color: 'red', textAlign: 'center' }}>{errorMsg}</Text>
+      )}
       <Button
         title="Criar Conta"
         onPress={handleSubmit(handleSignUp)}

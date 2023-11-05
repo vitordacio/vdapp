@@ -15,11 +15,12 @@ import AppRoutes from './app.routes';
 import AuthRoutes from './auth.routes';
 
 const Routes: React.FC = () => {
-  const { signed, loading } = useAuth();
+  // const { signed, loading } = useAuth();
+  const { signed } = useAuth();
 
-  if (loading) {
-    console.log(loading);
-  }
+  // if (loading) {
+  //   console.log(loading);
+  // }
 
   // const currentTheme = useColorScheme();
   return (
@@ -35,7 +36,7 @@ const Routes: React.FC = () => {
           // theme={currentTheme === 'dark' ? DarkTheme : DefaultTheme}
           >
             {/* <StatusBar style="auto" /> */}
-            {!signed ? <AppRoutes /> : <AuthRoutes />}
+            {signed ? <AppRoutes /> : <AuthRoutes />}
           </NavigationContainer>
         </SafeAreaView>
       </SafeAreaProvider>
