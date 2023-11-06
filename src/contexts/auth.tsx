@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Login } from '@services/Auth/Login';
 import api from '@config/api';
+import { IUser } from '@interfaces/user';
 // import * as auth from '@services/auth';
 
 interface ISignIn {
@@ -11,10 +12,11 @@ interface ISignIn {
 interface IAuthContextData {
   loading: boolean;
   signed: boolean;
-  user: object | null;
+  user: IUser | null;
   status: string | null;
   SignIn(data: ISignIn): Promise<void>;
   SignOut(): void;
+  setUser: React.Dispatch<React.SetStateAction<IUser>>;
 }
 
 interface IProps {
@@ -24,7 +26,7 @@ interface IProps {
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
 export const AuthProvider: React.FC<IProps> = ({ children }) => {
-  const [user, setUser] = useState<object | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -50,13 +52,11 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
       const response = await Login(data);
       const { accessToken, user: responseUser } = response.data;
       setUser(responseUser);
-      api.defaults.headers.options.Authorization = `Bearer ${accessToken}`;
+      // api.defaults.headers.options.Authorization = `Bearer ${accessToken}`;
+      api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     } catch (error) {
       setStatus(error.response.data.message);
     }
-    // console.log('auth context', response);
-    // console.log(response);
-    // console.log(user);
 
     // api.defaults.headers.options.Authorization = `Bearer ${response.token}`;
 
@@ -72,7 +72,15 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ loading, signed: !!user, user, SignIn, status, SignOut }}
+      value={{
+        loading,
+        signed: !!user,
+        user,
+        setUser,
+        status,
+        SignIn,
+        SignOut,
+      }}
     >
       {children}
     </AuthContext.Provider>

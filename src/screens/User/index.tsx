@@ -3,8 +3,8 @@ import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Picture } from '@components/Profile/Picture';
-import { CoverPhoto } from '@components/Profile/CoverPhoto';
+import { Picture } from '@components/Picture';
+import { CoverPhoto } from '@components/CoverPhoto';
 import { Socials } from '@components/Profile/Socials';
 import React from 'react';
 import { Counts } from '@components/Profile/Counts';
@@ -14,27 +14,13 @@ import { Feather } from '@expo/vector-icons';
 import colors from '@styles/colors';
 import { Icon } from '@components/Icon';
 import { ProfileTopTabRoutes } from '@routes/profile.routes';
-
+import useAuth from '@contexts/auth';
 import styles from './styles';
 
-const OwnProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  const handleFriends = async () => {
-    navigation.navigate('Friends');
-  };
-
-  const handleEmotes = async () => {
-    navigation.navigate('Emotes');
-  };
-  const handleEditProfile = async () => {
-    navigation.navigate('EditProfile');
-  };
-
-  const handleInbox = async () => {
-    navigation.navigate('Inbox');
-  };
-
+  const { user } = useAuth();
   return (
     <AppView
       style={{
@@ -43,31 +29,45 @@ const OwnProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <CoverPhoto />
-          <Picture />
-          <Text style={styles.username}>@nomedeusuario</Text>
-          <Socials socials={['instagram', 'twitter', 'tiktok', 'twitch']} />
+          <CoverPhoto cover_photo={user.cover_photo} />
+          <Picture picture={user.picture} />
+          <Text style={styles.username}>@{user.username}</Text>
+          <Socials
+            socials={['instagram', 'twitter', 'tiktok', 'twitch', 'youtube']}
+          />
           <View style={styles.counts}>
-            <Counts number={87} description="Amigos" onPress={handleFriends} />
+            <Counts
+              number={87}
+              description="Amigos"
+              onPress={() => navigation.navigate('Friends')}
+            />
             <LineY />
-            <Counts number={85} description="Emotes" onPress={handleEmotes} />
+            <Counts
+              number={85}
+              description="Emotes"
+              onPress={() => navigation.navigate('EmojisReceived')}
+            />
           </View>
           <View style={styles.buttons}>
             <Button
               style={{ width: 165 }}
-              onPress={handleEditProfile}
+              onPress={() => navigation.navigate('UpdateUser')}
               title="Editar Perfil"
               icon="edit"
             />
-            <Button style={{ width: 40 }} onPress={handleInbox} svg="inbox" />
+            <Button
+              style={{ width: 40 }}
+              onPress={() => navigation.navigate('Inbox')}
+              svg="inbox"
+            />
           </View>
-          <View style={styles.location}>
-            <Icon name="location" style={{ height: 19, width: 11.83 }} />
-            <Text style={styles.text}>Petrolina-PE</Text>
-          </View>
-          <Text style={styles.text}>
-            Adsadas dsiadiasj sdalpwldpq dpwldpakdq dqpkdqpw dqkpwqk
-          </Text>
+          {user.location && (
+            <View style={styles.location}>
+              <Icon name="location" style={{ height: 19, width: 11.83 }} />
+              <Text style={styles.text}>{user.location}</Text>
+            </View>
+          )}
+          {user.bio && <Text style={styles.text}>{user.bio}</Text>}
           <View style={styles.private}>
             <Feather name="lock" size={24} color={`${colors.TEXT_DEFAULT}`} />
           </View>
@@ -80,4 +80,4 @@ const OwnProfile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   );
 };
 
-export default OwnProfile;
+export default User;

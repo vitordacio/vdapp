@@ -17,7 +17,12 @@ export const Picture: React.FC<IPicture> = ({ picture }) => {
     <View style={styles.picture_container}>
       <View style={styles.picture_content}>
         <Pressable onPress={handlePicture} style={styles.picture}>
-          {picture && <Image source={{ uri: picture }} style={{ flex: 1 }} />}
+          {picture && (
+            <Image
+              source={{ uri: picture }}
+              style={{ flex: 1, resizeMode: 'cover' }}
+            />
+          )}
         </Pressable>
       </View>
     </View>
