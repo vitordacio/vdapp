@@ -24,7 +24,9 @@ interface IViewConfirmProps
   data: object;
   type:
     | 'username'
+    | 'password'
     | 'name'
+    | 'email'
     | 'bio'
     | 'location'
     | 'gender'

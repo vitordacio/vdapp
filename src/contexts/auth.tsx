@@ -28,6 +28,7 @@ const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 export const AuthProvider: React.FC<IProps> = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(true);
 
   // useEffect(()=>{

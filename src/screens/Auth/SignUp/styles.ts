@@ -13,4 +13,8 @@ export default StyleSheet.create({
   login_link: {
     color: `${colors.BLUE_LINK}`,
   },
+  button: {
+    marginTop: 15,
+    marginBottom: 48,
+  },
 });

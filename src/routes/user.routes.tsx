@@ -1,15 +1,23 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import User from '@screens/User';
-import UpdateUser from '@screens/User/Update';
-import EmojisReceived from '@screens/User/Emojis';
-import Friends from '@screens/User/Friends';
-import Inbox from '@screens/User/Inbox';
-import Achievements from '@screens/User/Top/Achievements';
-import EmojisSent from '@screens/User/Top/EmojisSent';
-import Events from '@screens/User/Top/Events';
-import Participations from '@screens/User/Top/Participations';
-import UpdateUsername from '@screens/User/Update/UpdateUsername';
+import EmojisReceived from '@screens/App/User/Emojis';
+import Friends from '@screens/App/User/Friends';
+import Inbox from '@screens/App/User/Inbox';
+import Achievements from '@screens/App/User/Top/Achievements';
+import EmojisSent from '@screens/App/User/Top/EmojisSent';
+import Events from '@screens/App/User/Top/Events';
+import Participations from '@screens/App/User/Top/Participations';
+import UpdateUser from '@screens/App/User/Update';
+import UpdateUsername from '@screens/App/User/Update/UpdateUsername';
+import UpdateName from '@screens/App/User/Update/UpdateName';
+import UpdateBio from '@screens/App/User/Update/UpdateBio';
+import UpdateLocation from '@screens/App/User/Update/UpdateLocation';
+import UpdateGender from '@screens/App/User/Update/UpdateGender';
+import UpdateSocial from '@screens/App/User/Update/UpdateSocial';
+import UpdatePrivacy from '@screens/App/User/Update/UpdatePrivacy';
+import UpdateEmail from '@screens/App/User/Update/UpdateEmail';
+import UpdatePassword from '@screens/App/User/Update/UpdatePassword';
+import User from '@screens/App/User';
 
 const UpdateUserStackTab = createNativeStackNavigator();
 
@@ -36,17 +44,14 @@ export const UpdateUserRoutes: React.FC = () => {
         name="UpdateUsername"
         component={UpdateUsername}
       />
-      {/* <UpdateUserStackTab.Screen name="UpdateName" component={UpdateName} />
+      <UpdateUserStackTab.Screen name="UpdateName" component={UpdateName} />
       <UpdateUserStackTab.Screen name="UpdateBio" component={UpdateBio} />
       <UpdateUserStackTab.Screen
         name="UpdateLocation"
         component={UpdateLocation}
       />
       <UpdateUserStackTab.Screen name="UpdateGender" component={UpdateGender} />
-      <UpdateUserStackTab.Screen
-        name="UpdateSocials"
-        component={UpdateSocials}
-      />
+      <UpdateUserStackTab.Screen name="UpdateSocial" component={UpdateSocial} />
       <UpdateUserStackTab.Screen
         name="UpdatePrivacy"
         component={UpdatePrivacy}
@@ -55,7 +60,7 @@ export const UpdateUserRoutes: React.FC = () => {
       <UpdateUserStackTab.Screen
         name="UpdatePassword"
         component={UpdatePassword}
-      /> */}
+      />
     </UpdateUserStackTab.Navigator>
   );
 };

@@ -33,4 +33,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     color: `${colors.BLUE_LINK}`,
   },
+  button: {
+    marginTop: 15,
+    marginBottom: 48,
+  },
 });
