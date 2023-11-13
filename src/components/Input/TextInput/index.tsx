@@ -18,6 +18,7 @@ export type ITextInputProps = TextInputProps & {
   title?: string;
   status?: (data: string) => Promise<boolean>;
   lengthMax?: number;
+  nullMargin?: boolean;
 };
 
 const TextInput = ({
@@ -27,6 +28,7 @@ const TextInput = ({
   status,
   onChange,
   lengthMax,
+  nullMargin,
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -48,7 +50,12 @@ const TextInput = ({
   return (
     <>
       {title && <Text style={styles.title}>{title}</Text>}
-      <View style={[styles.container]}>
+      <View
+        style={[
+          styles.container,
+          nullMargin && { marginBottom: 0, marginLeft: 0, marginRight: 0 },
+        ]}
+      >
         {icon && (
           <View style={[styles.icon_container, styles.left]}>
             <Feather
@@ -78,7 +85,6 @@ const TextInput = ({
               ? { paddingLeft: 48, paddingRight: 48 }
               : { paddingLeft: 16, paddingRight: 16 },
           ]}
-          // maxLength={maxLength}
           maxLength={lengthMax || undefined}
           textAlignVertical={lengthMax ? 'top' : 'auto'}
           multiline={!!lengthMax}
@@ -134,7 +140,6 @@ const TextInput = ({
 };
 
 type IControlledTextInputProps = ITextInputProps & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<FieldValues>;
   name: string;
   error?: FieldError;

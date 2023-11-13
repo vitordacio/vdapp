@@ -1,20 +1,15 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Login } from '@services/Auth/Login';
+import { ILogin, Login } from '@services/Auth/Login';
 import api from '@config/api';
 import { IUser } from '@interfaces/user';
 // import * as auth from '@services/auth';
-
-interface ISignIn {
-  email: string;
-  password: string;
-}
 
 interface IAuthContextData {
   loading: boolean;
   signed: boolean;
   user: IUser | null;
   status: string | null;
-  SignIn(data: ISignIn): Promise<void>;
+  SignIn(data: ILogin): Promise<void>;
   SignOut(): void;
   setUser: React.Dispatch<React.SetStateAction<IUser>>;
 }
@@ -47,7 +42,7 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
   //   loadStorageData()
   // }, [])
 
-  const SignIn = async (data: ISignIn) => {
+  const SignIn = async (data: ILogin) => {
     setStatus(null);
     try {
       const response = await Login(data);

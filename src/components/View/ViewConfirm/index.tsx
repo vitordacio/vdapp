@@ -17,6 +17,7 @@ import { ParamListBase } from '@react-navigation/native';
 import useAuth from '@contexts/auth';
 import { IUser } from '@interfaces/user';
 import { AxiosResponse } from 'axios';
+import { IUpdatePassword, UpdatePassword } from '@services/User/UpdatePassword';
 import styles from './styles';
 
 interface IViewConfirmProps
@@ -30,7 +31,7 @@ interface IViewConfirmProps
     | 'bio'
     | 'location'
     | 'gender'
-    | 'social'
+    | 'socials'
     | 'privacy';
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
   description: string;
@@ -43,38 +44,49 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   description,
   navigation,
 }) => {
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const [responseError, setResponseError] = useState('');
   const handleSubmit = async () => {
     let response: AxiosResponse<IUser, any>;
     try {
       if (type === 'username') {
         response = await UpdateUsername(data as IUpdateUsername);
+        user.username = response.data.username;
       }
       if (type === 'name') {
         response = await UpdateName(data as IUpdateName);
+        user.name = response.data.name;
       }
       if (type === 'bio') {
         response = await UpdateBio(data as IUpdateBio);
+        user.bio = response.data.bio;
       }
       if (type === 'location') {
         response = await UpdateLocation(data as IUpdateLocation);
+        user.location = response.data.location;
       }
       if (type === 'gender') {
         response = await UpdateGender(data as IUpdateGender);
+        user.gender = response.data.gender;
       }
-      if (type === 'social') {
+      if (type === 'socials') {
         response = await UpdateSocial(data as IUpdateSocial);
+        user.socials = response.data.socials;
       }
       if (type === 'privacy') {
         response = await UpdatePrivacy(data as IUpdatePrivacy);
+        user.private = response.data.private;
+      }
+      if (type === 'password') {
+        response = await UpdatePassword(data as IUpdatePassword);
+        return navigation.replace('UpdateUser');
       }
     } catch (error) {
       setResponseError(error.response.data.message);
     }
 
-    setUser(response.data);
-    navigation.replace('UpdateUser');
+    setUser(user);
+    return navigation.replace('UpdateUser');
   };
 
   return (

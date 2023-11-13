@@ -6,17 +6,22 @@ import styles from './styles';
 
 interface IPicture extends ViewProps {
   picture: string;
+  onClick?: () => void;
+  card?: boolean;
 }
 
-export const Picture: React.FC<IPicture> = ({ picture }) => {
+export const Picture: React.FC<IPicture> = ({ picture, onClick, card }) => {
   const handlePicture = async () => {
-    console.log('picture');
+    onClick();
   };
 
   return (
-    <View style={styles.picture_container}>
-      <View style={styles.picture_content}>
-        <Pressable onPress={handlePicture} style={styles.picture}>
+    <View style={!card ? styles.picture_container : styles.card_container}>
+      <View style={!card ? styles.picture_content : styles.card_content}>
+        <Pressable
+          onPress={handlePicture}
+          style={!card ? styles.picture : styles.card}
+        >
           {picture && <Image source={{ uri: picture }} style={{ flex: 1 }} />}
         </Pressable>
       </View>

@@ -1,16 +1,15 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import Custom from '@screens/Custom';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import colors from '@styles/colors';
 import UserRoutes from './user.routes';
 import HomeRoutes from './home.routes';
+// import ProfileRoutes from './profile.routes';
 
-const BottomTab = createBottomTabNavigator();
+const App = createBottomTabNavigator();
 
-const BottomTabRoutes: React.FC = () => {
+const AppRoutes: React.FC = () => {
   return (
-    <BottomTab.Navigator
+    <App.Navigator
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, focused, size }) => {
@@ -31,7 +30,7 @@ const BottomTabRoutes: React.FC = () => {
         tabBarInactiveTintColor: `${colors.TEXT_DEFAULT}`,
       })}
     >
-      <BottomTab.Screen
+      <App.Screen
         name="Home"
         component={HomeRoutes}
         options={{
@@ -42,7 +41,7 @@ const BottomTabRoutes: React.FC = () => {
         }}
       />
 
-      <BottomTab.Screen
+      <App.Screen
         name="UserRoutes"
         component={UserRoutes}
         options={{
@@ -53,33 +52,6 @@ const BottomTabRoutes: React.FC = () => {
           headerShown: false,
         }}
       />
-      {/* <BottomTab.Screen
-        name="Profile"
-        component={OwnProfile}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="user" color={color} size={size} />
-          ),
-          tabBarLabel: 'Perfil',
-          headerShown: false,
-        }}
-      /> */}
-    </BottomTab.Navigator>
-  );
-};
-
-const App = createNativeStackNavigator();
-
-const AppRoutes: React.FC = () => {
-  return (
-    <App.Navigator>
-      <App.Screen
-        name="BottomTabRoutes"
-        component={BottomTabRoutes}
-        options={{ headerShown: false }}
-      />
-      <App.Screen name="Event" component={Custom} />
-      <App.Screen name="Profile" component={Custom} />
     </App.Navigator>
   );
 };

@@ -18,6 +18,7 @@ import UpdatePrivacy from '@screens/App/User/Update/UpdatePrivacy';
 import UpdateEmail from '@screens/App/User/Update/UpdateEmail';
 import UpdatePassword from '@screens/App/User/Update/UpdatePassword';
 import User from '@screens/App/User';
+import Profile from '@screens/App/Profile';
 
 const UpdateUserStackTab = createNativeStackNavigator();
 
@@ -113,15 +114,24 @@ const UserStackTab = createNativeStackNavigator();
 const UserRoutes: React.FC = () => {
   return (
     <UserStackTab.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: 'black',
-        },
-        headerTitleStyle: {
-          color: 'white',
-        },
-        headerTintColor: 'white',
-        headerTitleAlign: 'center',
+      // screenOptions={{
+      //   headerStyle: {
+      //     backgroundColor: 'black',
+      //   },
+      //   headerTitleStyle: {
+      //     color: 'white',
+      //   },
+      //   headerTintColor: 'white',
+      //   headerTitleAlign: 'center',
+      // }}
+      screenOptions={({ route }) => {
+        return {
+          headerStyle: { backgroundColor: 'black' },
+          headerTitleStyle: { color: 'white' },
+          headerTintColor: 'white',
+          headerTitleAlign: 'center',
+          tabBarVisible: `${route.name === 'User'}`,
+        };
       }}
     >
       <UserStackTab.Screen name="User" component={User} />
@@ -147,6 +157,8 @@ const UserRoutes: React.FC = () => {
         }}
       />
       <UserStackTab.Screen name="Inbox" component={Inbox} />
+
+      <UserStackTab.Screen name="Profile" component={Profile} />
     </UserStackTab.Navigator>
   );
 };

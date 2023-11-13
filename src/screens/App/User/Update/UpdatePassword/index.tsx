@@ -18,7 +18,7 @@ const schema = yup.object({
     .required('Informe a nova senha'),
   password_confirm: yup
     .string()
-    .oneOf([yup.ref('password')], 'A senha de confirmação não confere.')
+    .oneOf([yup.ref('new_password')], 'A senha de confirmação não confere.')
     .required('Informe a senha de confirmação'),
 });
 

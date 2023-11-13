@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ParamListBase, useRoute } from '@react-navigation/native';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -8,33 +9,46 @@ import {
 } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
 import CardUser from '@components/Card/User';
+import { FindFriends } from '@services/User/FindFriends';
+import { IUser } from '@interfaces/user';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SearchUser } from '@services/User/SearchUser';
 import styles from './styles';
 
-const Friends = ({ navigation }) => {
+type UserParam = ParamListBase & {
+  user?: IUser;
+};
+
+const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
+  const route = useRoute();
+  const { user } = route.params as UserParam;
+
   const [search, setSearch] = useState('');
   const [friends, setFriends] = useState([]);
 
-  const handleFriendsSearch = () => {
-    console.log(search);
+  const handleFriendsSearch = async () => {
+    if (!search) return;
+    try {
+      const { data } = await SearchUser(search);
+      setFriends(data);
+    } catch (error) {
+      setFriends([]);
+    }
   };
 
   useEffect(() => {
-    setFriends([
-      {
-        id: 1,
-        picture: '',
-        username: 'username',
-        name: 'Nome de usuário',
-        friendship: false,
-      },
-      {
-        id: 2,
-        picture: '',
-        username: 'username2',
-        name: 'Nome de usuário2',
-        friendship: true,
-      },
-    ]);
+    const fetchFriends = async () => {
+      try {
+        const { data } = await FindFriends(user.id_user);
+        setFriends(data);
+      } catch (error) {
+        setFriends([]);
+      }
+    };
+
+    fetchFriends();
   }, []);
 
   return (
@@ -51,8 +65,8 @@ const Friends = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
           >
             {friends &&
-              friends.map(user => (
-                <CardUser navigation={navigation} key={user.id} user={user} />
+              friends.map((friend, index) => (
+                <CardUser navigation={navigation} key={index} user={friend} />
               ))}
           </ScrollView>
         </KeyboardAvoidingView>

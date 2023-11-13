@@ -4,6 +4,12 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     display: 'flex',
+    flexDirection: 'column',
+    gap: 19,
+    marginBottom: 37,
+  },
+  wrapper: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
@@ -11,6 +17,12 @@ export default StyleSheet.create({
   title: {
     fontSize: 16,
     color: `${colors.TEXT_DEFAULT}`,
+  },
+  radio_wrapper: {
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   radio: {
     width: 19,

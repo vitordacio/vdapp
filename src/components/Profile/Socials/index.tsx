@@ -34,8 +34,8 @@ interface ISocialsProps {
 export const Socials: React.FC<ISocialsProps> = ({ socials }) => {
   return (
     <View style={styles.container}>
-      {socials.map(social => (
-        <Social social={social} />
+      {socials.map((social, index) => (
+        <Social key={index} social={social} />
       ))}
     </View>
   );

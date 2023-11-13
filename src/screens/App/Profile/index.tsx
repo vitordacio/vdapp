@@ -1,7 +1,7 @@
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
-import { ParamListBase } from '@react-navigation/native';
+import { ParamListBase, useRoute } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Picture } from '@components/Picture';
 import { CoverPhoto } from '@components/CoverPhoto';
@@ -13,14 +13,19 @@ import { ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import colors from '@styles/colors';
 import { Icon } from '@components/Icon';
-import useAuth from '@contexts/auth';
 import { UserTopTabRoutes } from '@routes/user.routes';
+import { IUser } from '@interfaces/user';
 import styles from './styles';
 
-const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+type UserParam = ParamListBase & {
+  user: IUser;
+};
+
+const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  const { user } = useAuth();
+  const route = useRoute();
+  const { user } = route.params as UserParam;
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -91,4 +96,4 @@ const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   );
 };
 
-export default User;
+export default Profile;

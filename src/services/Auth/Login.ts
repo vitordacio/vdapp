@@ -3,7 +3,7 @@ import { IUser } from '@interfaces/user';
 import { AxiosPromise } from 'axios';
 
 export interface ILogin {
-  email: string;
+  login: string;
   password: string;
 }
 
@@ -13,10 +13,7 @@ interface IResponse {
 }
 
 export const Login = (data: ILogin): AxiosPromise<IResponse> => {
-  const user = api.post('/auth/user', {
-    login: data.email,
-    password: data.password,
-  });
+  const user = api.post('/auth/user', data);
 
   return user;
 };

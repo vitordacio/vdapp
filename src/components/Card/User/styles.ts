@@ -33,4 +33,11 @@ export default StyleSheet.create({
     height: 50,
     borderRadius: 8,
   },
+  error: {
+    fontSize: 16,
+    maxWidth: 326,
+    height: 19,
+    textAlign: 'center',
+    color: `${colors.RED}`,
+  },
 });

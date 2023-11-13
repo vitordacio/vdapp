@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ControlledRadioInput } from '@components/Input/RadioInput';
-import { ControlledTextInput } from '@components/Input/TextInput';
+import {
+  ControlledRadioInputs,
+  IRadioOption,
+} from '@components/Input/RadioInputs';
 import { Button } from '@components/Button';
 import { ViewConfirm } from '@components/View/ViewConfirm';
 import { ViewUpdate } from '@components/View/ViewUpdate';
+import { ParamListBase } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import useAuth from '@contexts/auth';
 
 const schema = yup.object({
   gender: yup.string().max(30, 'O gênero deve ter no máximo 30 caracteres'),
@@ -14,18 +19,33 @@ const schema = yup.object({
 
 type GenderFormData = yup.InferType<typeof schema>;
 
-const UpdateGender: React.FC = () => {
+const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
+  const { user } = useAuth();
+
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
-  // const options: IRadioOptions[] = [
-  //   {value: 'female', title: 'Feminino'},
-  //   {value: 'male', title: 'masculino'},
-  //   {value: '', title: 'Prefiro não informar'},
-  // ]
+  const options: IRadioOption[] = [
+    { value: 'female', title: 'Feminino' },
+    { value: 'male', title: 'Masculino' },
+    { value: '', title: 'Prefiro não informar' },
+    {
+      value: 'custom',
+      custom: {
+        type: 'text',
+        placeholder: `${
+          user.gender && user.gender !== 'male' && user.gender !== 'female'
+            ? user.gender
+            : 'Gênero'
+        }`,
+        maxLength: 30,
+      },
+    },
+  ];
 
   const handleGender = async (data: GenderFormData) => {
-    console.log('gender', data);
     setForm(data);
     setConfirm(true);
   };
@@ -44,25 +64,11 @@ const UpdateGender: React.FC = () => {
       description="Você pode alterar o seu gênero a qualquer momento."
     >
       <>
-        <ControlledTextInput
+        <ControlledRadioInputs
           name="gender"
           control={control}
-          icon="user"
-          placeholder="Nome"
-          error={errors.gender}
-        />
-        <ControlledRadioInput
-          name="gender"
-          value="female"
-          title="Feminino"
-          control={control}
-          error={errors.gender}
-        />
-        <ControlledRadioInput
-          name="gender"
-          value="male"
-          title="Masculino"
-          control={control}
+          options={options}
+          value={user.gender}
           error={errors.gender}
         />
       </>
@@ -70,6 +76,7 @@ const UpdateGender: React.FC = () => {
       {confirm && (
         <ViewConfirm
           data={form}
+          navigation={navigation}
           setConfirm={setConfirm}
           type="gender"
           description="Tem certeza que deseja mudar o seu gênero?"

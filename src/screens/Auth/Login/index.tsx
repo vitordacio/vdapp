@@ -16,11 +16,10 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-// import FormLogin from '@components/Form/FormLogin';
 import styles from './styles';
 
 const schema = yup.object({
-  email: yup.string().required('Informe o e-mail'),
+  login: yup.string().required('Informe o e-mail ou nome de usuário'),
   password: yup
     .string()
     .min(6, 'A senha deve ter ao menos 6 dígitos')
@@ -36,7 +35,7 @@ const Login: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const handleLogin = async (data: LoginFormData) => {
     await SignIn({
-      email: data.email,
+      login: data.login,
       password: data.password,
     });
   };
@@ -66,17 +65,16 @@ const Login: React.FC<NativeStackScreenProps<ParamListBase>> = ({
               <Text style={styles.or}>OU</Text>
               <View style={styles.half_line} />
             </View>
-            {/* <FormLogin /> */}
             <>
               <ControlledTextInput
-                name="email"
+                name="login"
                 title="E-mail ou nome de usuário"
                 control={control}
                 icon="mail"
                 placeholder="E-mail ou nome de usuário"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                error={errors.email}
+                error={errors.login}
               />
               <ControlledTextInput
                 name="password"
