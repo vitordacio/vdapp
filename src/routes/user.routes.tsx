@@ -1,24 +1,24 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import EmojisReceived from '@screens/App/User/Emojis';
-import Friends from '@screens/App/User/Friends';
-import Inbox from '@screens/App/User/Inbox';
-import Achievements from '@screens/App/User/Top/Achievements';
-import EmojisSent from '@screens/App/User/Top/EmojisSent';
-import Events from '@screens/App/User/Top/Events';
-import Participations from '@screens/App/User/Top/Participations';
-import UpdateUser from '@screens/App/User/Update';
-import UpdateUsername from '@screens/App/User/Update/UpdateUsername';
-import UpdateName from '@screens/App/User/Update/UpdateName';
-import UpdateBio from '@screens/App/User/Update/UpdateBio';
-import UpdateLocation from '@screens/App/User/Update/UpdateLocation';
-import UpdateGender from '@screens/App/User/Update/UpdateGender';
-import UpdateSocial from '@screens/App/User/Update/UpdateSocial';
-import UpdatePrivacy from '@screens/App/User/Update/UpdatePrivacy';
-import UpdateEmail from '@screens/App/User/Update/UpdateEmail';
-import UpdatePassword from '@screens/App/User/Update/UpdatePassword';
-import User from '@screens/App/User';
-import Profile from '@screens/App/Profile';
+// import User from '@screens/App/User';
+// import Profile from '@screens/App/Profile';
+// import EmojisReceived from '@screens/App/Emojis';
+// import Friends from '@screens/App/Friends';
+// import Inbox from '@screens/App/Inbox';
+import Achievements from '@screens/App/Top/Achievements';
+import EmojisSent from '@screens/App/Top/EmojisSent';
+import Events from '@screens/App/Top/Events';
+import Participations from '@screens/App/Top/Participations';
+import UpdateUser from '@screens/App/Update';
+import UpdateBio from '@screens/App/Update/UpdateBio';
+import UpdateEmail from '@screens/App/Update/UpdateEmail';
+import UpdateGender from '@screens/App/Update/UpdateGender';
+import UpdateLocation from '@screens/App/Update/UpdateLocation';
+import UpdateName from '@screens/App/Update/UpdateName';
+import UpdatePassword from '@screens/App/Update/UpdatePassword';
+import UpdatePrivacy from '@screens/App/Update/UpdatePrivacy';
+import UpdateSocial from '@screens/App/Update/UpdateSocial';
+import UpdateUsername from '@screens/App/Update/UpdateUsername';
 
 const UpdateUserStackTab = createNativeStackNavigator();
 
@@ -109,58 +109,48 @@ export const UserTopTabRoutes: React.FC = () => {
   );
 };
 
-const UserStackTab = createNativeStackNavigator();
+// const UserStackTab = createNativeStackNavigator();
 
-const UserRoutes: React.FC = () => {
-  return (
-    <UserStackTab.Navigator
-      // screenOptions={{
-      //   headerStyle: {
-      //     backgroundColor: 'black',
-      //   },
-      //   headerTitleStyle: {
-      //     color: 'white',
-      //   },
-      //   headerTintColor: 'white',
-      //   headerTitleAlign: 'center',
-      // }}
-      screenOptions={({ route }) => {
-        return {
-          headerStyle: { backgroundColor: 'black' },
-          headerTitleStyle: { color: 'white' },
-          headerTintColor: 'white',
-          headerTitleAlign: 'center',
-          tabBarVisible: `${route.name === 'User'}`,
-        };
-      }}
-    >
-      <UserStackTab.Screen name="User" component={User} />
-      <UserStackTab.Screen
-        name="Friends"
-        component={Friends}
-        options={{
-          headerTitle: 'Amigos',
-        }}
-      />
-      <UserStackTab.Screen
-        name="EmojisReceived"
-        component={EmojisReceived}
-        options={{
-          headerTitle: 'Emotes Recebidos',
-        }}
-      />
-      <UserStackTab.Screen
-        name="UpdateUser"
-        component={UpdateUserRoutes}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <UserStackTab.Screen name="Inbox" component={Inbox} />
+// const UserRoutes: React.FC = () => {
+//   return (
+//     <UserStackTab.Navigator
+//       screenOptions={({ route }) => {
+//         return {
+//           headerStyle: { backgroundColor: 'black' },
+//           headerTitleStyle: { color: 'white' },
+//           headerTintColor: 'white',
+//           headerTitleAlign: 'center',
+//           tabBarVisible: `${route.name === 'User'}`,
+//         };
+//       }}
+//     >
+//       <UserStackTab.Screen name="User" component={User} />
+//       <UserStackTab.Screen
+//         name="Friends"
+//         component={Friends}
+//         options={{
+//           headerTitle: 'Amigos',
+//         }}
+//       />
+//       <UserStackTab.Screen
+//         name="EmojisReceived"
+//         component={EmojisReceived}
+//         options={{
+//           headerTitle: 'Emotes Recebidos',
+//         }}
+//       />
+//       <UserStackTab.Screen
+//         name="UpdateUser"
+//         component={UpdateUserRoutes}
+//         options={{
+//           headerShown: false,
+//         }}
+//       />
+//       <UserStackTab.Screen name="Inbox" component={Inbox} />
 
-      <UserStackTab.Screen name="Profile" component={Profile} />
-    </UserStackTab.Navigator>
-  );
-};
+//       <UserStackTab.Screen name="Profile" component={Profile} />
+//     </UserStackTab.Navigator>
+//   );
+// };
 
-export default UserRoutes;
+// export default UserRoutes;

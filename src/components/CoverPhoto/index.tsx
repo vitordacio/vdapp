@@ -7,9 +7,7 @@ interface IPicture extends ViewProps {
 }
 
 export const CoverPhoto: React.FC<IPicture> = ({ cover_photo }) => {
-  const handleCoverPhoto = async () => {
-    console.log('cover_photo');
-  };
+  const handleCoverPhoto = async () => {};
 
   return (
     // <View style={styles.cover_photo}>

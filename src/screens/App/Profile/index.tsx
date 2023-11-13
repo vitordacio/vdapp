@@ -51,7 +51,7 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             <Counts
               number={user.friends_count}
               description="Amigos"
-              onPress={() => navigation.navigate('Friends', { user })}
+              onPress={() => navigation.push('Friends', { user })}
             />
             <LineY />
             <Counts

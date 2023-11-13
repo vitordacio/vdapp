@@ -1,23 +1,35 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather, Ionicons } from '@expo/vector-icons';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import colors from '@styles/colors';
-import UserRoutes from './user.routes';
+import Custom from '@screens/Custom';
+import EmojisReceived from '@screens/App/Emojis';
+import Friends from '@screens/App/Friends';
+import Inbox from '@screens/App/Inbox';
+import Profile from '@screens/App/Profile';
+import User from '@screens/App/User';
 import HomeRoutes from './home.routes';
-// import ProfileRoutes from './profile.routes';
+import { UpdateUserRoutes } from './user.routes';
 
-const App = createBottomTabNavigator();
+const BottomTab = createBottomTabNavigator();
 
-const AppRoutes: React.FC = () => {
+const BottomTabRoutes: React.FC = () => {
   return (
-    <App.Navigator
+    <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, focused, size }) => {
           let iconName: string;
-          if (route.name === 'Feed') {
+          if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Map') {
+            iconName = focused ? 'map' : 'map-outline';
+          } else if (route.name === 'CreateEvent') {
+            iconName = focused ? 'add-circle' : 'add-circle-outline';
           } else if (route.name === 'Notifications') {
             iconName = focused ? 'ios-notifications' : 'notification-outline';
+          } else if (route.name === 'User') {
+            iconName = focused ? 'person' : 'person-outline';
           }
 
           return (
@@ -28,27 +40,85 @@ const AppRoutes: React.FC = () => {
         tabBarActiveBackgroundColor: `${colors.BLACK}`,
         tabBarActiveTintColor: `${colors.GOLD}`,
         tabBarInactiveTintColor: `${colors.TEXT_DEFAULT}`,
+        headerStyle: {
+          backgroundColor: 'black',
+        },
+        headerTitleStyle: {
+          color: 'white',
+        },
+        headerTintColor: 'white',
+        headerTitleAlign: 'center',
+        headerShown: false,
       })}
     >
-      <App.Screen
+      <BottomTab.Screen
         name="Home"
         component={HomeRoutes}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="home" color={color} size={size} />
-          ),
           tabBarLabel: 'Início',
         }}
       />
 
-      <App.Screen
-        name="UserRoutes"
-        component={UserRoutes}
+      <BottomTab.Screen
+        name="User"
+        component={User}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="user" color={color} size={size} />
-          ),
           tabBarLabel: 'Perfil',
+          headerShown: true,
+        }}
+      />
+    </BottomTab.Navigator>
+  );
+};
+
+const App = createNativeStackNavigator();
+
+const AppRoutes: React.FC = () => {
+  return (
+    <App.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: 'black',
+        },
+        headerTitleStyle: {
+          color: 'white',
+        },
+        headerTintColor: 'white',
+        headerTitleAlign: 'center',
+      }}
+    >
+      <App.Screen
+        name="BottomTabRoutes"
+        component={BottomTabRoutes}
+        options={{ headerShown: false }}
+      />
+      <App.Screen
+        name="Event"
+        component={Custom}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <App.Screen name="Profile" component={Profile} />
+      <App.Screen name="Inbox" component={Inbox} />
+      <App.Screen
+        name="Friends"
+        component={Friends}
+        options={{
+          headerTitle: 'Amigos',
+        }}
+      />
+      <App.Screen
+        name="EmojisReceived"
+        component={EmojisReceived}
+        options={{
+          headerTitle: 'Emotes Recebidos',
+        }}
+      />
+      <App.Screen
+        name="UpdateUser"
+        component={UpdateUserRoutes}
+        options={{
           headerShown: false,
         }}
       />

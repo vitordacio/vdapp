@@ -46,25 +46,25 @@ const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             <Counts
               number={user.friends_count}
               description="Amigos"
-              onPress={() => navigation.navigate('Friends', { user })}
+              onPress={() => navigation.push('Friends', { user })}
             />
             <LineY />
             <Counts
               number={user.emojis_count}
               description="Emotes"
-              onPress={() => navigation.navigate('EmojisReceived')}
+              onPress={() => navigation.push('EmojisReceived', { user })}
             />
           </View>
           <View style={styles.buttons}>
             <Button
               style={{ width: 165 }}
-              onPress={() => navigation.navigate('UpdateUser')}
+              onPress={() => navigation.push('UpdateUser')}
               title="Editar Perfil"
               icon="edit"
             />
             <Button
               style={{ width: 40 }}
-              onPress={() => navigation.navigate('Inbox')}
+              onPress={() => navigation.push('Inbox')}
               svg="inbox"
             />
           </View>

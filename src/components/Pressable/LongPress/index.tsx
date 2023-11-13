@@ -1,4 +1,3 @@
-import { Pressable } from '@components/GarbTouches/Pressable';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,

@@ -1,4 +1,4 @@
-import Home from '@screens/Home';
+import Home from '@screens/App/Home';
 import Custom from '@screens/Custom';
 import colors from '@styles/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';

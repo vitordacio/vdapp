@@ -23,7 +23,6 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const route = useRoute();
-  const { user } = route.params as UserParam;
 
   const [search, setSearch] = useState('');
   const [friends, setFriends] = useState([]);
@@ -39,6 +38,8 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   };
 
   useEffect(() => {
+    const { user } = route.params as UserParam;
+
     const fetchFriends = async () => {
       try {
         const { data } = await FindFriends(user.id_user);
