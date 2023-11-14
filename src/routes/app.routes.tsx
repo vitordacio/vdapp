@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '@styles/colors';
-import Custom from '@screens/Custom';
+import Event from '@screens/App/Event';
 import EmojisReceived from '@screens/App/Emojis';
 import Friends from '@screens/App/Friends';
 import Inbox from '@screens/App/Inbox';
@@ -94,7 +94,7 @@ const AppRoutes: React.FC = () => {
       />
       <App.Screen
         name="Event"
-        component={Custom}
+        component={Event}
         options={{
           headerShown: false,
         }}

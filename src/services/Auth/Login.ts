@@ -7,12 +7,12 @@ export interface ILogin {
   password: string;
 }
 
-interface IResponse {
+export interface IAuthResponse {
   accessToken: string;
   user: IUser;
 }
 
-export const Login = (data: ILogin): AxiosPromise<IResponse> => {
+export const Login = (data: ILogin): AxiosPromise<IAuthResponse> => {
   const user = api.post('/auth/user', data);
 
   return user;

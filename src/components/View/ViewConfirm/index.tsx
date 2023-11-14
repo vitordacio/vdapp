@@ -18,6 +18,8 @@ import useAuth from '@contexts/auth';
 import { IUser } from '@interfaces/user';
 import { AxiosResponse } from 'axios';
 import { IUpdatePassword, UpdatePassword } from '@services/User/UpdatePassword';
+import { userService } from '@services/User';
+
 import styles from './styles';
 
 interface IViewConfirmProps
@@ -47,15 +49,20 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   const { user, setUser } = useAuth();
   const [responseError, setResponseError] = useState('');
   const handleSubmit = async () => {
-    let response: AxiosResponse<IUser, any>;
+    setResponseError('');
+    // let response: AxiosResponse<IUser, any>;
+    let response: IUser;
     try {
       if (type === 'username') {
         response = await UpdateUsername(data as IUpdateUsername);
         user.username = response.data.username;
       }
       if (type === 'name') {
-        response = await UpdateName(data as IUpdateName);
-        user.name = response.data.name;
+        // response = await UpdateName(data as IUpdateName);
+        // user.name = response.data.name;
+        response = await userService.updateName(data as IUpdateName);
+        console.log(response);
+        user.name = response.name;
       }
       if (type === 'bio') {
         response = await UpdateBio(data as IUpdateBio);
@@ -82,11 +89,12 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
         return navigation.replace('UpdateUser');
       }
     } catch (error) {
-      setResponseError(error.response.data.message);
+      console.log(error);
+      setResponseError(error.message);
     }
 
     setUser(user);
-    return navigation.replace('UpdateUser');
+    return response ? navigation.replace('UpdateUser') : undefined;
   };
 
   return (

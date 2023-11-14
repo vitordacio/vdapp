@@ -1,14 +1,14 @@
-import React, { createContext, useContext, useState } from 'react';
-import { ILogin, Login } from '@services/Auth/Login';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { IAuthResponse, ILogin, Login } from '@services/Auth/Login';
 import api from '@config/api';
 import { IUser } from '@interfaces/user';
-// import * as auth from '@services/auth';
+import { storageService } from '@services/Storage';
 
 interface IAuthContextData {
   loading: boolean;
   signed: boolean;
   user: IUser | null;
-  status: string | null;
+  loginError: string | null;
   SignIn(data: ILogin): Promise<void>;
   SignOut(): void;
   setUser: React.Dispatch<React.SetStateAction<IUser>>;
@@ -22,47 +22,44 @@ const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
 export const AuthProvider: React.FC<IProps> = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [loginError, setLoginError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(()=>{
-  //   const loadStorageData = () => {
-  //     const storageUser = algumacoisa.getItem()
-  //     const storagedToken =algumacoisa.getItem()
+  useEffect(() => {
+    setLoading(true);
+    const loadStorageData = async () => {
+      const storagedData =
+        await storageService.getItem<IAuthResponse>('@Auth:data');
 
-  //     if (storageUser && storagedToken){
-  // api.defaults.headers.authorizations = `Bearer ${storagedToken}`
+      if (storagedData) {
+        setUser(storagedData.user);
+        api.defaults.headers.common.Authorization = `Bearer ${storagedData.accessToken}`;
+      }
+      setLoading(false);
+    };
 
-  //       setUser(JSON.parse(storageUser))
-  // setLoading(false)
-  //     }
-  //   }
-
-  //   loadStorageData()
-  // }, [])
+    loadStorageData();
+  }, []);
 
   const SignIn = async (data: ILogin) => {
-    setStatus(null);
+    setLoginError(null);
     try {
       const response = await Login(data);
+      storageService.setItem<IAuthResponse>('@Auth:data', response.data);
       const { accessToken, user: responseUser } = response.data;
+
       setUser(responseUser);
-      // api.defaults.headers.options.Authorization = `Bearer ${accessToken}`;
       api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     } catch (error) {
-      setStatus(error.response.data.message);
+      setLoginError(error.response.data.message);
     }
-
-    // api.defaults.headers.options.Authorization = `Bearer ${response.token}`;
-
-    // set storage
-    // algumacoisa.setItem('@Auth:user', JSON.stringify(response.user))
-    // algumacoisa.setItem('@Auth:user', response.token)
   };
 
   const SignOut = () => {
-    // clearstorage
+    storageService.removeItem('@Auth:data');
+    // storageService.removeItem('@Auth:user')
+    // storageService.removeItem('@Auth:token')
+
     setUser(null);
   };
 
@@ -73,7 +70,7 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
         signed: !!user,
         user,
         setUser,
-        status,
+        loginError,
         SignIn,
         SignOut,
       }}

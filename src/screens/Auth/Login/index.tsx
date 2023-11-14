@@ -31,7 +31,7 @@ type LoginFormData = yup.InferType<typeof schema>;
 const Login: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  const { SignIn, status } = useAuth();
+  const { SignIn, loginError } = useAuth();
 
   const handleLogin = async (data: LoginFormData) => {
     await SignIn({
@@ -87,9 +87,9 @@ const Login: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                 secureTextEntry
                 error={errors.password}
               />
-              {status && (
+              {loginError && (
                 <Text style={{ color: 'red', textAlign: 'center' }}>
-                  {status}
+                  {loginError}
                 </Text>
               )}
               <Button

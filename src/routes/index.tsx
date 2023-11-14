@@ -7,20 +7,24 @@ import {
 // import { useColorScheme } from 'react-native';
 import useAuth from '@contexts/auth';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// import AppRoutes from './app.routes';
-// import SignedRoutes from './signed.routes';
+import { Text } from '@components/Text';
+import { View } from '@components/View';
 import { SafeAreaView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppRoutes from './app.routes';
 import AuthRoutes from './auth.routes';
 
 const Routes: React.FC = () => {
-  // const { signed, loading } = useAuth();
-  const { signed } = useAuth();
+  const { signed, loading } = useAuth();
+  // const { signed } = useAuth();
 
-  // if (loading) {
-  //   console.log(loading);
-  // }
+  if (loading) {
+    return (
+      <View>
+        <Text>TELA DE LOADING</Text>
+      </View>
+    );
+  }
 
   // const currentTheme = useColorScheme();
   return (
