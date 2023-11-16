@@ -3,39 +3,40 @@ import { Text } from '@components/Text';
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Button } from '@components/Button';
-import { Picture } from '@components/Picture';
+// import { Picture } from '@components/Profile/Picture';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
-import { IUser } from '@interfaces/user';
+import { INotification } from '@interfaces/notification';
 import { CreateRequest } from '@services/Friendship/CreateRequest';
 import { CreateResponse } from '@services/Friendship/CreateResponse';
 import { DeleteFriendship } from '@services/Friendship/DeleteFriendship';
 import styles from './styles';
 
 type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
-  user: IUser;
+  notification: INotification;
 };
 
-const CardUser = ({ user, navigation }: CardProps) => {
-  const { username, name, picture, friendship_status } = user;
+const CardNotification = ({ notification, navigation }: CardProps) => {
+  const { author, message } = notification;
 
   const [responseError, setResponseError] = useState('');
-  const [status, setStatus] = useState(friendship_status);
+  const [status, setStatus] = useState('');
+  // const [status, setStatus] = useState(author.friendship_status);
 
   const toAdd = !status || status === 'request_received';
-  // const handleUser = async () => {};
+
   const handleFriendship = async () => {
     try {
       if (!status) {
-        await CreateRequest(user.id_user);
+        await CreateRequest(author.id_user);
         setStatus('request_sent');
       }
       if (status === 'request_received') {
-        await CreateResponse(user.id_user);
+        await CreateResponse(author.id_user);
         setStatus('friends');
       }
       if (status === 'request_received' || status === 'friends') {
-        await DeleteFriendship(user.id_user);
+        await DeleteFriendship(author.id_user);
         setStatus('');
       }
     } catch (error) {
@@ -45,15 +46,17 @@ const CardUser = ({ user, navigation }: CardProps) => {
 
   return (
     <>
-      {user && (
+      {notification && (
         <TouchableOpacity
           style={styles.container}
-          onPress={() => navigation.push('Profile', { user })}
+          onPress={() => navigation.push('Profile', { author })}
         >
-          <Picture card={true} picture={picture} />
+          {/* {author.picture && <Picture card={true} picture={author.picture} />} */}
           <View style={styles.data}>
-            {name && <Text style={styles.name}>{name}</Text>}
-            {username && <Text style={styles.username}>@{username}</Text>}
+            {message && <Text style={styles.message}>{message}</Text>}
+            {/* {author.username && (
+              <Text style={styles.username}>@{author.username}</Text>
+            )} */}
           </View>
           <Button
             type={toAdd ? 'blue' : 'red'}
@@ -70,4 +73,4 @@ const CardUser = ({ user, navigation }: CardProps) => {
   );
 };
 
-export default CardUser;
+export default CardNotification;

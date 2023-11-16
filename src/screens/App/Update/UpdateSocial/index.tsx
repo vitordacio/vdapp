@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { Socials } from '@components/Profile/Socials';
+import { Socials } from '@components/Socials';
 import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
 import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 
@@ -57,7 +57,7 @@ const UpdateSocial: React.FC = () => {
         <ViewConfirm
           data={form}
           setConfirm={setConfirm}
-          type="social"
+          type="socials"
           description="Tem certeza que deseja adicionar a ligação a rede social?"
         />
       )}

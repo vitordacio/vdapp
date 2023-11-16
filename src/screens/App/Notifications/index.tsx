@@ -1,23 +1,18 @@
 import { AppView, View } from '@components/View';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-// import useAuth from '@contexts/auth';
 import React, { useCallback, useEffect, useState } from 'react';
-// import CardUser from '@components/Card/User';
-import { IUser } from '@interfaces/user';
 import { ActivityIndicator, FlatList } from 'react-native';
 import { INotification } from '@interfaces/notification';
 import { notificationService } from '@services/Notification';
-import { Text } from '@components/Text';
-// import styles from './styles';
+import CardNotification from '@components/Card/Notification';
+import styles from './styles';
 
 let loadMore = true;
 
 const Notifications: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  // const { user } = useAuth();
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Notificações',
@@ -51,13 +46,16 @@ const Notifications: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <Text style={{ color: 'white' }}>{item.message}</Text>;
-      // return <CardUser navigation={navigation} user={item} />;
+      // return <Text style={{ color: 'white' }}>{item.message}</Text>;
+      return <CardNotification navigation={navigation} notification={item} />;
     },
     [data],
   );
 
-  const keyExtractor = useCallback((item: IUser) => `${item.id_user}`, []);
+  const keyExtractor = useCallback(
+    (item: INotification) => `${item.id_notification}`,
+    [],
+  );
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ height: 14 }} />;
@@ -79,7 +77,7 @@ const Notifications: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   }, []);
 
   return (
-    <AppView>
+    <AppView style={styles.container}>
       <FlatList
         data={data}
         renderItem={renderItem}

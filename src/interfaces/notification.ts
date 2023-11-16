@@ -1,4 +1,5 @@
 import { IFriendship } from './friendship';
+import { IUser } from './user';
 
 export interface INotification {
   id_notification: string;
@@ -11,4 +12,5 @@ export interface INotification {
   emoji_id: string;
   participation_id: string;
   friendship?: IFriendship;
+  author: IUser;
 }

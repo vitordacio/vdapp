@@ -73,6 +73,8 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     password: ICardUpdateOption;
   };
 
+  const handlePicture = () => {};
+
   return (
     <AppView
       style={{
@@ -82,7 +84,10 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <CoverPhoto cover_photo={user.cover_photo} />
-          <View style={styles.picture_container}>
+          <TouchableOpacity
+            style={styles.picture_container}
+            onPress={handlePicture}
+          >
             <Picture picture={user.picture} />
             <View style={styles.camera}>
               <Feather
@@ -91,7 +96,7 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                 color={`${colors.TEXT_DEFAULT}`}
               />
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.edit_username}>
             <Text style={styles.username}>@{user.username}</Text>
             <TouchableOpacity
