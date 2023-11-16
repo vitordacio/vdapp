@@ -4,8 +4,8 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { ViewConfirm } from '@components/View/ViewConfirm';
-import { ViewUpdate } from '@components/View/ViewUpdate';
+import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
+import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 

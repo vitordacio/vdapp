@@ -5,8 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { Socials } from '@components/Profile/Socials';
-import { ViewConfirm } from '@components/View/ViewConfirm';
-import { ViewUpdate } from '@components/View/ViewUpdate';
+import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
+import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 
 const schema = yup.object({
   socials: yup.string(),

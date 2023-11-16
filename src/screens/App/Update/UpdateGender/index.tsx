@@ -7,8 +7,8 @@ import {
   IRadioOption,
 } from '@components/Input/RadioInputs';
 import { Button } from '@components/Button';
-import { ViewConfirm } from '@components/View/ViewConfirm';
-import { ViewUpdate } from '@components/View/ViewUpdate';
+import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
+import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useAuth from '@contexts/auth';

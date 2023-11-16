@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { IAuthResponse, ILogin, Login } from '@services/Auth/Login';
 import api from '@config/api';
 import { IUser } from '@interfaces/user';
 import { storageService } from '@services/Storage';
+import { userService } from '@services/User';
+import { IAuthResponse, ILogin } from '@services/User/IUserService';
 
 interface IAuthContextData {
   loading: boolean;
@@ -44,9 +45,10 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
   const SignIn = async (data: ILogin) => {
     setLoginError(null);
     try {
-      const response = await Login(data);
-      storageService.setItem<IAuthResponse>('@Auth:data', response.data);
-      const { accessToken, user: responseUser } = response.data;
+      // const response = await Login(data);
+      const response = await userService.login(data);
+      storageService.setItem<IAuthResponse>('@Auth:data', response);
+      const { accessToken, user: responseUser } = response;
 
       setUser(responseUser);
       api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;

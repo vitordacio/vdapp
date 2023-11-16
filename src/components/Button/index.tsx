@@ -7,6 +7,7 @@ import {
   GestureResponderEvent,
   ImageBackground,
   ImageSourcePropType,
+  ActivityIndicator,
 } from 'react-native';
 import assets from '@assets/index';
 import styles from './styles';
@@ -21,6 +22,7 @@ interface IButtonProps extends PressableProps {
   icon?: React.ComponentProps<typeof Feather>['name'];
   iconSize?: number;
   iconColor?: string;
+  loading?: boolean;
   svg?: keyof typeof svgMapping;
   onPress?: (e: GestureResponderEvent) => void;
 }
@@ -32,6 +34,7 @@ export function Button({
   icon,
   iconSize,
   iconColor,
+  loading,
   svg,
   ...rest
 }: IButtonProps) {
@@ -49,7 +52,7 @@ export function Button({
       {({ pressed }) => {
         return (
           <>
-            {title && (
+            {title && !loading && (
               <Text
                 style={[
                   styles.title,
@@ -60,6 +63,7 @@ export function Button({
                 {title}
               </Text>
             )}
+            {loading && <ActivityIndicator size="small" />}
             {icon && (
               <Feather
                 name={icon}

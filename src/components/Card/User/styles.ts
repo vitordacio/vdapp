@@ -10,20 +10,22 @@ export default StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: `${colors.BLACK}`,
     borderRadius: 8,
-    marginBottom: 14,
+    // marginBottom: 14,
     alignItems: 'center',
-    gap: 19,
+    justifyContent: 'space-between',
+    // gap: 19,
   },
   data: {
+    marginLeft: 19,
     justifyContent: 'center',
     fontSize: 16,
     flex: 1,
     flexDirection: 'column',
   },
-  username: {
+  name: {
     color: `${colors.TEXT_DEFAULT}`,
   },
-  name: {
+  username: {
     color: `${colors.GRAY_DESCRIPTION}`,
   },
   friendship: {

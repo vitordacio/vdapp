@@ -7,9 +7,11 @@ import EmojisReceived from '@screens/App/Emojis';
 import Friends from '@screens/App/Friends';
 import Inbox from '@screens/App/Inbox';
 import Profile from '@screens/App/Profile';
+import Search from '@screens/App/Search';
+import Notifications from '@screens/App/Notifications';
 import User from '@screens/App/User';
-import HomeRoutes from './home.routes';
 import { UpdateUserRoutes } from './user.routes';
+import HomeRoutes from './home.routes';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -22,12 +24,12 @@ const BottomTabRoutes: React.FC = () => {
           let iconName: string;
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Map') {
-            iconName = focused ? 'map' : 'map-outline';
+          } else if (route.name === 'Search') {
+            iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'CreateEvent') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
           } else if (route.name === 'Notifications') {
-            iconName = focused ? 'ios-notifications' : 'notification-outline';
+            iconName = focused ? 'notifications' : 'notifications-outline';
           } else if (route.name === 'User') {
             iconName = focused ? 'person' : 'person-outline';
           }
@@ -48,7 +50,6 @@ const BottomTabRoutes: React.FC = () => {
         },
         headerTintColor: 'white',
         headerTitleAlign: 'center',
-        headerShown: false,
       })}
     >
       <BottomTab.Screen
@@ -56,6 +57,23 @@ const BottomTabRoutes: React.FC = () => {
         component={HomeRoutes}
         options={{
           tabBarLabel: 'Início',
+          headerShown: false,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Search"
+        component={Search}
+        options={{
+          tabBarLabel: 'Explorar',
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{
+          tabBarLabel: 'Notificações',
         }}
       />
 
@@ -64,7 +82,6 @@ const BottomTabRoutes: React.FC = () => {
         component={User}
         options={{
           tabBarLabel: 'Perfil',
-          headerShown: true,
         }}
       />
     </BottomTab.Navigator>

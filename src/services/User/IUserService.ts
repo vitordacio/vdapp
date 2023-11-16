@@ -1,8 +1,32 @@
+import { IUser } from '@interfaces/user';
+
+export interface ILogin {
+  login: string;
+  password: string;
+}
+
+export interface IAuthResponse {
+  accessToken: string;
+  user: IUser;
+}
+
 export interface ICreateUser {
   name: string;
   username: string;
   email: string;
   password: string;
+}
+
+export interface IFindFriends {
+  user_id: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface ISearchByName {
+  name: string;
+  page?: number;
+  limit?: number;
 }
 
 export interface IUpdateBio {

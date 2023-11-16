@@ -52,8 +52,8 @@ const CardUser = ({ user, navigation }: CardProps) => {
         >
           <Picture card={true} picture={picture} />
           <View style={styles.data}>
-            {username && <Text style={styles.username}>{username}</Text>}
             {name && <Text style={styles.name}>{name}</Text>}
+            {username && <Text style={styles.username}>@{username}</Text>}
           </View>
           <Button
             type={toAdd ? 'blue' : 'red'}

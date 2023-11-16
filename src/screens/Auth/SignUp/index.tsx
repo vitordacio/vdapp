@@ -5,7 +5,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@components/Button';
 import { ControlledTextInput } from '@components/Input/TextInput';
-import { CreateUser } from '@services/User/CreateUser';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
@@ -16,8 +15,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-// import FormSignUp from '@components/Form/FormSignUp';
-import { VerifyUsername } from '@services/User/VerifyUsername';
+import { userService } from '@services/User';
 import styles from './styles';
 
 const schema = yup.object({
@@ -52,8 +50,8 @@ const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     if (!usernameRegex.test(username)) return false;
 
     try {
-      const { data } = await VerifyUsername(username);
-      return data as unknown as boolean;
+      const response = await userService.verifyUsername(username);
+      return response;
     } catch (error) {
       return false;
     }
@@ -64,12 +62,13 @@ const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     if (!valid) return;
 
     try {
-      await CreateUser({
+      await userService.createUser({
         name: data.name,
         username: data.username,
         email: data.email,
         password: data.password,
       });
+
       navigation.replace('Login');
     } catch (error) {
       setErrorMsg(error.response.data.message);
@@ -89,7 +88,6 @@ const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView behavior="position" enabled>
-            {/* <FormSignUp navigation={navigation} /> */}
             <>
               <ControlledTextInput
                 control={control}

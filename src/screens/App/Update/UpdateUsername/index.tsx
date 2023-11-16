@@ -5,11 +5,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import useAuth from '@contexts/auth';
-import { VerifyUsername } from '@services/User/VerifyUsername';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ViewUpdate } from '@components/View/ViewUpdate';
-import { ViewConfirm } from '@components/View/ViewConfirm';
+import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
+import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
+import { userService } from '@services/User';
 
 const schema = yup.object({
   username: yup
@@ -36,8 +36,8 @@ const UpdateUsername: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     if (!usernameRegex.test(username)) return false;
 
     try {
-      const { data } = await VerifyUsername(username);
-      return data as unknown as boolean;
+      const response = await userService.verifyUsername(username);
+      return response;
     } catch (error) {
       return false;
     }

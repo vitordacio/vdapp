@@ -1,75 +1,134 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-console */
+import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase, useRoute } from '@react-navigation/native';
 import {
+  ActivityIndicator,
   Keyboard,
   KeyboardAvoidingView,
-  ScrollView,
+  FlatList,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
-import CardUser from '@components/Card/User';
-import { FindFriends } from '@services/User/FindFriends';
 import { IUser } from '@interfaces/user';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SearchUser } from '@services/User/SearchUser';
+import { userService } from '@services/User';
+import CardUser from '@components/Card/User';
 import styles from './styles';
 
 type UserParam = ParamListBase & {
   user?: IUser;
 };
 
+let loadMore = true;
+
 const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const route = useRoute();
+  const { user } = route.params as UserParam;
 
   const [search, setSearch] = useState('');
-  const [friends, setFriends] = useState([]);
+  const [data, setData] = useState<IUser[] | []>([]);
+  const [page, setPage] = useState(1);
+  const [showLoader, setShowLoader] = useState(false);
 
-  const handleFriendsSearch = async () => {
-    if (!search) return;
+  const fetchData = async () => {
+    let friends: IUser[];
+
     try {
-      const { data } = await SearchUser(search);
-      setFriends(data);
+      friends = await userService.findFriends({
+        user_id: user.id_user,
+        page,
+      });
+
+      if (friends.length === 0) {
+        loadMore = false;
+      }
+
+      setData([...data, ...friends]);
+      setPage(page + 1);
+      setShowLoader(false);
     } catch (error) {
-      setFriends([]);
+      console.log(error);
     }
   };
 
-  useEffect(() => {
-    const { user } = route.params as UserParam;
+  const handleFriendsSearch = async () => {
+    setShowLoader(true);
+    let friends: IUser[];
 
-    const fetchFriends = async () => {
-      try {
-        const { data } = await FindFriends(user.id_user);
-        setFriends(data);
-      } catch (error) {
-        setFriends([]);
+    try {
+      if (!search) {
+        friends = await userService.findFriends({
+          user_id: user.id_user,
+        });
+
+        if (friends.length === 0) {
+          loadMore = false;
+        }
+
+        setPage(2);
+      } else {
+        friends = await userService.searchUserByName({
+          name: search,
+        });
       }
-    };
 
-    fetchFriends();
+      setData([...friends]);
+      setShowLoader(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderItem = useCallback(
+    ({ item }) => {
+      return <CardUser navigation={navigation} user={item} />;
+    },
+    [data],
+  );
+
+  const keyExtractor = useCallback((item: IUser) => `${item.id_user}`, []);
+
+  const itemSeparatorComponent = useCallback(() => {
+    return <View style={{ height: 14 }} />;
+  }, [data]);
+
+  const onEndReached = () => {
+    if (loadMore) {
+      setShowLoader(true);
+      fetchData();
+    }
+  };
+
+  const listFooterComponent = useCallback(() => {
+    return <ActivityIndicator style={{ marginVertical: 16 }} size="large" />;
+  }, []);
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView behavior="position" enabled>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="position" enabled>
           <SearchInput
             handlePress={handleFriendsSearch}
             onChangeText={e => setSearch(e)}
             value={search}
           />
-          <ScrollView
-            style={styles.friends}
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            ItemSeparatorComponent={itemSeparatorComponent}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.9}
+            ListFooterComponent={showLoader && listFooterComponent}
             showsVerticalScrollIndicator={false}
-          >
-            {friends &&
-              friends.map((friend, index) => (
-                <CardUser navigation={navigation} key={index} user={friend} />
-              ))}
-          </ScrollView>
+          />
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </View>
