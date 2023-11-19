@@ -10,4 +10,5 @@ export interface IUserSocialType {
   id_social_network_type: string;
   type: 'instagram' | 'tiktok' | 'twitter' | 'twitch' | 'youtube';
   base_url: string;
+  deep_link: string;
 }

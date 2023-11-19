@@ -19,6 +19,7 @@ export type ITextInputProps = TextInputProps & {
   status?: (data: string) => Promise<boolean>;
   lengthMax?: number;
   nullMargin?: boolean;
+  setShowValue?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const TextInput = ({
@@ -29,6 +30,7 @@ const TextInput = ({
   onChange,
   lengthMax,
   nullMargin,
+  setShowValue,
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -93,6 +95,7 @@ const TextInput = ({
           onChangeText={async e => {
             onChange(e);
             setIsFilled(!!e);
+            if (setShowValue) setShowValue(e);
             if (status) setIsValid(await status(e));
             if (lengthMax) setLengthCount(e.length);
           }}

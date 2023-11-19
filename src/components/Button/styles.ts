@@ -34,7 +34,7 @@ export default StyleSheet.create({
     color: `${colors.WHITE}`,
   },
 
-  blue_container: { backgroundColor: `${colors.BLUE_BUTTON}` },
+  blue_container: { backgroundColor: `${colors.BLUE_BUTTON}`, maxWidth: 230 },
   blue_title: {
     color: `${colors.WHITE}`,
   },

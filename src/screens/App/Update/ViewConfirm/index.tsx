@@ -16,7 +16,7 @@ import {
   IUpdateName,
   IUpdatePassword,
   IUpdatePrivacy,
-  IUpdateSocial,
+  ICreateSocial,
   IUpdateUsername,
 } from '@services/User/IUserService';
 
@@ -24,7 +24,7 @@ import styles from './styles';
 
 interface IViewConfirmProps
   extends Partial<NativeStackScreenProps<ParamListBase>> {
-  data: object;
+  data: object | string;
   type:
     | 'username'
     | 'password'
@@ -33,8 +33,9 @@ interface IViewConfirmProps
     | 'bio'
     | 'location'
     | 'gender'
-    | 'socials'
-    | 'privacy';
+    | 'privacy'
+    | 'create_social'
+    | 'delete_social';
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
   description: string;
 }
@@ -46,7 +47,7 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   description,
   navigation,
 }) => {
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const [responseError, setResponseError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -71,14 +72,23 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
       if (type === 'gender') {
         updatedUser = await userService.updateGender(data as IUpdateGender);
       }
-      if (type === 'socials') {
-        updatedUser = await userService.updateSocial(data as IUpdateSocial);
-      }
       if (type === 'privacy') {
         updatedUser = await userService.updatePrivacy(data as IUpdatePrivacy);
       }
       if (type === 'password') {
         updatedUser = await userService.updatePassword(data as IUpdatePassword);
+      }
+      if (type === 'create_social') {
+        const social = await userService.createSocial(data as ICreateSocial);
+        user.social_networks.push(social);
+        updatedUser = user;
+      }
+      if (type === 'delete_social') {
+        await userService.deleteSocial(data as string);
+        user.social_networks.filter(
+          social => social.id_social_network !== data,
+        );
+        updatedUser = user;
       }
     } catch (error) {
       setResponseError(error.message);

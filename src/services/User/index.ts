@@ -1,6 +1,6 @@
 import api from '@config/api';
 import { IUser } from '@interfaces/user';
-import { IUserSocial } from '@interfaces/social_network';
+import { IUserSocial, IUserSocialType } from '@interfaces/social_network';
 import { AxiosResponse } from 'axios';
 import {
   ILogin,
@@ -34,6 +34,7 @@ interface IUserService {
   updatePassword: (data: IUpdatePassword) => Promise<IUser>;
   updatePrivacy: (data: IUpdatePrivacy) => Promise<IUser>;
   updateUsername: (data: IUpdateUsername) => Promise<IUser>;
+  findSocialTypes: () => Promise<IUserSocialType[]>;
   createSocial: (data: ICreateSocial) => Promise<IUserSocial>;
   deleteSocial: (data: string) => Promise<void>;
   verifyUsername: (data: string) => Promise<boolean>;
@@ -117,6 +118,11 @@ export const service: IUserService = {
       '/user/username',
       data,
     );
+    return response.data;
+  },
+  findSocialTypes: async (): Promise<IUserSocialType[]> => {
+    const response: AxiosResponse<IUserSocialType[]> =
+      await api.get('/user/social/types');
     return response.data;
   },
   createSocial: async (data: ICreateSocial): Promise<IUserSocial> => {
