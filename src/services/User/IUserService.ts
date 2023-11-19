@@ -58,11 +58,11 @@ export interface IUpdatePrivacy {
   private: boolean;
 }
 
-export interface IUpdateSocial {
-  social: string;
+export interface IUpdateUsername {
   username: string;
 }
 
-export interface IUpdateUsername {
-  username: string;
+export interface ICreateSocial {
+  username: 'instagram' | 'tiktok' | 'twitter' | 'twitch' | 'youtube';
+  type: string;
 }

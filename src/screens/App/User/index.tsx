@@ -39,9 +39,7 @@ const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           <CoverPhoto cover_photo={user.cover_photo} />
           <Picture picture={user.picture} />
           <Text style={styles.username}>@{user.username}</Text>
-          <Socials
-            socials={['instagram', 'twitter', 'tiktok', 'twitch', 'youtube']}
-          />
+          <Socials socials={user.social_networks} />
           <View style={styles.counts}>
             <Counts
               number={user.friends_count}

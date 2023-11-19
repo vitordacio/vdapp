@@ -3,6 +3,7 @@ export default {
   WHITE: '#FFFFFF',
   GOLD: '#F2C94D',
   RED: '#E63C3D',
+  GREEN: '#008000',
   BLUE_LINK: '#276BC6',
   BLUE_BUTTON: '#0095F6',
   GRAY_CARD: '#16181C',

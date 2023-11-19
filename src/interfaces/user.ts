@@ -1,3 +1,5 @@
+import { IUserSocial } from './social_network';
+
 export interface IUser {
   id_user: string;
   email: string;
@@ -14,9 +16,9 @@ export interface IUser {
   CNPJ: string;
   role_name: string;
   google_id: string;
-  friendship_status: string;
+  friendship_status: 'friends' | 'request_sent' | 'request_received' | '';
   friends_count: number;
   emojis_count: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  socials: any[];
+  social_networks: IUserSocial[];
 }

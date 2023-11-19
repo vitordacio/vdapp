@@ -1,5 +1,6 @@
 import api from '@config/api';
 import { IUser } from '@interfaces/user';
+import { IUserSocial } from '@interfaces/social_network';
 import { AxiosResponse } from 'axios';
 import {
   ILogin,
@@ -14,13 +15,15 @@ import {
   IUpdateName,
   IUpdatePassword,
   IUpdatePrivacy,
-  IUpdateSocial,
+  ICreateSocial,
   IUpdateUsername,
 } from './IUserService';
 
 interface IUserService {
   login: (data: ILogin) => Promise<IAuthResponse>;
+  loginToken: () => Promise<IAuthResponse>;
   createUser: (data: ICreateUser) => Promise<IUser>;
+  findById: (data: string) => Promise<IUser>;
   findFriends: (data: IFindFriends) => Promise<IUser[]>;
   searchUserByName: (data: ISearchByName) => Promise<IUser[]>;
   updateBio: (data: IUpdateBio) => Promise<IUser>;
@@ -30,8 +33,9 @@ interface IUserService {
   updateName: (data: IUpdateName) => Promise<IUser>;
   updatePassword: (data: IUpdatePassword) => Promise<IUser>;
   updatePrivacy: (data: IUpdatePrivacy) => Promise<IUser>;
-  updateSocial: (data: IUpdateSocial) => Promise<IUser>;
   updateUsername: (data: IUpdateUsername) => Promise<IUser>;
+  createSocial: (data: ICreateSocial) => Promise<IUserSocial>;
+  deleteSocial: (data: string) => Promise<void>;
   verifyUsername: (data: string) => Promise<boolean>;
 }
 
@@ -43,8 +47,17 @@ export const service: IUserService = {
     );
     return response.data;
   },
+  loginToken: async (): Promise<IAuthResponse> => {
+    const response: AxiosResponse<IAuthResponse> =
+      await api.post('/auth/token');
+    return response.data;
+  },
   createUser: async (data: ICreateUser): Promise<IUser> => {
     const response: AxiosResponse<IUser> = await api.post('/user', data);
+    return response.data;
+  },
+  findById: async (data: string): Promise<IUser> => {
+    const response: AxiosResponse<IUser> = await api.get(`/user/${data}`);
     return response.data;
   },
   findFriends: async (data: IFindFriends): Promise<IUser[]> => {
@@ -56,6 +69,12 @@ export const service: IUserService = {
   searchUserByName: async (data: ISearchByName): Promise<IUser[]> => {
     const response: AxiosResponse<IUser[]> = await api.get(
       `/user/search?name=${data.name}&page=${data.page || 1}`,
+    );
+    return response.data;
+  },
+  verifyUsername: async (data: string): Promise<boolean> => {
+    const response: AxiosResponse<boolean> = await api.get(
+      `/user/check-username/${data}`,
     );
     return response.data;
   },
@@ -93,10 +112,6 @@ export const service: IUserService = {
     const response: AxiosResponse<IUser> = await api.put('/user/private', data);
     return response.data;
   },
-  updateSocial: async (data: IUpdateSocial): Promise<IUser> => {
-    const response: AxiosResponse<IUser> = await api.put('/user/social', data);
-    return response.data;
-  },
   updateUsername: async (data: IUpdateUsername): Promise<IUser> => {
     const response: AxiosResponse<IUser> = await api.put(
       '/user/username',
@@ -104,9 +119,16 @@ export const service: IUserService = {
     );
     return response.data;
   },
-  verifyUsername: async (data: string): Promise<boolean> => {
-    const response: AxiosResponse<boolean> = await api.get(
-      `/user/check-username/${data}`,
+  createSocial: async (data: ICreateSocial): Promise<IUserSocial> => {
+    const response: AxiosResponse<IUserSocial> = await api.post(
+      '/user/social',
+      data,
+    );
+    return response.data;
+  },
+  deleteSocial: async (data: string): Promise<void> => {
+    const response: AxiosResponse<void> = await api.delete(
+      `/user/social/${data}`,
     );
     return response.data;
   },

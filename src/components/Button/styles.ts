@@ -15,9 +15,7 @@ const commonStyles: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
-    // borderWidth: 1,
     backgroundColor: `${colors.BUTTON_BACKGROUND}`,
-    // borderColor: `${colors.BUTTON_BORDER}`,
   },
   title: { fontSize: 16, color: `${colors.BUTTON_TEXT}` },
   pressed_container: { opacity: 0.8 },
@@ -43,6 +41,11 @@ export default StyleSheet.create({
 
   red_container: { backgroundColor: `${colors.RED}` },
   red_title: {
+    color: `${colors.WHITE}`,
+  },
+
+  green_container: { backgroundColor: `${colors.GREEN}` },
+  green_title: {
     color: `${colors.WHITE}`,
   },
 

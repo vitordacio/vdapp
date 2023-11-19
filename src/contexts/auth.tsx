@@ -33,8 +33,18 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
         await storageService.getItem<IAuthResponse>('@Auth:data');
 
       if (storagedData) {
-        setUser(storagedData.user);
-        api.defaults.headers.common.Authorization = `Bearer ${storagedData.accessToken}`;
+        try {
+          api.defaults.headers.common.Authorization = `Bearer ${storagedData.accessToken}`;
+          const response = await userService.loginToken();
+          const { accessToken, user: responseUser } = response;
+
+          setUser(responseUser);
+          api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        } catch (error) {
+          storageService.removeItem('@Auth:data');
+
+          setUser(null);
+        }
       }
       setLoading(false);
     };
@@ -59,8 +69,6 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
 
   const SignOut = () => {
     storageService.removeItem('@Auth:data');
-    // storageService.removeItem('@Auth:user')
-    // storageService.removeItem('@Auth:token')
 
     setUser(null);
   };

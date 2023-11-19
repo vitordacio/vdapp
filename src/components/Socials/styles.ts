@@ -5,7 +5,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 21,
     marginBottom: 21,
   },
   social: {

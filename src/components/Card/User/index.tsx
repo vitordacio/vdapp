@@ -1,6 +1,6 @@
 import { View } from '@components/View';
 import { Text } from '@components/Text';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Button } from '@components/Button';
 import { Picture } from '@components/Picture';
@@ -12,6 +12,12 @@ import { CreateResponse } from '@services/Friendship/CreateResponse';
 import { DeleteFriendship } from '@services/Friendship/DeleteFriendship';
 import styles from './styles';
 
+type Situation = {
+  status: 'friends' | 'request_sent' | 'request_received' | '';
+  type: 'blue' | 'red' | 'green';
+  icon: 'user-plus' | 'user-check' | 'user-x';
+};
+
 type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
   user: IUser;
 };
@@ -20,28 +26,65 @@ const CardUser = ({ user, navigation }: CardProps) => {
   const { username, name, picture, friendship_status } = user;
 
   const [responseError, setResponseError] = useState('');
-  const [status, setStatus] = useState(friendship_status);
+  const [situation, setSituation] = useState({} as Situation);
 
-  const toAdd = !status || status === 'request_received';
-  // const handleUser = async () => {};
   const handleFriendship = async () => {
     try {
-      if (!status) {
+      if (!situation.status) {
         await CreateRequest(user.id_user);
-        setStatus('request_sent');
+        setSituation({
+          status: 'request_sent',
+          type: 'red',
+          icon: 'user-x',
+        });
       }
-      if (status === 'request_received') {
+      if (situation.status === 'request_received') {
         await CreateResponse(user.id_user);
-        setStatus('friends');
+        setSituation({
+          status: 'friends',
+          type: 'red',
+          icon: 'user-x',
+        });
       }
-      if (status === 'request_received' || status === 'friends') {
+      if (
+        situation.status === 'request_sent' ||
+        situation.status === 'friends'
+      ) {
         await DeleteFriendship(user.id_user);
-        setStatus('');
+        setSituation({
+          status: '',
+          type: 'blue',
+          icon: 'user-plus',
+        });
       }
     } catch (error) {
       setResponseError(error.response.data.message);
     }
   };
+
+  useEffect(() => {
+    let type: Situation['type'];
+    let icon: Situation['icon'];
+
+    if (!friendship_status) {
+      type = 'blue';
+      icon = 'user-plus';
+    } else if (friendship_status === 'request_received') {
+      type = 'green';
+      icon = 'user-check';
+    } else {
+      type = 'red';
+      icon = 'user-x';
+    }
+
+    const handleSituation: Situation = {
+      status: friendship_status,
+      type,
+      icon,
+    };
+
+    setSituation(handleSituation);
+  }, []);
 
   return (
     <>
@@ -56,8 +99,8 @@ const CardUser = ({ user, navigation }: CardProps) => {
             {username && <Text style={styles.username}>@{username}</Text>}
           </View>
           <Button
-            type={toAdd ? 'blue' : 'red'}
-            icon={toAdd ? 'user-plus' : 'user-x'}
+            type={situation.type}
+            icon={situation.icon}
             iconSize={30}
             iconColor="#FFFFFF"
             style={styles.friendship}

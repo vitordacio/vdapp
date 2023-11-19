@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
+import { Text } from '@components/Text';
 import { IUser } from '@interfaces/user';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { userService } from '@services/User';
@@ -28,6 +29,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const route = useRoute();
   const { user } = route.params as UserParam;
 
+  const [resError, setResError] = useState();
   const [search, setSearch] = useState('');
   const [data, setData] = useState<IUser[] | []>([]);
   const [page, setPage] = useState(1);
@@ -50,35 +52,25 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
-      console.log(error);
+      setResError(error.response.data.message);
     }
   };
 
   const handleFriendsSearch = async () => {
     setShowLoader(true);
-    let friends: IUser[];
 
     try {
-      if (!search) {
-        friends = await userService.findFriends({
-          user_id: user.id_user,
-        });
+      const friends = await userService.findFriends({
+        user_id: user.id_user,
+        page,
+      });
 
-        if (friends.length === 0) {
-          loadMore = false;
-        }
-
-        setPage(2);
-      } else {
-        friends = await userService.searchUserByName({
-          name: search,
-        });
-      }
-
+      loadMore = friends.length !== 0;
+      setPage(1);
       setData([...friends]);
       setShowLoader(false);
     } catch (error) {
-      console.log(error);
+      setResError(error.response.data.message);
     }
   };
 
@@ -119,6 +111,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             onChangeText={e => setSearch(e)}
             value={search}
           />
+          {resError && <Text style={styles.error}>{resError}</Text>}
           <FlatList
             data={data}
             renderItem={renderItem}
