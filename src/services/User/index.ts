@@ -1,6 +1,6 @@
 import api from '@config/api';
 import { IUser } from '@interfaces/user';
-import { IUserSocial, IUserSocialType } from '@interfaces/social_network';
+import { IUserSocialType } from '@interfaces/social_network';
 import { AxiosResponse } from 'axios';
 import {
   ILogin,
@@ -35,8 +35,8 @@ interface IUserService {
   updatePrivacy: (data: IUpdatePrivacy) => Promise<IUser>;
   updateUsername: (data: IUpdateUsername) => Promise<IUser>;
   findSocialTypes: () => Promise<IUserSocialType[]>;
-  createSocial: (data: ICreateSocial) => Promise<IUserSocial>;
-  deleteSocial: (data: string) => Promise<void>;
+  createSocial: (data: ICreateSocial) => Promise<IUser>;
+  deleteSocial: (data: string) => Promise<IUser>;
   verifyUsername: (data: string) => Promise<boolean>;
 }
 
@@ -122,18 +122,15 @@ export const service: IUserService = {
   },
   findSocialTypes: async (): Promise<IUserSocialType[]> => {
     const response: AxiosResponse<IUserSocialType[]> =
-      await api.get('/user/social/types');
+      await api.get('/social/type');
     return response.data;
   },
-  createSocial: async (data: ICreateSocial): Promise<IUserSocial> => {
-    const response: AxiosResponse<IUserSocial> = await api.post(
-      '/user/social',
-      data,
-    );
+  createSocial: async (data: ICreateSocial): Promise<IUser> => {
+    const response: AxiosResponse<IUser> = await api.post('/user/social', data);
     return response.data;
   },
-  deleteSocial: async (data: string): Promise<void> => {
-    const response: AxiosResponse<void> = await api.delete(
+  deleteSocial: async (data: string): Promise<IUser> => {
+    const response: AxiosResponse<IUser> = await api.delete(
       `/user/social/${data}`,
     );
     return response.data;

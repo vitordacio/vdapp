@@ -47,7 +47,7 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   description,
   navigation,
 }) => {
-  const { user, setUser } = useAuth();
+  const { setUser } = useAuth();
   const [responseError, setResponseError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -79,16 +79,10 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
         updatedUser = await userService.updatePassword(data as IUpdatePassword);
       }
       if (type === 'create_social') {
-        const social = await userService.createSocial(data as ICreateSocial);
-        user.social_networks.push(social);
-        updatedUser = user;
+        updatedUser = await userService.createSocial(data as ICreateSocial);
       }
       if (type === 'delete_social') {
-        await userService.deleteSocial(data as string);
-        user.social_networks.filter(
-          social => social.id_social_network !== data,
-        );
-        updatedUser = user;
+        updatedUser = await userService.deleteSocial(data as string);
       }
     } catch (error) {
       setResponseError(error.message);

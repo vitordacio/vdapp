@@ -7,12 +7,16 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
 import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
-import { IUserSocialType } from '@interfaces/social_network';
+import { IUserSocial, IUserSocialType } from '@interfaces/social_network';
 import useAuth from '@contexts/auth';
 import { Pressable, ImageBackground, ImageSourcePropType } from 'react-native';
 import { View } from '@components/View';
 import { Text } from '@components/Text';
 import { userService } from '@services/User';
+import { Feather } from '@expo/vector-icons';
+import { ParamListBase } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ICreateSocial } from '@services/User/IUserService';
 import styles from './styles';
 
 const assetMapping: Record<string, ImageSourcePropType> = {
@@ -29,50 +33,45 @@ const schema = yup.object({
 
 type SocialFormData = yup.InferType<typeof schema>;
 
-const UpdateSocial: React.FC = () => {
+const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
   const { user } = useAuth();
 
-  const [confirm, setConfirm] = useState(false);
-  const [value, setShowValue] = useState('');
-  const [form, setForm] = useState({});
-  const [currentType, setCurrentType] = useState<IUserSocialType['type']>();
+  const [confirmCreate, setConfirmCreate] = useState(false);
+  const [formCreate, setFormCreate] = useState<ICreateSocial>();
+
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [formDelete, setFormDelete] = useState('');
+
+  const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>([]);
+  const [currentType, setCurrentType] = useState<IUserSocialType>();
   const [disabledTypes, setDisabledTypes] = useState<IUserSocialType['type'][]>(
     [],
   );
-  const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>([]);
+  const [userSocials, setUserSocials] = useState<IUserSocial[]>([]);
+  const [value, setShowValue] = useState('');
 
   const fetchData = async () => {
-    // setSocials(['instagram', 'tiktok', 'twitter', 'twitch', 'youtube']);
-
-    // setCurrentType(
-    //   user.social_networks.length !== 0
-    //     ? user.social_networks[0].type.type
-    //     : null,
-    // );
-
     try {
-      const dataSocialTypes = await userService.findSocialTypes();
-      setSocialTypes([...dataSocialTypes]);
+      setUserSocials(user.social_networks);
 
+      const dataSocialTypes = await userService.findSocialTypes();
+      setSocialTypes(dataSocialTypes);
+      // setSocialTypes([...dataSocialTypes]);
       if (user.social_networks.length !== 0) {
         const disableds: IUserSocialType['type'][] = [];
+
         user.social_networks.forEach(userSocial => {
-          const toDisable = dataSocialTypes.find(
-            dataSocial =>
-              dataSocial.id_social_network_type === userSocial.type_id,
-          );
-          if (!toDisable) return;
-          disableds.push(toDisable.type);
+          disableds.push(userSocial.type.type);
         });
+
         setDisabledTypes(disableds);
-        // const current = dataSocialTypes.find(socialType => {
-        //   !disableds.some(disabled => disabled === socialType.type)
-        // })
-        // setCurrentType(current.type)
         const current = dataSocialTypes.find(
           socialType => !disableds.includes(socialType.type),
         );
-        setCurrentType(current ? current.type : 'instagram');
+        setCurrentType(current);
+        // setCurrentType(current ? current.type : 'instagram');
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -85,15 +84,20 @@ const UpdateSocial: React.FC = () => {
       disabled => disabled === socialType.type,
     );
     if (isDisabled) return;
-    setCurrentType(socialType.type);
+    setCurrentType(socialType);
   };
 
   const handleCreateSocial = async (data: SocialFormData) => {
-    setForm({
+    setFormCreate({
       username: data.username,
-      type: currentType,
+      type_id: currentType.id_social_network_type,
     });
-    setConfirm(true);
+    setConfirmCreate(true);
+  };
+
+  const handleDeleteSocial = async (data: IUserSocial) => {
+    setFormDelete(data.id_social_network);
+    setConfirmDelete(true);
   };
 
   const {
@@ -106,7 +110,7 @@ const UpdateSocial: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [user.social_networks]);
 
   return (
     <ViewUpdate
@@ -119,7 +123,7 @@ const UpdateSocial: React.FC = () => {
             key={socialType.id_social_network_type}
             style={[
               styles.social_wrapper,
-              currentType === socialType.type && { borderColor: 'white' },
+              currentType.type === socialType.type && styles.selected,
               disabledTypes.some(disabled => disabled === socialType.type) &&
                 styles.disabled,
             ]}
@@ -150,17 +154,47 @@ const UpdateSocial: React.FC = () => {
         {currentType && `${currentType}.com/${value}`}
       </Text>
 
-      <Button
-        onPress={handleSubmit(handleCreateSocial)}
-        title="Salvar"
-        type="blue"
-      />
-      {confirm && (
+      <View style={styles.button_wrapper}>
+        <Button
+          onPress={handleSubmit(handleCreateSocial)}
+          title="Salvar"
+          type="blue"
+        />
+      </View>
+
+      <View style={styles.user_socials}>
+        <Text style={styles.user_socials_title}>Suas Ligações</Text>
+        {userSocials.map(social => (
+          <View key={social.id_social_network} style={styles.user_social}>
+            <ImageBackground
+              style={styles.social}
+              source={assetMapping[social.type.type]}
+            />
+            <Text style={styles.user_social_username}>/{social.username}</Text>
+            <Pressable onPress={() => handleDeleteSocial(social)}>
+              <Feather name="trash-2" size={30} color="white" />
+            </Pressable>
+          </View>
+        ))}
+      </View>
+
+      {confirmCreate && (
         <ViewConfirm
-          data={form}
-          setConfirm={setConfirm}
+          data={formCreate}
+          navigation={navigation}
+          setConfirm={setConfirmCreate}
           type="create_social"
           description="Tem certeza que deseja adicionar a ligação a rede social?"
+        />
+      )}
+
+      {confirmDelete && (
+        <ViewConfirm
+          navigation={navigation}
+          data={formDelete}
+          setConfirm={setConfirmDelete}
+          type="delete_social"
+          description="Tem certeza que deseja desfazer a ligação a rede social?"
         />
       )}
     </ViewUpdate>

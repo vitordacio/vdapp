@@ -63,6 +63,6 @@ export interface IUpdateUsername {
 }
 
 export interface ICreateSocial {
-  username: 'instagram' | 'tiktok' | 'twitter' | 'twitch' | 'youtube';
-  type: string;
+  username: string;
+  type_id: string;
 }
