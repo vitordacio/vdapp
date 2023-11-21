@@ -9,7 +9,7 @@ import { CoverPhoto } from '@components/CoverPhoto';
 import React, { useEffect, useState } from 'react';
 import { Counts } from '@components/Counts';
 import { LineY } from '@components/Line';
-import { ActivityIndicator, ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import colors from '@styles/colors';
 import { Icon } from '@components/Icon';
@@ -19,15 +19,16 @@ import { userService } from '@services/User';
 import { friendshipService } from '@services/Friendship';
 import useAuth from '@contexts/auth';
 import styles from './styles';
+import { ViewPrivate } from './ViewPrivate';
 
 type Situation = {
   status: 'friends' | 'request_sent' | 'request_received' | '';
-  type: 'blue' | 'red' | 'green';
-  icon: 'user-plus' | 'user-check' | 'user-x';
+  type: 'blue' | 'red' | 'green' | 'gray';
+  icon: 'user-plus' | 'user-check' | 'user-x' | 'user-minus';
 };
 
 type UserParam = ParamListBase & {
-  profile_id: IUser['id_user'];
+  user: IUser;
 };
 
 const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
@@ -35,13 +36,16 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 }) => {
   const { user, setUser } = useAuth();
   const route = useRoute();
-  const { profile_id } = route.params as UserParam;
+  const { user: paramUser } = route.params as UserParam;
 
   const [profileUser, setProfileUser] = useState<IUser>();
-  const [responseError, setResponseError] = useState();
-  const [showLoader, setShowLoader] = useState(false);
-  const [friendshipLoader, setFriendshipLoader] = useState(false);
-  const [friendshipTitle, setFriendshipTitle] = useState('');
+  const [responseError, setResponseError] = useState<string>();
+  const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [showPrivate, setShowPrivate] = useState<boolean>(false);
+  const [privateViewType, setPrivateViewType] = useState<'info' | 'warning'>();
+  const [canSeeContent, setCanSeeContent] = useState<boolean>();
+  const [friendshipLoader, setFriendshipLoader] = useState<boolean>(false);
+  const [friendshipTitle, setFriendshipTitle] = useState<string>('');
   const [situation, setSituation] = useState({} as Situation);
 
   const fetchData = async () => {
@@ -53,7 +57,7 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     let icon: Situation['icon'];
 
     try {
-      profile = await userService.findById(profile_id);
+      profile = await userService.findById(paramUser.id_user);
 
       const { friendship_status } = profile;
 
@@ -65,13 +69,14 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         type = 'green';
         icon = 'user-check';
         currentTitle = 'Aceitar amizade';
+      } else if (friendship_status === 'request_sent') {
+        type = 'gray';
+        icon = 'user-x';
+        currentTitle = 'Cancelar solicitação';
       } else {
         type = 'red';
-        icon = 'user-x';
-        currentTitle =
-          friendship_status === 'friends'
-            ? 'Desfazer amizade'
-            : 'Cancelar solicitação';
+        icon = 'user-minus';
+        currentTitle = 'Desfazer amizade';
       }
 
       const handleSituation: Situation = {
@@ -79,6 +84,10 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         type,
         icon,
       };
+
+      setCanSeeContent(
+        !profile.private ? true : friendship_status === 'friends',
+      );
       setSituation(handleSituation);
       setFriendshipTitle(currentTitle);
       setProfileUser(profile);
@@ -97,34 +106,31 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         await friendshipService.createRequest(profileUser.id_user);
         setSituation({
           status: 'request_sent',
-          type: 'red',
+          type: 'gray',
           icon: 'user-x',
         });
         currentTitle = 'Cancelar solicitação';
-      }
-      if (situation.status === 'request_received') {
+      } else if (situation.status === 'request_received') {
         await friendshipService.createResponse(profileUser.id_user);
         setSituation({
           status: 'friends',
           type: 'red',
-          icon: 'user-x',
+          icon: 'user-minus',
         });
         user.friends_count += 1;
         profileUser.friends_count += 1;
         currentTitle = 'Desfazer amizade';
-      }
-      if (
-        situation.status === 'request_sent' ||
-        situation.status === 'friends'
-      ) {
+      } else {
         await friendshipService.deleteFriendship(profileUser.id_user);
         setSituation({
           status: '',
           type: 'blue',
           icon: 'user-plus',
         });
-        user.friends_count -= 1;
-        profileUser.friends_count -= 1;
+        if (situation.status === 'friends') {
+          user.friends_count -= 1;
+          profileUser.friends_count -= 1;
+        }
         currentTitle = 'Adicionar amigo';
       }
 
@@ -137,11 +143,16 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     }
   };
 
-  // React.useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     title: user.name,
-  //   });
-  // }, [navigation, user.name]);
+  const handlePrivacy = (data: 'info' | 'warning') => {
+    setPrivateViewType(data);
+    setShowPrivate(true);
+  };
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: paramUser.name,
+    });
+  }, [navigation, paramUser.name]);
 
   useEffect(() => {
     fetchData();
@@ -170,7 +181,9 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                       number={profileUser.friends_count}
                       description="Amigos"
                       onPress={() =>
-                        navigation.push('Friends', { profileUser })
+                        canSeeContent
+                          ? navigation.push('Friends', { user: profileUser })
+                          : handlePrivacy('warning')
                       }
                     />
                     <LineY />
@@ -209,11 +222,13 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                     <Text style={styles.text}>{profileUser.bio}</Text>
                   )}
                   <View style={styles.private}>
-                    <Feather
-                      name={profileUser.private ? 'lock' : 'unlock'}
-                      size={19}
-                      color={`${colors.TEXT_DEFAULT}`}
-                    />
+                    <TouchableOpacity onPress={() => handlePrivacy('info')}>
+                      <Feather
+                        name={profileUser.private ? 'lock' : 'unlock'}
+                        size={19}
+                        color={`${colors.TEXT_DEFAULT}`}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </>
               )}
@@ -224,6 +239,13 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           </>
         )}
       </ScrollView>
+      {showPrivate && (
+        <ViewPrivate
+          setConfirm={setShowPrivate}
+          type={privateViewType}
+          is_private={profileUser.private}
+        />
+      )}
     </AppView>
   );
 };

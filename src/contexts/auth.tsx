@@ -37,7 +37,6 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
           api.defaults.headers.common.Authorization = `Bearer ${storagedData.accessToken}`;
           const response = await userService.loginToken();
           const { accessToken, user: responseUser } = response;
-
           setUser(responseUser);
           api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         } catch (error) {

@@ -7,15 +7,14 @@ import { Picture } from '@components/Picture';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { IUser } from '@interfaces/user';
-import { CreateRequest } from '@services/Friendship/CreateRequest';
-import { CreateResponse } from '@services/Friendship/CreateResponse';
-import { DeleteFriendship } from '@services/Friendship/DeleteFriendship';
+import { friendshipService } from '@services/Friendship';
+import useAuth from '@contexts/auth';
 import styles from './styles';
 
 type Situation = {
   status: 'friends' | 'request_sent' | 'request_received' | '';
-  type: 'blue' | 'red' | 'green';
-  icon: 'user-plus' | 'user-check' | 'user-x';
+  type: 'blue' | 'red' | 'green' | 'gray';
+  icon: 'user-plus' | 'user-check' | 'user-x' | 'user-minus';
 };
 
 type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
@@ -23,6 +22,7 @@ type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
 };
 
 const CardUser = ({ user, navigation }: CardProps) => {
+  const { user: self } = useAuth();
   const { username, name, picture, friendship_status } = user;
 
   const [responseError, setResponseError] = useState('');
@@ -31,7 +31,7 @@ const CardUser = ({ user, navigation }: CardProps) => {
   const handleFriendship = async () => {
     try {
       if (!situation.status) {
-        await CreateRequest(user.id_user);
+        await friendshipService.createRequest(user.id_user);
         setSituation({
           status: 'request_sent',
           type: 'red',
@@ -39,18 +39,18 @@ const CardUser = ({ user, navigation }: CardProps) => {
         });
       }
       if (situation.status === 'request_received') {
-        await CreateResponse(user.id_user);
+        await friendshipService.createResponse(user.id_user);
         setSituation({
           status: 'friends',
           type: 'red',
-          icon: 'user-x',
+          icon: 'user-minus',
         });
       }
       if (
         situation.status === 'request_sent' ||
         situation.status === 'friends'
       ) {
-        await DeleteFriendship(user.id_user);
+        await friendshipService.deleteFriendship(user.id_user);
         setSituation({
           status: '',
           type: 'blue',
@@ -72,9 +72,12 @@ const CardUser = ({ user, navigation }: CardProps) => {
     } else if (friendship_status === 'request_received') {
       type = 'green';
       icon = 'user-check';
+    } else if (friendship_status === 'request_sent') {
+      type = 'gray';
+      icon = 'user-x';
     } else {
       type = 'red';
-      icon = 'user-x';
+      icon = 'user-minus';
     }
 
     const handleSituation: Situation = {
@@ -92,7 +95,9 @@ const CardUser = ({ user, navigation }: CardProps) => {
         <TouchableOpacity
           style={styles.container}
           onPress={() =>
-            navigation.push('Profile', { profile_id: user.id_user })
+            self.id_user !== user.id_user
+              ? navigation.push('Profile', { user })
+              : navigation.navigate('User')
           }
         >
           <Picture card={true} picture={picture} />
@@ -100,14 +105,17 @@ const CardUser = ({ user, navigation }: CardProps) => {
             {name && <Text style={styles.name}>{name}</Text>}
             {username && <Text style={styles.username}>@{username}</Text>}
           </View>
-          <Button
-            type={situation.type}
-            icon={situation.icon}
-            iconSize={30}
-            iconColor="#FFFFFF"
-            style={styles.friendship}
-            onPress={handleFriendship}
-          />
+          {self.id_user !== user.id_user && (
+            <Button
+              type={situation.type}
+              icon={situation.icon}
+              iconSize={30}
+              iconColor="#FFFFFF"
+              style={styles.friendship}
+              onPress={handleFriendship}
+            />
+          )}
+
           <Text style={styles.error}>{responseError}</Text>
         </TouchableOpacity>
       )}

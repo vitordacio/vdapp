@@ -63,13 +63,15 @@ const service: IUserService = {
   },
   findFriends: async (data: IFindFriends): Promise<IUser[]> => {
     const response: AxiosResponse<IUser[]> = await api.get(
-      `/user/friends/${data.user_id}?page=${data.page || 1}`,
+      `/user/friends/${data.user_id}?page=${data.page || 1}&name${
+        data.name && `=${data.name}`
+      }`,
     );
     return response.data;
   },
   searchUserByName: async (data: ISearchByName): Promise<IUser[]> => {
     const response: AxiosResponse<IUser[]> = await api.get(
-      `/user/search?name=${data.name}&page=${data.page || 1}`,
+      `/user/search?page=${data.page || 1}&name${data.name && `=${data.name}`}`,
     );
     return response.data;
   },

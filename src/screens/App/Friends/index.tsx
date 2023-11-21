@@ -35,39 +35,22 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const [page, setPage] = useState(1);
   const [showLoader, setShowLoader] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = async (reset: boolean) => {
+    if (reset) loadMore = true;
     let friends: IUser[];
 
     try {
       friends = await userService.findFriends({
         user_id: user.id_user,
-        page,
+        page: !reset ? page : 1,
+        name: search,
       });
 
       if (friends.length === 0) {
         loadMore = false;
       }
-
-      setData([...data, ...friends]);
-      setPage(page + 1);
-      setShowLoader(false);
-    } catch (error) {
-      setResponseError(error.response.data.message);
-    }
-  };
-
-  const handleFriendsSearch = async () => {
-    setShowLoader(true);
-
-    try {
-      const friends = await userService.findFriends({
-        user_id: user.id_user,
-        page,
-      });
-
-      loadMore = friends.length !== 0;
-      setPage(1);
-      setData([...friends]);
+      setData(!reset ? [...data, ...friends] : friends);
+      setPage(!reset ? page + 1 : 2);
       setShowLoader(false);
     } catch (error) {
       setResponseError(error.response.data.message);
@@ -90,7 +73,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const onEndReached = () => {
     if (loadMore) {
       setShowLoader(true);
-      fetchData();
+      fetchData(false);
     }
   };
 
@@ -99,7 +82,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   }, []);
 
   useEffect(() => {
-    fetchData();
+    fetchData(false);
   }, []);
 
   return (
@@ -107,7 +90,11 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="position" enabled>
           <SearchInput
-            handlePress={handleFriendsSearch}
+            handlePress={() => {
+              setPage(1);
+              setData([]);
+              fetchData(true);
+            }}
             onChangeText={e => setSearch(e)}
             value={search}
           />

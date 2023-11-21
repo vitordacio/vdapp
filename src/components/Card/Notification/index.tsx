@@ -7,9 +7,8 @@ import { Button } from '@components/Button';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { INotification } from '@interfaces/notification';
-import { CreateRequest } from '@services/Friendship/CreateRequest';
-import { CreateResponse } from '@services/Friendship/CreateResponse';
-import { DeleteFriendship } from '@services/Friendship/DeleteFriendship';
+import { friendshipService } from '@services/Friendship';
+import { IUser } from '@interfaces/user';
 import styles from './styles';
 
 type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
@@ -20,25 +19,26 @@ const CardNotification = ({ notification, navigation }: CardProps) => {
   const { author, message } = notification;
 
   const [responseError, setResponseError] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState<IUser['friendship_status']>('');
   // const [status, setStatus] = useState(author.friendship_status);
 
   const toAdd = !status || status === 'request_received';
-
   const handleFriendship = async () => {
+    let currentStatus: IUser['friendship_status'];
     try {
       if (!status) {
-        await CreateRequest(author.id_user);
-        setStatus('request_sent');
+        await friendshipService.createRequest(author.id_user);
+        currentStatus = 'request_sent';
       }
       if (status === 'request_received') {
-        await CreateResponse(author.id_user);
-        setStatus('friends');
+        await friendshipService.createResponse(author.id_user);
+        currentStatus = 'friends';
       }
       if (status === 'request_received' || status === 'friends') {
-        await DeleteFriendship(author.id_user);
-        setStatus('');
+        await friendshipService.deleteFriendship(author.id_user);
+        currentStatus = '';
       }
+      setStatus(currentStatus);
     } catch (error) {
       setResponseError(error.response.data.message);
     }
@@ -49,9 +49,7 @@ const CardNotification = ({ notification, navigation }: CardProps) => {
       {notification && (
         <TouchableOpacity
           style={styles.container}
-          onPress={() =>
-            navigation.push('Profile', { profile_id: notification.author_id })
-          }
+          onPress={() => navigation.push('Profile', { user: author })}
         >
           {/* {author.picture && <Picture card={true} picture={author.picture} />} */}
           <View style={styles.data}>

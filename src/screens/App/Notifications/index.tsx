@@ -17,7 +17,7 @@ const Notifications: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     navigation.setOptions({
       title: 'Notificações',
     });
-  }, [navigation]);
+  }, []);
 
   const [data, setData] = useState<INotification[] | []>([]);
   const [page, setPage] = useState(1);

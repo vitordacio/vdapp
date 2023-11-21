@@ -39,6 +39,14 @@ export default StyleSheet.create({
     color: `${colors.WHITE}`,
   },
 
+  gray_container: {
+    backgroundColor: `${colors.GRAY_INPUT_BACKGROUND}`,
+    maxWidth: 230,
+  },
+  gray_title: {
+    color: `${colors.WHITE}`,
+  },
+
   red_container: { backgroundColor: `${colors.RED}` },
   red_title: {
     color: `${colors.WHITE}`,

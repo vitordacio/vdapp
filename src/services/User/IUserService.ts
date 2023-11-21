@@ -21,6 +21,7 @@ export interface IFindFriends {
   user_id: string;
   page?: number;
   limit?: number;
+  name?: string;
 }
 
 export interface ISearchByName {
