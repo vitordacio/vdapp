@@ -7,7 +7,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 37,
+    marginBottom: 14,
   },
   title: {
     display: 'flex',
@@ -24,7 +24,17 @@ export default StyleSheet.create({
     color: `${colors.RED}`,
     textAlign: 'center',
     height: 17,
-    marginTop: -17,
     width: '100%',
+    marginBottom: 37,
+  },
+  user_private: {
+    color: `${colors.TEXT_DEFAULT}`,
+    textAlign: 'left',
+    fontSize: 14,
+  },
+  details: {
+    color: `${colors.GRAY_DESCRIPTION}`,
+    fontSize: 16,
+    marginBottom: 14,
   },
 });

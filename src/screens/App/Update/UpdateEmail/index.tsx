@@ -9,6 +9,8 @@ import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import useAuth from '@contexts/auth';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { View } from '@components/View';
+import styles from '@screens/App/Update/styles';
 
 const schema = yup.object({
   email: yup.string().email('E-mail inválido').required('Informe o e-mail'),
@@ -50,13 +52,20 @@ const UpdateEmail: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           name="email"
           control={control}
           icon="mail"
-          placeholder="E-mail"
+          placeholder="Informe um e-mail"
+          defaultValue={user.email}
           keyboardType="email-address"
           autoCapitalize="none"
           error={errors.email}
         />
       </>
-      <Button onPress={handleSubmit(handleEmail)} title="Salvar" type="blue" />
+      <View style={styles.confirm_button_wrapper}>
+        <Button
+          onPress={handleSubmit(handleEmail)}
+          title="Salvar"
+          type="blue"
+        />
+      </View>
       {confirm && (
         <ViewConfirm
           data={form}

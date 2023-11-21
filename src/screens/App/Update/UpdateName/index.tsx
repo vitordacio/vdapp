@@ -9,11 +9,13 @@ import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useAuth from '@contexts/auth';
+import { View } from '@components/View';
+import styles from '@screens/App/Update/styles';
 
 const schema = yup.object({
   name: yup
     .string()
-    .min(3, 'O nome deve ter ao menos 3 dígitos')
+    .min(4, 'O nome deve ter ao menos 4 dígitos')
     .max(30, 'O nome deve ter no máximo 30 dígitos')
     .required('Informe um nome'),
 });
@@ -46,16 +48,17 @@ const UpdateName: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       name="Nome"
       description="Você pode alterar o seu nome uma vez a cada 7 dias."
     >
-      <>
-        <ControlledTextInput
-          name="name"
-          control={control}
-          placeholder={`${user.name}`}
-          error={errors.name}
-          maxLength={30}
-        />
-      </>
-      <Button onPress={handleSubmit(handleName)} title="Salvar" type="blue" />
+      <ControlledTextInput
+        name="name"
+        control={control}
+        placeholder="Informe um nome"
+        defaultValue={user.name}
+        error={errors.name}
+        maxLength={30}
+      />
+      <View style={styles.confirm_button_wrapper}>
+        <Button onPress={handleSubmit(handleName)} title="Salvar" type="blue" />
+      </View>
       {confirm && (
         <ViewConfirm
           data={form}

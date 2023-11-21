@@ -1,88 +1,74 @@
 import React, { useState } from 'react';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@components/Button';
 import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
-import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useAuth from '@contexts/auth';
-import { ControlledSwitchInput } from '@components/Input/SwitchInput';
 import { Text } from '@components/Text';
-import colors from '@styles/colors';
+import { userService } from '@services/User';
+import { View } from '@components/View';
+import { IUser } from '@interfaces/user';
+import { ActivityIndicator, Switch } from 'react-native';
+import styles from './styles';
 
-const schema = yup.object({
-  privacy: yup.boolean(),
-});
+const UpdatePrivacy: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
+  const { user, setUser } = useAuth();
+  const [value, setValue] = useState(user.private);
+  const [loading, setLoading] = useState(false);
+  const [responseError, setResponseError] = useState('');
 
-type PrivacyFormData = yup.InferType<typeof schema>;
+  const handlePrivate = async () => {
+    setLoading(true);
 
-const UpdatePrivacy: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
-
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
-
-  const handlePrivacy = async (data: PrivacyFormData) => {
-    setForm({ private: data.privacy });
-    setConfirm(true);
+    let updatedUser: IUser;
+    try {
+      updatedUser = await userService.updatePrivacy({
+        private: !value,
+      });
+    } catch (error) {
+      setResponseError(error.message);
+    }
+    setUser(updatedUser);
+    setValue(prev => !prev);
+    setLoading(false);
   };
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<PrivacyFormData>({
-    resolver: yupResolver(schema),
-  });
 
   return (
     <ViewUpdate
       name="Privacidade da conta"
       description="Quem pode ver seu conteúdo"
     >
-      <>
-        <ControlledSwitchInput
-          name="privacy"
-          control={control}
-          title="Conta Privada"
-          error={errors.privacy}
-          value={user.private}
-        />
-      </>
-      <Button
-        onPress={handleSubmit(handlePrivacy)}
-        title="Salvar"
-        type="blue"
-      />
-      <Text
-        style={{
-          color: `${colors.GRAY_DESCRIPTION}`,
-          fontSize: 16,
-          marginTop: 37,
-          marginBottom: 14,
-        }}
-      >
+      <View style={styles.container}>
+        <Text style={styles.title}>Conta Privada</Text>
+        <View style={styles.switch}>
+          {!loading ? (
+            <Switch
+              onValueChange={handlePrivate}
+              value={value}
+              // trackColor={{
+              //   false: `${colors.GRAY_DESCRIPTION}`,
+              //   true: `${colors.BLUE_BUTTON}`,
+              // }}
+              // thumbColor="yellow"
+            />
+          ) : (
+            <ActivityIndicator size="small" />
+          )}
+        </View>
+      </View>
+      <Text style={styles.user_private}>
+        {value ? 'Seu perfil está privado' : 'Seu perfil está público'}
+      </Text>
+      <Text style={styles.error}>{responseError}</Text>
+
+      <Text style={[styles.details, { marginBottom: 14 }]}>
         Quando sua conta é pública, seu perfil e publicações podem ser vistos
         por todos dentro do app.
       </Text>
-      <Text style={{ color: `${colors.GRAY_DESCRIPTION}`, fontSize: 16 }}>
+      <Text style={styles.details}>
         Quando sua conta é privada, somente os seus amigos podem ver o que você
         compartilha, como eventos, participações, emotes enviados e conquistas,
         bem como suas listas de amigos e de emotes recebidos.
       </Text>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="privacy"
-          description="Tem certeza que deseja mudar a sua localização?"
-        />
-      )}
     </ViewUpdate>
   );
 };

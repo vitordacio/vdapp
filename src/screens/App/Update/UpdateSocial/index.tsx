@@ -17,6 +17,7 @@ import { Feather } from '@expo/vector-icons';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ICreateSocial } from '@services/User/IUserService';
+import generalstyle from '@screens/App/Update/styles';
 import styles from './styles';
 
 const assetMapping: Record<string, ImageSourcePropType> = {
@@ -38,11 +39,12 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 }) => {
   const { user } = useAuth();
 
-  const [confirmCreate, setConfirmCreate] = useState(false);
-  const [formCreate, setFormCreate] = useState<ICreateSocial>();
+  const [submitType, setSubmitType] = useState<
+    'create_social' | 'delete_social'
+  >();
 
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [formDelete, setFormDelete] = useState('');
+  const [confirm, setConfirm] = useState(false);
+  const [form, setForm] = useState<ICreateSocial | string>();
 
   const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>([]);
   const [currentType, setCurrentType] = useState<IUserSocialType>();
@@ -55,24 +57,21 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const fetchData = async () => {
     try {
       setUserSocials(user.social_networks);
-
       const dataSocialTypes = await userService.findSocialTypes();
       setSocialTypes(dataSocialTypes);
-      // setSocialTypes([...dataSocialTypes]);
-      if (user.social_networks.length !== 0) {
-        const disableds: IUserSocialType['type'][] = [];
 
-        user.social_networks.forEach(userSocial => {
-          disableds.push(userSocial.type.type);
-        });
+      const disableds =
+        user.social_networks.length === 0
+          ? []
+          : user.social_networks.map(userSocial => userSocial.type.type);
 
-        setDisabledTypes(disableds);
-        const current = dataSocialTypes.find(
-          socialType => !disableds.includes(socialType.type),
-        );
-        setCurrentType(current);
-        // setCurrentType(current ? current.type : 'instagram');
-      }
+      setDisabledTypes(disableds);
+
+      const current = dataSocialTypes.find(
+        socialType => !disableds.includes(socialType.type),
+      );
+
+      setCurrentType(current);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
@@ -88,16 +87,18 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   };
 
   const handleCreateSocial = async (data: SocialFormData) => {
-    setFormCreate({
+    setSubmitType('create_social');
+    setForm({
       username: data.username,
       type_id: currentType.id_social_network_type,
     });
-    setConfirmCreate(true);
+    setConfirm(true);
   };
 
   const handleDeleteSocial = async (data: IUserSocial) => {
-    setFormDelete(data.id_social_network);
-    setConfirmDelete(true);
+    setSubmitType('delete_social');
+    setForm(data.id_social_network);
+    setConfirm(true);
   };
 
   const {
@@ -110,7 +111,7 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   useEffect(() => {
     fetchData();
-  }, [user.social_networks]);
+  }, [user]);
 
   return (
     <ViewUpdate
@@ -151,10 +152,10 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       </>
 
       <Text style={styles.preview}>
-        {currentType && `${currentType}.com/${value}`}
+        {currentType && `${currentType.base_url}${value}`}
       </Text>
 
-      <View style={styles.button_wrapper}>
+      <View style={generalstyle.confirm_button_wrapper}>
         <Button
           onPress={handleSubmit(handleCreateSocial)}
           title="Salvar"
@@ -178,23 +179,17 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         ))}
       </View>
 
-      {confirmCreate && (
-        <ViewConfirm
-          data={formCreate}
-          navigation={navigation}
-          setConfirm={setConfirmCreate}
-          type="create_social"
-          description="Tem certeza que deseja adicionar a ligação a rede social?"
-        />
-      )}
-
-      {confirmDelete && (
+      {confirm && (
         <ViewConfirm
           navigation={navigation}
-          data={formDelete}
-          setConfirm={setConfirmDelete}
-          type="delete_social"
-          description="Tem certeza que deseja desfazer a ligação a rede social?"
+          data={form}
+          setConfirm={setConfirm}
+          type={submitType}
+          description={
+            submitType === 'create_social'
+              ? 'Tem certeza que deseja adicionar a ligação a rede social?'
+              : 'Tem certeza que deseja desfazer a ligação a rede social?'
+          }
         />
       )}
     </ViewUpdate>

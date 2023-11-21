@@ -48,6 +48,19 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 16,
   },
+  confirm_button_wrapper: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  error: {
+    fontSize: 16,
+    maxWidth: 326,
+    height: 19,
+    textAlign: 'center',
+    color: `${colors.RED}`,
+  },
 });
 
 export default styles;

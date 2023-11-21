@@ -9,6 +9,8 @@ import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import useAuth from '@contexts/auth';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { View } from '@components/View';
+import styles from '@screens/App/Update/styles';
 
 const schema = yup.object({
   bio: yup.string().max(150, 'A biografia deve ter no máximo 150 dígitos'),
@@ -45,12 +47,16 @@ const UpdateBio: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <ControlledTextInput
         name="bio"
         control={control}
-        placeholder={`${user.bio || 'Biografia'}`}
         error={errors.bio}
         lengthMax={150}
+        placeholder="Informe uma biografia"
+        defaultValue={user.bio}
       />
 
-      <Button onPress={handleSubmit(handleBio)} title="Salvar" type="blue" />
+      <View style={styles.confirm_button_wrapper}>
+        <Button onPress={handleSubmit(handleBio)} title="Salvar" type="blue" />
+      </View>
+
       {confirm && (
         <ViewConfirm
           data={form}

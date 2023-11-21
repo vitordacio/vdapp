@@ -10,6 +10,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
 import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { userService } from '@services/User';
+import { View } from '@components/View';
+import styles from '@screens/App/Update/styles';
 
 const schema = yup.object({
   username: yup
@@ -68,18 +70,21 @@ const UpdateUsername: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           name="username"
           control={control}
           icon="at-sign"
-          placeholder={`${user.username}`}
+          placeholder="Informe um nome de usuário"
+          defaultValue={user.username}
           autoCapitalize="none"
           error={errors.username}
           status={handleValid}
           maxLength={16}
         />
       </>
-      <Button
-        onPress={handleSubmit(handleUsername)}
-        title="Salvar"
-        type="blue"
-      />
+      <View style={styles.confirm_button_wrapper}>
+        <Button
+          onPress={handleSubmit(handleUsername)}
+          title="Salvar"
+          type="blue"
+        />
+      </View>
       {confirm && (
         <ViewConfirm
           data={form}

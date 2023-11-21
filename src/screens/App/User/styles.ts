@@ -49,6 +49,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: 5,
   },
+  error: {
+    fontSize: 16,
+    maxWidth: 326,
+    height: 19,
+    textAlign: 'center',
+    color: `${colors.RED}`,
+  },
 });
 
 export default styles;

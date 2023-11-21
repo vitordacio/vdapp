@@ -89,7 +89,8 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
     }
 
     setUser(updatedUser);
-    return updatedUser && navigation.goBack();
+    const goBack = type !== 'create_social' && type !== 'delete_social';
+    return goBack ? navigation.goBack() : setConfirm(false);
   };
 
   return (

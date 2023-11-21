@@ -9,6 +9,8 @@ import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import useAuth from '@contexts/auth';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { View } from '@components/View';
+import styles from '@screens/App/Update/styles';
 
 const schema = yup.object({
   location: yup.string().max(30, 'A localização deve ter no máximo 30 dígitos'),
@@ -41,21 +43,22 @@ const UpdateLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       name="Localização"
       description="Você pode editar a sua localização a qualquer momento."
     >
-      <>
-        <ControlledTextInput
-          name="location"
-          control={control}
-          icon="map-pin"
-          placeholder={`${user.location || 'Localização'}`}
-          error={errors.location}
-          maxLength={30}
-        />
-      </>
-      <Button
-        onPress={handleSubmit(handleLocation)}
-        title="Salvar"
-        type="blue"
+      <ControlledTextInput
+        name="location"
+        control={control}
+        icon="map-pin"
+        placeholder="Informe sua localização"
+        defaultValue={user.location}
+        error={errors.location}
+        maxLength={30}
       />
+      <View style={styles.confirm_button_wrapper}>
+        <Button
+          onPress={handleSubmit(handleLocation)}
+          title="Salvar"
+          type="blue"
+        />
+      </View>
       {confirm && (
         <ViewConfirm
           data={form}

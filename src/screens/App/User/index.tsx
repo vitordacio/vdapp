@@ -1,3 +1,6 @@
+import React from 'react';
+import useAuth from '@contexts/auth';
+import colors from '@styles/colors';
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
@@ -6,14 +9,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Picture } from '@components/Picture';
 import { CoverPhoto } from '@components/CoverPhoto';
 import { Socials } from '@components/Socials';
-import React from 'react';
 import { Counts } from '@components/Counts';
 import { LineY } from '@components/Line';
 import { ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import colors from '@styles/colors';
 import { Icon } from '@components/Icon';
-import useAuth from '@contexts/auth';
 import { UserTopTabRoutes } from '@routes/user.routes';
 import styles from './styles';
 
@@ -37,12 +37,11 @@ const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         {user && (
           <>
-            {' '}
             <View style={styles.container}>
               <CoverPhoto cover_photo={user.cover_photo} />
               <Picture picture={user.picture} />
               <Text style={styles.username}>@{user.username}</Text>
-              <Socials socials={user.social_networks} />
+              <Socials user={user} />
               <View style={styles.counts}>
                 <Counts
                   number={user.friends_count}

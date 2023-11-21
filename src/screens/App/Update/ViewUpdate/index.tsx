@@ -8,7 +8,6 @@ import {
   ViewProps,
 } from 'react-native';
 import { AppView } from '@components/View';
-import colors from '@styles/colors';
 import styles from './styles';
 
 interface IUpdateViewProps extends ViewProps {
@@ -23,12 +22,12 @@ export const ViewUpdate: React.FC<IUpdateViewProps> = ({
 }) => {
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: `${colors.VIEW_BACKGROUND}` }}
+      contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView behavior="position" enabled>
-          <AppView {...props} style={{ position: 'relative' }}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="position" enabled>
+          <AppView {...props}>
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.description}>{description}</Text>
             {props.children}
@@ -38,3 +37,12 @@ export const ViewUpdate: React.FC<IUpdateViewProps> = ({
     </ScrollView>
   );
 };
+
+//   /* <ScrollView
+//         style={{ flex: 1, backgroundColor: 'green' }}
+//         showsVerticalScrollIndicator={false}
+//       > */
+// }
+// {
+//   /* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */
+// }

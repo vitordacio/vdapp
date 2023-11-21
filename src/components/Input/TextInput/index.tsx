@@ -20,9 +20,10 @@ export type ITextInputProps = TextInputProps & {
   lengthMax?: number;
   nullMargin?: boolean;
   setShowValue?: React.Dispatch<React.SetStateAction<string>>;
+  defaultValue?: string;
 };
 
-const TextInput = ({
+export const TextInput = ({
   icon,
   value,
   title,
@@ -31,10 +32,12 @@ const TextInput = ({
   lengthMax,
   nullMargin,
   setShowValue,
+  defaultValue,
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [isFilled, setIsFilled] = useState(false);
+  // const [isFilled, setIsFilled] = useState(false);
+  const [isFilled, setIsFilled] = useState(!!defaultValue);
   const [isSecurity, setIsSecurity] = useState(rest.secureTextEntry);
   const [isValid, setIsValid] = useState(false);
   const [lengthCount, setLengthCount] = useState(0);
@@ -92,6 +95,7 @@ const TextInput = ({
           multiline={!!lengthMax}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
+          defaultValue={defaultValue}
           onChangeText={async e => {
             onChange(e);
             setIsFilled(!!e);

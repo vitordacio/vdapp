@@ -8,6 +8,8 @@ import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
 import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { View } from '@components/View';
+import styles from '@screens/App/Update/styles';
 
 const schema = yup.object({
   password: yup.string().required('Informe a senha atual'),
@@ -88,11 +90,13 @@ const UpdatePassword: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           maxLength={30}
         />
       </>
-      <Button
-        onPress={handleSubmit(handlePassword)}
-        title="Salvar"
-        type="blue"
-      />
+      <View style={styles.confirm_button_wrapper}>
+        <Button
+          onPress={handleSubmit(handlePassword)}
+          title="Salvar"
+          type="blue"
+        />
+      </View>
       {confirm && (
         <ViewConfirm
           data={form}

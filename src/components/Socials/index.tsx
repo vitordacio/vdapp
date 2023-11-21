@@ -9,6 +9,7 @@ import { View } from '@components/View';
 import assets from '@assets/index';
 import { useCallback, useEffect, useState } from 'react';
 import { IUserSocial } from '@interfaces/social_network';
+import { IUser } from '@interfaces/user';
 import styles from './styles';
 
 const assetMapping: Record<string, ImageSourcePropType> = {
@@ -20,10 +21,10 @@ const assetMapping: Record<string, ImageSourcePropType> = {
 };
 
 interface ISocialsProps {
-  socials: IUserSocial[];
+  user: IUser;
 }
 
-export const Socials: React.FC<ISocialsProps> = ({ socials }) => {
+export const Socials: React.FC<ISocialsProps> = ({ user }) => {
   const [data, setData] = useState<IUserSocial[] | []>([]);
 
   const handlePress = async (item: IUserSocial) => {
@@ -62,8 +63,8 @@ export const Socials: React.FC<ISocialsProps> = ({ socials }) => {
   }, [data]);
 
   useEffect(() => {
-    setData(socials);
-  }, []);
+    setData(user.social_networks);
+  }, [user]);
 
   return (
     <FlatList

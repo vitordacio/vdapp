@@ -1,87 +1,113 @@
 import React, { useState } from 'react';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  ControlledRadioInputs,
-  IRadioOption,
-} from '@components/Input/RadioInputs';
-import { Button } from '@components/Button';
+
 import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
-import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useAuth from '@contexts/auth';
+import { Text } from '@components/Text';
+import generalstyle from '@screens/App/Update/styles';
+import { RadioInput } from '@components/Input/RadioInput';
+import { IUser } from '@interfaces/user';
+import { userService } from '@services/User';
+import { TextInput } from '@components/Input/TextInput';
+import { View, TouchableOpacity } from 'react-native';
+import styles from './styles';
 
-const schema = yup.object({
-  gender: yup.string().max(30, 'O gênero deve ter no máximo 30 caracteres'),
-});
+const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
+  const { user, setUser } = useAuth();
 
-type GenderFormData = yup.InferType<typeof schema>;
+  const [currentValue, setCurrentValue] = useState<IUser['gender']>(
+    user.gender || ('' as IUser['gender']),
+  );
 
-const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
+  const [responseError, setResponseError] = useState('');
 
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
-
-  const options: IRadioOption[] = [
-    { value: 'female', title: 'Feminino' },
-    { value: 'male', title: 'Masculino' },
-    { value: '', title: 'Prefiro não informar' },
-    {
-      value: 'custom',
-      custom: {
-        type: 'text',
-        placeholder: `${
-          user.gender && user.gender !== 'male' && user.gender !== 'female'
-            ? user.gender
-            : 'Gênero'
-        }`,
-        maxLength: 30,
-      },
-    },
-  ];
-
-  const handleGender = async (data: GenderFormData) => {
-    setForm(data);
-    setConfirm(true);
+  const handleGender = async (gender: IUser['gender']) => {
+    let updatedUser: IUser;
+    // if (gender && gender !== 'male' && gender !== 'female') setInputValue(null);
+    try {
+      updatedUser = await userService.updateGender({
+        gender: gender || '',
+      });
+    } catch (error) {
+      setResponseError(error.message);
+    }
+    setUser(updatedUser);
+    setCurrentValue(gender);
   };
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<GenderFormData>({
-    resolver: yupResolver(schema),
-  });
+  // const handleInputText = (e: string) => {
+  //   setCurrentValue(e as IUser['gender']);
+
+  //   handleGender(e as IUser['gender']);
+  // };
 
   return (
     <ViewUpdate
       name="Gênero"
       description="Você pode alterar o seu gênero a qualquer momento."
     >
-      <>
-        <ControlledRadioInputs
-          name="gender"
-          control={control}
-          options={options}
-          value={user.gender}
-          error={errors.gender}
+      <RadioInput
+        value=""
+        title="Prefiro não comentar"
+        handleSubmit={handleGender}
+        currentValue={currentValue}
+      />
+
+      <RadioInput
+        value="male"
+        title="Masculino"
+        handleSubmit={handleGender}
+        currentValue={currentValue}
+      />
+
+      <RadioInput
+        value="female"
+        title="Feminino"
+        handleSubmit={handleGender}
+        currentValue={currentValue}
+      />
+
+      <View style={styles.wrapper}>
+        <View style={styles.radio_wrapper}>
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentValue('input' as IUser['gender']);
+            }}
+            style={[
+              styles.radio,
+              {
+                backgroundColor: `${
+                  currentValue &&
+                  currentValue !== 'male' &&
+                  currentValue !== 'female'
+                    ? 'blue'
+                    : 'white'
+                }`,
+              },
+            ]}
+          />
+        </View>
+
+        <TextInput
+          placeholder="Gênero"
+          defaultValue={
+            user.gender && user.gender !== 'male' && user.gender !== 'female'
+              ? user.gender
+              : null
+          }
+          value={
+            user.gender && user.gender !== 'male' && user.gender !== 'female'
+              ? user.gender
+              : null
+          }
+          maxLength={30}
+          nullMargin
+          onChange={e => handleGender(e)}
         />
-      </>
-      <Button onPress={handleSubmit(handleGender)} title="Salvar" type="blue" />
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="gender"
-          description="Tem certeza que deseja mudar o seu gênero?"
-        />
-      )}
+      </View>
+
+      <Text style={generalstyle.error}>{responseError}</Text>
     </ViewUpdate>
   );
 };
