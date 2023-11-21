@@ -68,7 +68,7 @@ export const Socials: React.FC<ISocialsProps> = ({ user }) => {
 
   return (
     <FlatList
-      style={{ marginBottom: 8 }}
+      style={styles.container}
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}

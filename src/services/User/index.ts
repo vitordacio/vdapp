@@ -40,7 +40,7 @@ interface IUserService {
   verifyUsername: (data: string) => Promise<boolean>;
 }
 
-export const service: IUserService = {
+const service: IUserService = {
   login: async (data: ILogin): Promise<IAuthResponse> => {
     const response: AxiosResponse<IAuthResponse> = await api.post(
       '/auth/user',

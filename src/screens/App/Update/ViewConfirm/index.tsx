@@ -11,11 +11,9 @@ import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
 import {
   IUpdateBio,
-  IUpdateGender,
   IUpdateLocation,
   IUpdateName,
   IUpdatePassword,
-  IUpdatePrivacy,
   ICreateSocial,
   IUpdateUsername,
 } from '@services/User/IUserService';
@@ -32,8 +30,6 @@ interface IViewConfirmProps
     | 'email'
     | 'bio'
     | 'location'
-    | 'gender'
-    | 'privacy'
     | 'create_social'
     | 'delete_social';
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -68,12 +64,6 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
       }
       if (type === 'location') {
         updatedUser = await userService.updateLocation(data as IUpdateLocation);
-      }
-      if (type === 'gender') {
-        updatedUser = await userService.updateGender(data as IUpdateGender);
-      }
-      if (type === 'privacy') {
-        updatedUser = await userService.updatePrivacy(data as IUpdatePrivacy);
       }
       if (type === 'password') {
         updatedUser = await userService.updatePassword(data as IUpdatePassword);

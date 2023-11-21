@@ -91,7 +91,9 @@ const CardUser = ({ user, navigation }: CardProps) => {
       {user && (
         <TouchableOpacity
           style={styles.container}
-          onPress={() => navigation.push('Profile', { user })}
+          onPress={() =>
+            navigation.push('Profile', { profile_id: user.id_user })
+          }
         >
           <Picture card={true} picture={picture} />
           <View style={styles.data}>

@@ -29,7 +29,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const route = useRoute();
   const { user } = route.params as UserParam;
 
-  const [resError, setResError] = useState();
+  const [responseError, setResponseError] = useState();
   const [search, setSearch] = useState('');
   const [data, setData] = useState<IUser[] | []>([]);
   const [page, setPage] = useState(1);
@@ -52,7 +52,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
-      setResError(error.response.data.message);
+      setResponseError(error.response.data.message);
     }
   };
 
@@ -70,7 +70,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setData([...friends]);
       setShowLoader(false);
     } catch (error) {
-      setResError(error.response.data.message);
+      setResponseError(error.response.data.message);
     }
   };
 
@@ -111,7 +111,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             onChangeText={e => setSearch(e)}
             value={search}
           />
-          {resError && <Text style={styles.error}>{resError}</Text>}
+          {responseError && <Text style={styles.error}>{responseError}</Text>}
           <FlatList
             data={data}
             renderItem={renderItem}

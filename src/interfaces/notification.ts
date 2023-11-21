@@ -7,10 +7,10 @@ export interface INotification {
   read: boolean;
   type: string;
   user_id: string;
-  sent_by: string;
-  friendship_id: string;
+  author_id: string;
+  author: IUser;
   emoji_id: string;
   participation_id: string;
+  friendship_id: string;
   friendship?: IFriendship;
-  author: IUser;
 }

@@ -49,7 +49,9 @@ const CardNotification = ({ notification, navigation }: CardProps) => {
       {notification && (
         <TouchableOpacity
           style={styles.container}
-          onPress={() => navigation.push('Profile', { author })}
+          onPress={() =>
+            navigation.push('Profile', { profile_id: notification.author_id })
+          }
         >
           {/* {author.picture && <Picture card={true} picture={author.picture} />} */}
           <View style={styles.data}>
