@@ -15,6 +15,7 @@ import { IUser } from '@interfaces/user';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { userService } from '@services/User';
 import CardUser from '@components/Card/User';
+import useDebounce from '@hooks/useDebounce';
 import styles from './styles';
 
 type UserParam = ParamListBase & {
@@ -32,25 +33,51 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const [responseError, setResponseError] = useState();
   const [search, setSearch] = useState('');
   const [data, setData] = useState<IUser[] | []>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState(false);
 
-  const fetchData = async (reset: boolean) => {
-    if (reset) loadMore = true;
+  const debouncedSearch = useDebounce(search, 500);
+
+  const fetchData = async () => {
+    setShowLoader(true);
+
     let friends: IUser[];
 
     try {
       friends = await userService.findFriends({
         user_id: user.id_user,
-        page: !reset ? page : 1,
+        page: 1,
+        name: debouncedSearch,
+      });
+
+      if (friends.length === 0) {
+        loadMore = false;
+      }
+
+      setData(friends);
+      setShowLoader(false);
+    } catch (error) {
+      setResponseError(error.response.data.message);
+    }
+  };
+
+  const fetchNewData = async () => {
+    setShowLoader(true);
+    let friends: IUser[];
+    console.log('page on new', page);
+    try {
+      friends = await userService.findFriends({
+        user_id: user.id_user,
+        page,
         name: search,
       });
 
       if (friends.length === 0) {
         loadMore = false;
       }
-      setData(!reset ? [...data, ...friends] : friends);
-      setPage(!reset ? page + 1 : 2);
+
+      setData(prev => [...prev, ...friends]);
+      setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
       setResponseError(error.response.data.message);
@@ -72,8 +99,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const onEndReached = () => {
     if (loadMore) {
-      setShowLoader(true);
-      fetchData(false);
+      fetchNewData();
     }
   };
 
@@ -82,19 +108,15 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   }, []);
 
   useEffect(() => {
-    fetchData(false);
-  }, []);
+    fetchData();
+  }, [debouncedSearch]);
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="position" enabled>
           <SearchInput
-            handlePress={() => {
-              setPage(1);
-              setData([]);
-              fetchData(true);
-            }}
+            handlePress={() => fetchData()}
             onChangeText={e => setSearch(e)}
             value={search}
           />

@@ -1,10 +1,6 @@
 import Feather from 'react-native-vector-icons/Feather';
 import React, { useState } from 'react';
-import {
-  TextInputProps,
-  TextInput as NativeTextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { TextInputProps, TextInput, TouchableOpacity } from 'react-native';
 import { View } from '@components/View';
 import colors from '@styles/colors';
 import styles from './styles';
@@ -37,7 +33,7 @@ export const SearchInput = ({
         <Feather name="search" size={24} color={colors.TEXT_DEFAULT} />
       </TouchableOpacity>
 
-      <NativeTextInput
+      <TextInput
         style={[
           styles.input_text,
           {
