@@ -64,7 +64,6 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const fetchNewData = async () => {
     setShowLoader(true);
     let friends: IUser[];
-    console.log('page on new', page);
     try {
       friends = await userService.findFriends({
         user_id: user.id_user,

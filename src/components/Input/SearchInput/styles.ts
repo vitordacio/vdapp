@@ -6,7 +6,8 @@ export default StyleSheet.create({
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 34,
+    marginBottom: 19,
+    // marginBottom: 34,
     minHeight: 40,
   },
   input_text: {

@@ -7,11 +7,12 @@ import EmojisReceived from '@screens/App/Emojis';
 import Friends from '@screens/App/Friends';
 import Inbox from '@screens/App/Inbox';
 import Profile from '@screens/App/Profile';
-import Search from '@screens/App/Search';
+
 import Notifications from '@screens/App/Notifications';
 import User from '@screens/App/User';
 import { UpdateUserRoutes } from './user.routes';
 import HomeRoutes from './home.routes';
+import SearchRoutes from './search.routes';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -63,7 +64,7 @@ const BottomTabRoutes: React.FC = () => {
 
       <BottomTab.Screen
         name="Search"
-        component={Search}
+        component={SearchRoutes}
         options={{
           tabBarLabel: 'Explorar',
         }}
