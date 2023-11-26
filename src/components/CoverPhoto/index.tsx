@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Image, ViewProps } from 'react-native';
+import { Image, ViewProps, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
 interface IPicture extends ViewProps {
@@ -11,14 +11,14 @@ export const CoverPhoto: React.FC<IPicture> = ({ cover_photo }) => {
 
   return (
     // <View style={styles.cover_photo}>
-    <Pressable onPress={handleCoverPhoto} style={styles.cover_photo}>
+    <TouchableOpacity onPress={handleCoverPhoto} style={styles.cover_photo}>
       {cover_photo && (
         <Image
           source={{ uri: cover_photo }}
           style={{ flex: 1, resizeMode: 'cover' }}
         />
       )}
-    </Pressable>
+    </TouchableOpacity>
     // </View>
   );
 };

@@ -30,8 +30,7 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     setShowLoader(true);
 
     let users: IUser[];
-    console.log('search', search);
-    console.log('debouncedSearch', debouncedSearch);
+
     try {
       users = await userService.searchUserByName({
         name: debouncedSearch,
@@ -97,7 +96,6 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   }, []);
 
   useEffect(() => {
-    console.log('use effect');
     fetchData();
   }, [debouncedSearch, refreshing]);
 
