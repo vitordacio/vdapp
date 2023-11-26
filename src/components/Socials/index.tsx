@@ -50,7 +50,7 @@ export const Socials: React.FC<ISocialsProps> = ({ user }) => {
         <Pressable onPress={() => handlePress(item)}>
           <ImageBackground
             style={styles.social}
-            source={assetMapping[item.type.type]}
+            source={assetMapping[item.type.name]}
           />
         </Pressable>
       );

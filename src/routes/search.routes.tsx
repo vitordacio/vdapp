@@ -18,17 +18,17 @@ export const SearchTopRoutes: React.FC = () => {
       }}
     >
       <SearchTopTab.Screen
-        name="SearchUser"
-        component={SearchUser}
-        options={{
-          tabBarLabel: 'Usuários',
-        }}
-      />
-      <SearchTopTab.Screen
         name="SearchEvent"
         component={SearchEvent}
         options={{
           tabBarLabel: 'Eventos',
+        }}
+      />
+      <SearchTopTab.Screen
+        name="SearchUser"
+        component={SearchUser}
+        options={{
+          tabBarLabel: 'Usuários',
         }}
       />
     </SearchTopTab.Navigator>
