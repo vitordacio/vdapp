@@ -26,5 +26,7 @@ export interface IEvent {
   address: IAddress;
   author: IUser;
   participations: IParticipation;
+  participating_count: number;
+  emojis_count: number;
   status: 'not_started' | 'started' | 'finished' | '';
 }

@@ -6,7 +6,6 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    // minHeight: 150,
     padding: 8,
     backgroundColor: `${colors.BLACK}`,
     borderRadius: 8,
@@ -18,43 +17,80 @@ export default StyleSheet.create({
   },
   container_data: {
     position: 'relative',
-    paddingTop: 24,
     paddingHorizontal: 8,
     width: '100%',
+    gap: 10,
+    paddingTop: 19,
   },
-  data: {
+  status: {
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: 2,
+    right: 0,
+    width: 15,
+    height: 15,
+    backgroundColor: '#fff',
+  },
+  container_event: {
     flex: 1,
+    display: 'flex',
     flexDirection: 'column',
-
-    borderWidth: 1,
-    borderColor: 'red',
+    justifyContent: 'center',
+    gap: 8,
   },
   data_text: {
     display: 'flex',
-    flex: 1,
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  data_icon: {
-    justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    flexDirection: 'row',
+    gap: 10,
   },
   icon: {
     width: 21,
     height: 21,
-    marginRight: 10,
   },
-  name: {
-    display: 'flex',
-    alignItems: 'center',
+  text_large: {
+    flex: 1,
+    fontSize: 18,
+  },
+  text_medium: {
+    flex: 1,
+    fontSize: 14,
+  },
+  text_default_color: {
     color: `${colors.TEXT_DEFAULT}`,
-    fontSize: 16,
   },
-  location: {
-    display: 'flex',
-    alignItems: 'center',
+  text_gray_color: {
     color: `${colors.GRAY_DESCRIPTION}`,
-    fontSize: 16,
+  },
+  container_author: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingVertical: 8,
+
+    borderColor: `${colors.GRAY_DESCRIPTION}`,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+  },
+  data_author: {
+    marginLeft: 19,
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'column',
+  },
+  container_counts: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 10,
+    paddingVertical: 4,
+  },
+  data_counts: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
 });

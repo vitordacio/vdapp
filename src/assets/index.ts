@@ -20,8 +20,9 @@ import inbox from './inbox.svg';
 import location from './location.svg';
 import clock from './clock.svg';
 
-import pizza from './pizza.svg';
 import beer from './beer.svg';
+import users from './users.svg';
+import smile from './smile.svg';
 
 export default {
   instagram,
@@ -43,6 +44,7 @@ export default {
   party,
   table,
   clock,
-  pizza,
   beer,
+  users,
+  smile,
 };

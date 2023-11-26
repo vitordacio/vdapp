@@ -11,6 +11,8 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
+import { Picture } from '@components/Picture';
+import { formatTimeRange } from '@utils/formaters';
 import styles from './styles';
 
 const assetMapping: Record<string, ImageSourcePropType> = {
@@ -37,11 +39,15 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
     name,
     location,
     cover_photo,
+    status,
     date,
     time,
     finish_time,
     finish_date,
     type,
+    author,
+    participating_count,
+    emojis_count,
   } = event;
 
   return (
@@ -59,7 +65,8 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
             />
           )}
           <View style={styles.container_data}>
-            <View style={styles.data}>
+            <View style={styles.status}></View>
+            <View style={styles.container_event}>
               {name && (
                 <View style={styles.data_text}>
                   <Image
@@ -68,7 +75,9 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                     resizeMode="contain"
                     tintColor="#fff"
                   />
-                  <Text style={styles.name}>{name}</Text>
+                  <Text style={[styles.text_default_color, styles.text_large]}>
+                    {name}
+                  </Text>
                 </View>
               )}
               {location && (
@@ -79,7 +88,9 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                     resizeMode="contain"
                     tintColor="#fff"
                   />
-                  <Text style={styles.location}>{location}</Text>
+                  <Text style={[styles.text_default_color, styles.text_medium]}>
+                    {location}
+                  </Text>
                 </View>
               )}
               {date && (
@@ -90,9 +101,58 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                     resizeMode="contain"
                     tintColor="#fff"
                   />
-                  <Text style={styles.location}>{date}</Text>
+                  <Text style={[styles.text_gray_color, styles.text_medium]}>
+                    {formatTimeRange(
+                      date,
+                      time,
+                      finish_date,
+                      finish_time,
+                      author.locale,
+                    )}
+                  </Text>
                 </View>
               )}
+            </View>
+            <View style={styles.container_author}>
+              <Picture card={true} picture={author.picture} />
+              <View style={styles.data_author}>
+                {author.username && (
+                  <Text style={[styles.text_default_color, styles.text_medium]}>
+                    {author.username}
+                  </Text>
+                )}
+
+                {author.name && (
+                  <Text style={[styles.text_gray_color, styles.text_medium]}>
+                    {author.name}
+                  </Text>
+                )}
+              </View>
+            </View>
+            <View style={styles.container_counts}>
+              <View style={styles.data_counts}>
+                <ImageBackground
+                  style={styles.icon}
+                  source={assets.smile}
+                  resizeMode="contain"
+                  tintColor="#fff"
+                />
+                <Text style={[styles.text_default_color, styles.text_medium]}>
+                  {emojis_count}
+                </Text>
+              </View>
+
+              <View style={styles.data_counts}>
+                <ImageBackground
+                  style={styles.icon}
+                  source={assets.users}
+                  resizeMode="contain"
+                  tintColor="#fff"
+                />
+                <Text style={[styles.text_default_color, styles.text_medium]}>
+                  {participating_count}
+                </Text>
+              </View>
             </View>
           </View>
         </TouchableOpacity>
