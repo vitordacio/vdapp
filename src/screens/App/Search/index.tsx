@@ -1,5 +1,6 @@
 import { AppView } from '@components/View';
 import React from 'react';
+
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -32,6 +33,7 @@ const Search: React.FC = () => {
             value={search}
           />
           {responseError && <Text style={styles.error}>{responseError}</Text>}
+
           <SearchTopRoutes />
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>

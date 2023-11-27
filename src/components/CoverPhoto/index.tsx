@@ -6,12 +6,15 @@ interface IPicture extends ViewProps {
   cover_photo: string;
 }
 
-export const CoverPhoto: React.FC<IPicture> = ({ cover_photo }) => {
+export const CoverPhoto: React.FC<IPicture> = ({ cover_photo, ...rest }) => {
   const handleCoverPhoto = async () => {};
 
   return (
     // <View style={styles.cover_photo}>
-    <TouchableOpacity onPress={handleCoverPhoto} style={styles.cover_photo}>
+    <TouchableOpacity
+      onPress={handleCoverPhoto}
+      style={[styles.cover_photo, rest.style]}
+    >
       {cover_photo && (
         <Image
           source={{ uri: cover_photo }}

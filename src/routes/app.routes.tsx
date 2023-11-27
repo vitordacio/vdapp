@@ -110,13 +110,7 @@ const AppRoutes: React.FC = () => {
         component={BottomTabRoutes}
         options={{ headerShown: false }}
       />
-      <App.Screen
-        name="Event"
-        component={Event}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <App.Screen name="Event" component={Event} />
       <App.Screen name="Profile" component={Profile} />
       <App.Screen name="Inbox" component={Inbox} />
       <App.Screen

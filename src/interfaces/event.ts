@@ -14,6 +14,7 @@ export interface IEvent {
   finish_time: string;
   cover_photo: string;
   drink_preferences: string;
+  additional?: string;
   min_amount: number;
   tickets_free: number;
   ticket_value: number;
@@ -28,5 +29,5 @@ export interface IEvent {
   participations: IParticipation;
   participating_count: number;
   emojis_count: number;
-  status: 'not_started' | 'started' | 'finished' | '';
+  status: 'awaiting' | 'ongoing' | 'finished' | '';
 }

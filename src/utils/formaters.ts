@@ -6,27 +6,22 @@ const formatTimeRange = (
   locale?: string,
 ) => {
   const options: Intl.DateTimeFormatOptions = {
+    hour12: false,
     year: '2-digit',
     month: '2-digit',
     day: '2-digit',
   };
 
-  let formattedStartDate = new Date(date);
-  formattedStartDate = formattedStartDate.toLocaleDateString(
-    locale || 'pt-BR',
+  const formattedStartDate = new Intl.DateTimeFormat(
+    `${locale || 'pt-BR'}`,
     options,
-  ) as unknown as Date;
+  ).format(new Date(`${date}T00:00:00`));
   const formattedStartTime = time.replace(/:\d{2}$/, '');
 
-  let formattedFinishDate = new Date(finish_date);
-  formattedFinishDate = formattedFinishDate.toLocaleDateString(
-    locale || 'pt-BR',
-    {
-      year: '2-digit',
-      month: '2-digit',
-      day: '2-digit',
-    },
-  ) as unknown as Date;
+  const formattedFinishDate = new Intl.DateTimeFormat(
+    `${locale || 'pt-BR'}`,
+    options,
+  ).format(new Date(`${finish_date}T00:00:00`));
   const formattedFinishTime = finish_time.replace(/:\d{2}$/, '');
 
   const startDateTime = `${formattedStartDate}, ${formattedStartTime}`;

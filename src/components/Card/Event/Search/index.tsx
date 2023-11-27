@@ -1,6 +1,8 @@
+import React from 'react';
+import LottieView from 'lottie-react-native';
 import { View } from '@components/View';
 import { Text } from '@components/Text';
-import React from 'react';
+
 import assets from '@assets/index';
 import {
   Image,
@@ -65,7 +67,15 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
             />
           )}
           <View style={styles.container_data}>
-            <View style={styles.status}></View>
+            {status === 'ongoing' && (
+              <LottieView
+                style={styles.status}
+                source={assets.ongoing}
+                autoPlay
+                loop
+              />
+            )}
+
             <View style={styles.container_event}>
               {name && (
                 <View style={styles.data_text}>
@@ -113,6 +123,7 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                 </View>
               )}
             </View>
+
             <View style={styles.container_author}>
               <Picture card={true} picture={author.picture} />
               <View style={styles.data_author}>
@@ -129,6 +140,7 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                 )}
               </View>
             </View>
+
             <View style={styles.container_counts}>
               <View style={styles.data_counts}>
                 <ImageBackground

@@ -5,6 +5,7 @@ import { ISearchByName } from './IEventService';
 
 interface IEventService {
   searchEventByName: (data: ISearchByName) => Promise<IEvent[]>;
+  findById: (data: string) => Promise<IEvent>;
 }
 
 const service: IEventService = {
@@ -14,6 +15,10 @@ const service: IEventService = {
         data.name && `=${data.name}`
       }`,
     );
+    return response.data;
+  },
+  findById: async (data: string): Promise<IEvent> => {
+    const response: AxiosResponse<IEvent> = await api.get(`/event/${data}`);
     return response.data;
   },
 };
