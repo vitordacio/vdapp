@@ -11,6 +11,7 @@ import {
   Image,
   ImageSourcePropType,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 // import { UserTopTabRoutes } from '@routes/user.routes';
 import { IEvent } from '@interfaces/event';
@@ -18,7 +19,24 @@ import { eventService } from '@services/Event';
 import assets from '@assets/index';
 import { formatTimeRange } from '@utils/formaters';
 import { Picture } from '@components/Picture';
+import { Button } from '@components/Button';
+import colors from '@styles/colors';
+import { participationService } from '@services/Participation';
+import Feather from 'react-native-vector-icons/Feather';
 import styles from './styles';
+import { ViewPrivate } from './ViewPrivate';
+
+type ParticipationStatus = {
+  participation_status: IEvent['participation_status'];
+  type: 'blue' | 'red' | 'green' | 'gray' | 'dark_gold';
+  icon:
+    | 'plus-circle'
+    | 'check-circle'
+    | 'x-circle'
+    | 'minus-circle'
+    | 'chevron-right';
+  buttonTitle: string;
+};
 
 const assetMapping: Record<string, ImageSourcePropType> = {
   auditorium: assets.auditorium,
@@ -50,19 +68,129 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const [event, setEvent] = useState<IEvent>();
   const [responseError, setResponseError] = useState<string>();
   const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [showPrivate, setShowPrivate] = useState<boolean>(false);
+  const [participationLoader, setParticipationLoader] =
+    useState<boolean>(false);
+  const [participationTitle, setParticipationTitle] = useState('');
+  const [participationStatus, setParticipationStatus] = useState(
+    {} as ParticipationStatus,
+  );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [canSeeContent, setCanSeeContent] = useState<boolean>();
 
   const fetchData = async () => {
     setShowLoader(true);
     let currentEvent: IEvent;
+    let title: string = '';
+
+    let type: ParticipationStatus['type'];
+    let icon: ParticipationStatus['icon'];
+    let buttonTitle: string = '';
 
     try {
       currentEvent = await eventService.findById(paramEvent.id_event);
 
+      const { participation_status } = currentEvent;
+
+      if (participation_status.startsWith('author')) title = 'Você é o dono!';
+      if (participation_status.startsWith('guest'))
+        title = 'Você é um convidado!';
+      if (participation_status.startsWith('vip'))
+        title = 'Você é um convidado VIP!';
+      if (participation_status.startsWith('mod'))
+        title = 'Você é um moderador!';
+
+      if (!participation_status) {
+        type = 'blue';
+        icon = 'plus-circle';
+        buttonTitle = 'Solicitar entrada';
+      } else if (participation_status === 'author') {
+        type = 'dark_gold';
+        icon = 'chevron-right';
+        buttonTitle = 'Gerenciar';
+      } else if (participation_status === 'user_out') {
+        type = 'gray';
+        icon = 'x-circle';
+        buttonTitle = 'Cancelar solicitação';
+      } else if (
+        participation_status === 'guest_out' ||
+        participation_status === 'vip_out' ||
+        participation_status === 'mod_out'
+      ) {
+        type = 'green';
+        icon = 'check-circle';
+        buttonTitle = 'Entrar';
+      } else {
+        type = 'red';
+        icon = 'minus-circle';
+        buttonTitle = 'Sair do Evento';
+      }
+
+      const handleParticipationStatus: ParticipationStatus = {
+        participation_status,
+        type,
+        icon,
+        buttonTitle,
+      };
+
       setCanSeeContent(!currentEvent.private);
       setEvent(currentEvent);
+      setParticipationTitle(title);
+      setParticipationStatus(handleParticipationStatus);
       setShowLoader(false);
+    } catch (error) {
+      setResponseError(error.response.data.message);
+    }
+  };
+
+  const handleParticipation = async () => {
+    setParticipationLoader(true);
+    // let currentEvent: IEvent;
+
+    try {
+      const { participation_status } = participationStatus;
+
+      if (!participation_status) {
+        const { id_participation } = await participationService.requestByUser(
+          event.id_event,
+        );
+        setParticipationStatus({
+          participation_status: 'user_out',
+          type: 'gray',
+          icon: 'x-circle',
+          buttonTitle: 'Cancelar Solicitação',
+        });
+        event.participation_id = id_participation;
+      } else if (
+        participation_status === 'guest_out' ||
+        participation_status === 'vip_out' ||
+        participation_status === 'mod_out'
+      ) {
+        await participationService.inviteResponse(event.id_event);
+        let status: IEvent['participation_status'];
+        if (participation_status.startsWith('guest')) status = 'guest_in';
+        if (participation_status.startsWith('vip')) status = 'vip_in';
+        if (participation_status.startsWith('mod')) status = 'mod_in';
+
+        setParticipationStatus({
+          participation_status: status,
+          type: 'red',
+          icon: 'minus-circle',
+          buttonTitle: 'Sair do Evento',
+        });
+        event.participating_count += 1;
+      } else {
+        await participationService.deleteParticipation(event.participation_id);
+        setParticipationStatus({
+          participation_status: '',
+          type: 'blue',
+          icon: 'plus-circle',
+          buttonTitle: 'Solicitar Entrada',
+        });
+        event.participation_id = '';
+      }
+
+      setParticipationLoader(false);
     } catch (error) {
       setResponseError(error.response.data.message);
     }
@@ -245,36 +373,6 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                         </Text>
                       </View>
                     </View>
-
-                    {/* <View style={styles.container_counts}>
-                      <View style={styles.data_counts}>
-                        <ImageBackground
-                          style={styles.count}
-                          source={assets.smile}
-                          resizeMode="contain"
-                          tintColor="#fff"
-                        />
-                        <Text
-                          style={[styles.text_default_color, styles.text_large]}
-                        >
-                          {event.emojis_count}
-                        </Text>
-                      </View>
-
-                      <View style={styles.data_counts}>
-                        <ImageBackground
-                          style={styles.count}
-                          source={assets.users}
-                          resizeMode="contain"
-                          tintColor="#fff"
-                        />
-                        <Text
-                          style={[styles.text_default_color, styles.text_large]}
-                        >
-                          {event.participating_count}
-                        </Text>
-                      </View>
-                    </View> */}
                   </View>
                 </View>
 
@@ -334,8 +432,71 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                       </View>
                     </View>
                   </View>
-                </View>
 
+                  <View style={styles.container_participation}>
+                    {event.participation_status === 'author' ||
+                      (event.participation_status === 'mod_in' && (
+                        <Button
+                          type="dark_gold"
+                          icon="chevron-right"
+                          style={{ maxWidth: 200 }}
+                          // iconSize={18}
+                          iconColor="#FFFFFF"
+                          onPress={handleParticipation}
+                          title="Gerenciar"
+                        />
+                      ))}
+
+                    {participationTitle && (
+                      <Text
+                        style={[
+                          styles.text_default_color,
+                          styles.text_extra_large,
+                        ]}
+                      >
+                        {participationTitle}
+                      </Text>
+                    )}
+
+                    {participationStatus && (
+                      <Button
+                        type={participationStatus.type}
+                        icon={participationStatus.icon}
+                        style={{ maxWidth: 200 }}
+                        iconSize={22}
+                        iconColor="#FFFFFF"
+                        onPress={handleParticipation}
+                        title={participationStatus.buttonTitle}
+                        loading={participationLoader}
+                      />
+                    )}
+                  </View>
+                </View>
+                <View style={styles.container_footer}>
+                  <Text
+                    style={[
+                      styles.text_gray_color,
+                      styles.text_medium,
+                      { textAlign: 'right' },
+                    ]}
+                  >
+                    {event.participation_status === 'author' ||
+                    event.participation_status === 'user_in' ||
+                    event.participation_status === 'guest_in' ||
+                    event.participation_status === 'mod_in' ||
+                    event.participation_status === 'vip_in'
+                      ? 'Você está participando'
+                      : 'Você não está participando'}
+                  </Text>
+
+                  <TouchableOpacity onPress={() => setShowPrivate(true)}>
+                    <Feather
+                      name={event.private ? 'lock' : 'unlock'}
+                      size={19}
+                      color={`${colors.TEXT_DEFAULT}`}
+                    />
+                  </TouchableOpacity>
+                </View>
                 <View style={{ minHeight: 500 }}>
                   {/* <UserTopTabRoutes /> */}
                 </View>
@@ -344,6 +505,9 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           </>
         )}
       </ScrollView>
+      {showPrivate && (
+        <ViewPrivate setConfirm={setShowPrivate} is_private={event.private} />
+      )}
     </AppView>
   );
 };

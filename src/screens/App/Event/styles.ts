@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     width: '100%',
 
     borderColor: `${colors.GRAY_DESCRIPTION}`,
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
     borderBottomWidth: 1,
   },
   data_author: {
@@ -107,9 +107,6 @@ const styles = StyleSheet.create({
     width: '100%',
 
     paddingVertical: 8,
-
-    borderWidth: 1,
-    borderColor: 'blue',
   },
   container_counts: {
     display: 'flex',
@@ -117,9 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-
-    borderWidth: 1,
-    borderColor: 'red',
+    marginBottom: 22,
   },
   counts: {
     display: 'flex',
@@ -140,6 +135,23 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#fff',
     marginHorizontal: 16,
+  },
+  container_participation: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+  },
+  container_footer: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    gap: 8,
   },
   error: {
     fontSize: 14,

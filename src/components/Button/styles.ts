@@ -9,6 +9,7 @@ const commonStyles: {
 } = {
   container: {
     width: '100%',
+    // paddingHorizontal: 8,
     height: 40,
     flexDirection: 'row',
     gap: 8,
@@ -31,6 +32,15 @@ export default StyleSheet.create({
     borderColor: `${colors.WHITE}`,
   },
   dark_title: {
+    color: `${colors.WHITE}`,
+  },
+
+  dark_gold_container: {
+    backgroundColor: `${colors.BLACK}`,
+    borderWidth: 1,
+    borderColor: `${colors.GOLD}`,
+  },
+  dark_gold_title: {
     color: `${colors.WHITE}`,
   },
 

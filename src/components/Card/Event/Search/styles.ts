@@ -70,7 +70,7 @@ export default StyleSheet.create({
     paddingVertical: 8,
 
     borderColor: `${colors.GRAY_DESCRIPTION}`,
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
     borderBottomWidth: 1,
   },
   data_author: {

@@ -29,5 +29,17 @@ export interface IEvent {
   participations: IParticipation;
   participating_count: number;
   emojis_count: number;
-  status: 'awaiting' | 'ongoing' | 'finished' | '';
+  status: 'awaiting' | 'ongoing' | 'finished';
+  participation_id: string;
+  participation_status:
+    | 'author'
+    | 'user_in'
+    | 'user_out'
+    | 'guest_in'
+    | 'guest_out'
+    | 'mod_in'
+    | 'mod_out'
+    | 'vip_in'
+    | 'vip_out'
+    | '';
 }

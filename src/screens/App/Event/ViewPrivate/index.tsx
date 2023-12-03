@@ -8,14 +8,12 @@ import { Pressable } from '@components/Pressable';
 import styles from './styles';
 
 interface IViewPrivateProps {
-  type: 'info' | 'warning';
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
   is_private: boolean;
 }
 
 export const ViewPrivate: React.FC<IViewPrivateProps> = ({
   setConfirm,
-  type,
   is_private,
 }) => {
   return (
@@ -27,16 +25,12 @@ export const ViewPrivate: React.FC<IViewPrivateProps> = ({
           </Pressable>
         </View>
         <Text style={styles.title}>
-          Essa conta é {`${is_private ? 'privada' : 'pública'}`}.
+          Esse evento é {`${is_private ? 'privado' : 'público'}`}.
         </Text>
         <Text style={styles.description}>
-          {type === 'info'
-            ? `${
-                is_private
-                  ? 'Quando uma conta é privada, somente os seus amigos podem ver detalhes do perfil e suas publicações.'
-                  : 'Quando uma conta é pública, seu perfil e publicações podem ser vistos por todos dentro do app.'
-              }`
-            : 'Siga esta conta para ver mais detalhes'}
+          {is_private
+            ? 'Quando um evento é privado, ...'
+            : 'Quando um evento é público, ...'}
         </Text>
         <Button type="dark" title="Ok" onPress={() => setConfirm(false)} />
       </View>
