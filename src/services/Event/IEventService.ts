@@ -3,3 +3,9 @@ export interface ISearchByName {
   page?: number;
   limit?: number;
 }
+
+export interface ICreateEvent {
+  type_id: string;
+  name: string;
+  location: string;
+}

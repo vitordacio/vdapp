@@ -66,33 +66,38 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const { event: paramEvent } = route.params as EventParam;
 
   const [event, setEvent] = useState<IEvent>();
-  const [responseError, setResponseError] = useState<string>();
   const [showLoader, setShowLoader] = useState<boolean>(false);
+
+  const [responseError, setResponseError] = useState<string>();
+
   const [showPrivate, setShowPrivate] = useState<boolean>(false);
+  const [userIn, setUserIn] = useState<boolean>(false);
+
   const [participationLoader, setParticipationLoader] =
     useState<boolean>(false);
   const [participationTitle, setParticipationTitle] = useState('');
   const [participationStatus, setParticipationStatus] = useState(
     {} as ParticipationStatus,
   );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [canSeeContent, setCanSeeContent] = useState<boolean>();
+  // const [canSeeContent, setCanSeeContent] = useState<boolean>();
 
   const fetchData = async () => {
     setShowLoader(true);
-    let currentEvent: IEvent;
-    let title: string = '';
 
+    let dataEvent: IEvent;
+    let handleIn: boolean = false;
+
+    let title: string = '';
     let type: ParticipationStatus['type'];
     let icon: ParticipationStatus['icon'];
     let buttonTitle: string = '';
 
     try {
-      currentEvent = await eventService.findById(paramEvent.id_event);
+      dataEvent = await eventService.findById(paramEvent.id_event);
 
-      const { participation_status } = currentEvent;
+      const { participation_status } = dataEvent;
 
-      if (participation_status.startsWith('author')) title = 'Você é o dono!';
+      if (participation_status === 'author') title = 'Você é o dono!';
       if (participation_status.startsWith('guest'))
         title = 'Você é um convidado!';
       if (participation_status.startsWith('vip'))
@@ -104,11 +109,13 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         type = 'blue';
         icon = 'plus-circle';
         buttonTitle = 'Solicitar entrada';
-      } else if (participation_status === 'author') {
-        type = 'dark_gold';
-        icon = 'chevron-right';
-        buttonTitle = 'Gerenciar';
-      } else if (participation_status === 'user_out') {
+      }
+      // else if (participation_status === 'author') {
+      //   type = 'dark_gold';
+      //   icon = 'chevron-right';
+      //   buttonTitle = 'Gerenciar';
+      // }
+      else if (participation_status === 'user_out') {
         type = 'gray';
         icon = 'x-circle';
         buttonTitle = 'Cancelar solicitação';
@@ -124,6 +131,7 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         type = 'red';
         icon = 'minus-circle';
         buttonTitle = 'Sair do Evento';
+        handleIn = true;
       }
 
       const handleParticipationStatus: ParticipationStatus = {
@@ -133,8 +141,9 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         buttonTitle,
       };
 
-      setCanSeeContent(!currentEvent.private);
-      setEvent(currentEvent);
+      // setCanSeeContent(!dataEvent.private);
+      setEvent(dataEvent);
+      setUserIn(handleIn);
       setParticipationTitle(title);
       setParticipationStatus(handleParticipationStatus);
       setShowLoader(false);
@@ -145,52 +154,24 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const handleParticipation = async () => {
     setParticipationLoader(true);
-    // let currentEvent: IEvent;
 
     try {
       const { participation_status } = participationStatus;
 
       if (!participation_status) {
-        const { id_participation } = await participationService.requestByUser(
-          event.id_event,
-        );
-        setParticipationStatus({
-          participation_status: 'user_out',
-          type: 'gray',
-          icon: 'x-circle',
-          buttonTitle: 'Cancelar Solicitação',
-        });
-        event.participation_id = id_participation;
+        await participationService.requestByUser(event.id_event);
       } else if (
         participation_status === 'guest_out' ||
         participation_status === 'vip_out' ||
         participation_status === 'mod_out'
       ) {
         await participationService.inviteResponse(event.id_event);
-        let status: IEvent['participation_status'];
-        if (participation_status.startsWith('guest')) status = 'guest_in';
-        if (participation_status.startsWith('vip')) status = 'vip_in';
-        if (participation_status.startsWith('mod')) status = 'mod_in';
-
-        setParticipationStatus({
-          participation_status: status,
-          type: 'red',
-          icon: 'minus-circle',
-          buttonTitle: 'Sair do Evento',
-        });
-        event.participating_count += 1;
       } else {
         await participationService.deleteParticipation(event.participation_id);
-        setParticipationStatus({
-          participation_status: '',
-          type: 'blue',
-          icon: 'plus-circle',
-          buttonTitle: 'Solicitar Entrada',
-        });
-        event.participation_id = '';
       }
 
       setParticipationLoader(false);
+      fetchData();
     } catch (error) {
       setResponseError(error.response.data.message);
     }
@@ -434,18 +415,40 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                   </View>
 
                   <View style={styles.container_participation}>
-                    {event.participation_status === 'author' ||
-                      (event.participation_status === 'mod_in' && (
-                        <Button
-                          type="dark_gold"
-                          icon="chevron-right"
-                          style={{ maxWidth: 200 }}
-                          // iconSize={18}
-                          iconColor="#FFFFFF"
-                          onPress={handleParticipation}
-                          title="Gerenciar"
-                        />
-                      ))}
+                    <View style={styles.container_buttons}>
+                      {event.participation_status === 'author' ||
+                        (event.participation_status === 'mod_in' && (
+                          <Button
+                            type="dark_gold"
+                            icon="chevron-right"
+                            style={{ maxWidth: 200 }}
+                            // iconSize={18}
+                            iconColor="#FFFFFF"
+                            onPress={handleParticipation}
+                            title="Gerenciar"
+                          />
+                        ))}
+
+                      <Button
+                        style={{ width: 40 }}
+                        onPress={() => console.log('handle emote')}
+                        svg="smile"
+                      />
+
+                      <Button
+                        style={{ width: 160 }}
+                        svgSize={22}
+                        onPress={() => console.log('handle map')}
+                        title="Ver no mapa"
+                        svg="map"
+                      />
+
+                      <Button
+                        style={{ width: 40 }}
+                        onPress={() => navigation.navigate('Inbox')}
+                        svg="inbox"
+                      />
+                    </View>
 
                     {participationTitle && (
                       <Text
@@ -480,11 +483,7 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                       { textAlign: 'right' },
                     ]}
                   >
-                    {event.participation_status === 'author' ||
-                    event.participation_status === 'user_in' ||
-                    event.participation_status === 'guest_in' ||
-                    event.participation_status === 'mod_in' ||
-                    event.participation_status === 'vip_in'
+                    {userIn
                       ? 'Você está participando'
                       : 'Você não está participando'}
                   </Text>

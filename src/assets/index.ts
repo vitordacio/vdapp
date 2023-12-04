@@ -27,6 +27,8 @@ import location from './location.svg';
 import users from './users.svg';
 import smile from './smile.svg';
 import coin from './coin.svg';
+import map from './map.svg';
+import verified from './verified.svg';
 
 import ongoing from './Animation/ongoing.json';
 
@@ -59,4 +61,6 @@ export default {
   attach,
   drink,
   coin,
+  map,
+  verified,
 };

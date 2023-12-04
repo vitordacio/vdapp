@@ -14,6 +14,8 @@ import styles from './styles';
 
 const svgMapping: Record<string, ImageSourcePropType> = {
   inbox: assets.inbox,
+  smile: assets.smile,
+  map: assets.map,
 };
 
 interface IButtonProps extends PressableProps {
@@ -21,6 +23,7 @@ interface IButtonProps extends PressableProps {
   type?: string;
   icon?: React.ComponentProps<typeof Feather>['name'];
   iconSize?: number;
+  svgSize?: number;
   iconColor?: string;
   loading?: boolean;
   svg?: keyof typeof svgMapping;
@@ -34,6 +37,7 @@ export function Button({
   icon,
   iconSize,
   iconColor,
+  svgSize,
   loading,
   svg,
   ...rest
@@ -73,7 +77,11 @@ export function Button({
             )}
             {svg && (
               <ImageBackground
-                style={{ width: 24, height: 24 }}
+                style={
+                  svgSize
+                    ? { width: svgSize, height: svgSize }
+                    : { width: 24, height: 24 }
+                }
                 source={svgMapping[svg]}
               />
             )}

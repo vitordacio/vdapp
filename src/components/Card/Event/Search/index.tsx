@@ -4,12 +4,7 @@ import { View } from '@components/View';
 import { Text } from '@components/Text';
 
 import assets from '@assets/index';
-import {
-  Image,
-  ImageBackground,
-  ImageSourcePropType,
-  TouchableOpacity,
-} from 'react-native';
+import { Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
@@ -17,26 +12,11 @@ import { Picture } from '@components/Picture';
 import { formatTimeRange } from '@utils/formaters';
 import styles from './styles';
 
-const assetMapping: Record<string, ImageSourcePropType> = {
-  auditorium: assets.auditorium,
-  beach: assets.beach,
-  birthday: assets.birthday,
-  boat: assets.boat,
-  culinary: assets.culinary,
-  exercise: assets.exercise,
-  games: assets.games,
-  meeting: assets.meeting,
-  nature: assets.nature,
-  party: assets.party,
-  table: assets.table,
-};
-
 type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
   event: IEvent;
 };
 
 const CardEventSearch = ({ event, navigation }: CardProps) => {
-  // const { name, location, cover_photo, type, author, status } = event;
   const {
     name,
     location,
@@ -81,7 +61,7 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                 <View style={styles.data_text}>
                   <Image
                     style={styles.icon}
-                    source={assetMapping[type.name]}
+                    source={assets[type.name]}
                     resizeMode="contain"
                     tintColor="#fff"
                   />

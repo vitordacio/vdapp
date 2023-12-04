@@ -13,6 +13,7 @@ import User from '@screens/App/User';
 import { UpdateUserRoutes } from './user.routes';
 import HomeRoutes from './home.routes';
 import SearchRoutes from './search.routes';
+import CreateEventRoutes from './createEvent.routes';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -67,6 +68,15 @@ const BottomTabRoutes: React.FC = () => {
         component={SearchRoutes}
         options={{
           tabBarLabel: 'Explorar',
+        }}
+      />
+
+      <BottomTab.Screen
+        name="CreateEvent"
+        component={CreateEventRoutes}
+        options={{
+          tabBarLabel: 'Criar Evento',
+          headerShown: false,
         }}
       />
 

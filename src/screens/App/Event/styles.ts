@@ -143,6 +143,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 16,
   },
+  container_buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+  },
   container_footer: {
     display: 'flex',
     flexDirection: 'row',
