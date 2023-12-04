@@ -21,6 +21,7 @@ export type ITextInputProps = TextInputProps & {
   nullMargin?: boolean;
   setShowValue?: React.Dispatch<React.SetStateAction<string>>;
   defaultValue?: string;
+  width?: number;
 };
 
 export const TextInput = ({
@@ -33,6 +34,7 @@ export const TextInput = ({
   nullMargin,
   setShowValue,
   defaultValue,
+  width,
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -89,6 +91,7 @@ export const TextInput = ({
             icon
               ? { paddingLeft: 48, paddingRight: 48 }
               : { paddingLeft: 16, paddingRight: 16 },
+            width && { width },
           ]}
           maxLength={lengthMax || undefined}
           textAlignVertical={lengthMax ? 'top' : 'auto'}

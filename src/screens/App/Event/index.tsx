@@ -416,19 +416,6 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
                   <View style={styles.container_participation}>
                     <View style={styles.container_buttons}>
-                      {event.participation_status === 'author' ||
-                        (event.participation_status === 'mod_in' && (
-                          <Button
-                            type="dark_gold"
-                            icon="chevron-right"
-                            style={{ maxWidth: 200 }}
-                            // iconSize={18}
-                            iconColor="#FFFFFF"
-                            onPress={handleParticipation}
-                            title="Gerenciar"
-                          />
-                        ))}
-
                       <Button
                         style={{ width: 40 }}
                         onPress={() => console.log('handle emote')}
@@ -448,6 +435,19 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                         onPress={() => navigation.navigate('Inbox')}
                         svg="inbox"
                       />
+
+                      {(event.participation_status === 'author' ||
+                        event.participation_status === 'mod_in') && (
+                        <Button
+                          type="dark_gold"
+                          icon="chevron-right"
+                          style={{ maxWidth: 200 }}
+                          // iconSize={18}
+                          iconColor="#FFFFFF"
+                          onPress={handleParticipation}
+                          title="Gerenciar"
+                        />
+                      )}
                     </View>
 
                     {participationTitle && (
@@ -461,18 +461,19 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                       </Text>
                     )}
 
-                    {participationStatus && (
-                      <Button
-                        type={participationStatus.type}
-                        icon={participationStatus.icon}
-                        style={{ maxWidth: 200 }}
-                        iconSize={22}
-                        iconColor="#FFFFFF"
-                        onPress={handleParticipation}
-                        title={participationStatus.buttonTitle}
-                        loading={participationLoader}
-                      />
-                    )}
+                    {participationStatus &&
+                      participationStatus.participation_status !== 'author' && (
+                        <Button
+                          type={participationStatus.type}
+                          icon={participationStatus.icon}
+                          style={{ maxWidth: 200 }}
+                          iconSize={22}
+                          iconColor="#FFFFFF"
+                          onPress={handleParticipation}
+                          title={participationStatus.buttonTitle}
+                          loading={participationLoader}
+                        />
+                      )}
                   </View>
                 </View>
                 <View style={styles.container_footer}>

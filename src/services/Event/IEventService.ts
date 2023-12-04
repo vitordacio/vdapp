@@ -8,4 +8,5 @@ export interface ICreateEvent {
   type_id: string;
   name: string;
   location: string;
+  private?: boolean;
 }

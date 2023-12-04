@@ -103,7 +103,7 @@ const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
           }
           maxLength={30}
           nullMargin
-          onChange={e => handleGender(e)}
+          onChange={(e: null) => handleGender(e)}
         />
       </View>
 
