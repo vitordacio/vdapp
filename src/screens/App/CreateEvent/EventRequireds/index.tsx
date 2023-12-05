@@ -16,9 +16,9 @@ import {
   Platform,
   Switch,
 } from 'react-native';
-import { eventService } from '@services/Event';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { RadioInput } from '@components/Input/RadioInput';
+import { ICreateEvent } from '@services/Event/IEventService';
 import styles from './styles';
 
 type EventParams = ParamListBase & {
@@ -55,25 +55,34 @@ const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const { eventType } = route.params as EventParams;
 
   const handleRequireds = async (data: EventFormRequireds) => {
-    try {
-      const event = await eventService.createEvent({
-        type_id: eventType.id_event_type,
-        name: data.name,
-        location: data.location,
-        // private: privacy,
-      });
+    const form: ICreateEvent = {
+      type_id: eventType.id_event_type,
+      name: data.name,
+      location: data.location,
+      start: startTime,
+      finish: finishTime,
+      private: privacy,
+    };
 
-      event.type = eventType;
+    navigation.push('CreateEventOptionals', { form, eventType });
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Home' }],
-      });
-      navigation.navigate('Event', { event });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
+    // try {
+    //   const event = await eventService.createEvent({
+    //     type_id: eventType.id_event_type,
+    //     name: data.name,
+    //     location: data.location,
+    //   });
+
+    //   event.type = eventType;
+
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{ name: 'Home' }],
+    //   });
+    //   navigation.navigate('Event', { event });
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const toggleStartDatepicker = () => {
@@ -137,7 +146,8 @@ const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           Informações Obrigatórias
         </Text>
         <Text style={[styles.text, styles.description]}>
-          Forneça todas as informações essenciais para o seu evento{' '}
+          Forneça todas as informações essenciais para o seu evento. Será
+          possível alterar as informações fornecidas a qualquer momento.
         </Text>
 
         <ControlledTextInput
