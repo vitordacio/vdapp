@@ -8,10 +8,10 @@ import { Text } from '@components/Text';
 import { ParamListBase, useRoute } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppView, View } from '@components/View';
-// import { TextInputMask } from 'react-native-masked-text';
 import { ScrollView, TextInput } from 'react-native';
 import { ICreateEvent } from '@services/Event/IEventService';
 import { IEventType } from '@interfaces/types';
+import colors from '@styles/colors';
 import styles from './styles';
 
 type EventParams = ParamListBase & {
@@ -28,16 +28,14 @@ const schema = yup.object({
     .max(80, 'Preferência de bebidas deve ter no máximo 150 dígitos'),
 });
 
-// club_name
-// ticket_value
-// performer
-
 type EventFormOptionals = yup.InferType<typeof schema>;
 
 const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const [moneyValue, setMoneyValue] = useState('');
+  const [isMinAmountFocused, setIsMinAmountFocused] = useState(false);
+  const [isMinAmountFilled, setIsMinAmountFilled] = useState(false);
 
   const route = useRoute();
   const { form: formRequireds, eventType } = route.params as EventParams;
@@ -47,7 +45,7 @@ const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       ...formRequireds,
       additional: data.additional,
       drink_preferences: data.drink_preferences,
-      min_amount: moneyValue,
+      min_amount: !moneyValue.includes('NaN') ? moneyValue : undefined,
     };
 
     navigation.push('CreateEventConfirm', { form, eventType });
@@ -56,7 +54,6 @@ const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const formatMoney = (value: string) => {
     const numericValue = value.replace(/[^0-9]/g, '');
 
-    // const floatValue = parseFloat(numericValue);
     const floatValue = parseFloat(numericValue) / 100;
 
     const formattedValue = floatValue.toLocaleString('pt-BR', {
@@ -68,9 +65,18 @@ const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     return formattedValue;
   };
 
-  const handleTextChange = (text: string) => {
+  const handleMinAmountChange = (text: string) => {
     setMoneyValue(formatMoney(text));
   };
+
+  function handleMinAmountFocus() {
+    setIsMinAmountFocused(true);
+  }
+
+  async function handleMinAmountBlur() {
+    setIsMinAmountFocused(false);
+    setIsMinAmountFilled(!!moneyValue);
+  }
 
   const {
     control,
@@ -94,6 +100,8 @@ const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           control={control}
           error={errors.additional}
           placeholder="Inclua informações adicionais"
+          lengthMax={150}
+          maxLength={150}
         />
 
         <ControlledTextInput
@@ -102,44 +110,34 @@ const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           control={control}
           error={errors.drink_preferences}
           placeholder="Informe a preferência de bebidas"
+          maxLength={80}
         />
 
-        <ControlledTextInput
-          name="drink_preferences"
-          title="Valor mínimo recomendado"
-          control={control}
-          error={errors.drink_preferences}
-          keyboardType="numeric"
-          placeholder="Digite o valor"
-          value={moneyValue}
-          onChangeText={e => handleTextChange(e)}
-        />
-
-        <View style={{ backgroundColor: 'red' }}>
+        <Text style={styles.title_min_amount}>Valor mínimo recomendado</Text>
+        <View style={styles.container_min_amount}>
           <TextInput
-            style={{ backgroundColor: 'green', color: 'yellow' }}
+            style={[
+              styles.input_min_amount,
+              {
+                color: `${
+                  (isMinAmountFocused && isMinAmountFilled) || isMinAmountFilled
+                    ? `${colors.WHITE}`
+                    : `${colors.GRAY_INPUT_PLACEHOLDER}`
+                }`,
+              },
+            ]}
+            maxLength={14}
             keyboardType="numeric"
             placeholder="Digite o valor"
             value={moneyValue}
-            onChangeText={handleTextChange}
+            onChangeText={e => {
+              handleMinAmountChange(e);
+              setIsMinAmountFilled(!!e);
+            }}
+            onFocus={handleMinAmountFocus}
+            onBlur={handleMinAmountBlur}
           />
         </View>
-        {/*
-        <TextInputMask
-          style={styles.input_min_amount}
-          type={'money'}
-          options={{
-            precision: 2,
-            separator: ',',
-            delimiter: '.',
-            unit: 'R$',
-            suffixUnit: '',
-          }}
-          value={moneyValue}
-          onChangeText={(formatted, extracted) => {
-            setMoneyValue(extracted);
-          }}
-        /> */}
 
         <View style={styles.confirm_button_wrapper}>
           <Button

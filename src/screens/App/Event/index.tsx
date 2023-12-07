@@ -287,10 +287,8 @@ const Event: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                           ]}
                         >
                           {formatTimeRange(
-                            event.date,
-                            event.time,
-                            event.finish_date,
-                            event.finish_time,
+                            new Date(event.start_time),
+                            new Date(event.finish_time),
                             event.author.locale,
                           )}
                         </Text>

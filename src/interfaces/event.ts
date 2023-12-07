@@ -8,10 +8,8 @@ export interface IEvent {
   type_id: string;
   name: string;
   location: string;
-  date: string;
-  time: string;
-  finish_date: null;
-  finish_time: string;
+  start_time: Date;
+  finish_time: Date;
   cover_photo: string;
   drink_preferences: string;
   additional?: string;

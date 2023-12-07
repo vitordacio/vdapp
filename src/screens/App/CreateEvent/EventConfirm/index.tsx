@@ -9,6 +9,7 @@ import { ICreateEvent } from '@services/Event/IEventService';
 import { eventService } from '@services/Event';
 import assets from '@assets/index';
 import { IEventType } from '@interfaces/types';
+import { formatTimeRange } from '@utils/formaters';
 import styles from './styles';
 
 type EventParams = ParamListBase & {
@@ -62,7 +63,7 @@ const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             tintColor="#fff"
           />
           <Text style={[styles.text_default_color, styles.text_large]}>
-            {form.name}
+            Nome: {form.name}
           </Text>
         </View>
         <View style={styles.data_text}>
@@ -72,8 +73,8 @@ const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             resizeMode="contain"
             tintColor="#fff"
           />
-          <Text style={[styles.text_default_color, styles.text_medium]}>
-            {form.location}
+          <Text style={[styles.text_default_color, styles.text_large]}>
+            Local: {form.location}
           </Text>
         </View>
         <View style={styles.data_text}>
@@ -83,8 +84,8 @@ const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             resizeMode="contain"
             tintColor="#fff"
           />
-          <Text style={[styles.text_default_color, styles.text_medium]}>
-            {(form.start, form.finish)}
+          <Text style={[styles.text_default_color, styles.text_large]}>
+            Horário: {formatTimeRange(form.start_time, form.finish_time)}
           </Text>
         </View>
         <View style={styles.data_text}>
@@ -94,8 +95,8 @@ const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             resizeMode="contain"
             tintColor="#fff"
           />
-          <Text style={[styles.text_gray_color, styles.text_medium]}>
-            {form.additional || '--'}
+          <Text style={[styles.text_gray_color, styles.text_large]}>
+            Adicional: {form.additional || '--'}
           </Text>
         </View>
         <View style={styles.data_text}>
@@ -105,8 +106,8 @@ const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             resizeMode="contain"
             tintColor="#fff"
           />
-          <Text style={[styles.text_gray_color, styles.text_medium]}>
-            {form.drink_preferences || '--'}
+          <Text style={[styles.text_gray_color, styles.text_large]}>
+            Preferência de bebidas: {form.drink_preferences || '--'}
           </Text>
         </View>
         <View style={styles.data_text}>
@@ -116,8 +117,8 @@ const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             resizeMode="contain"
             tintColor="#fff"
           />
-          <Text style={[styles.text_gray_color, styles.text_medium]}>
-            {form.min_amount || '--'}
+          <Text style={[styles.text_gray_color, styles.text_large]}>
+            Valor mínimo recomendado: {form.min_amount || '--'}
           </Text>
         </View>
 

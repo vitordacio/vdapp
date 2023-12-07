@@ -19,6 +19,8 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { RadioInput } from '@components/Input/RadioInput';
 import { ICreateEvent } from '@services/Event/IEventService';
+import { formatTimeRange } from '@utils/formaters';
+import useAuth from '@contexts/auth';
 import styles from './styles';
 
 type EventParams = ParamListBase & {
@@ -41,6 +43,12 @@ type EventFormRequireds = yup.InferType<typeof schema>;
 const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
+  const { user } = useAuth();
+
+  const currentTime = new Date();
+  const currentFinishTime = new Date(currentTime);
+  currentFinishTime.setHours(currentTime.getHours() + 24);
+
   const [startTime, setStartTime] = useState('');
   const [customStartTime, setCustomStartTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
@@ -59,30 +67,20 @@ const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       type_id: eventType.id_event_type,
       name: data.name,
       location: data.location,
-      start: startTime,
-      finish: finishTime,
-      private: privacy,
+      is_private: privacy,
+      start_time: startTime ? new Date(startTime) : currentTime,
+      finish_time: finishTime ? new Date(finishTime) : currentFinishTime,
     };
 
+    if (startTime) {
+      form.start_time = new Date(startTime);
+    }
+
+    if (finishTime) {
+      form.finish_time = new Date(finishTime);
+    }
+
     navigation.push('CreateEventOptionals', { form, eventType });
-
-    // try {
-    //   const event = await eventService.createEvent({
-    //     type_id: eventType.id_event_type,
-    //     name: data.name,
-    //     location: data.location,
-    //   });
-
-    //   event.type = eventType;
-
-    //   navigation.reset({
-    //     index: 0,
-    //     routes: [{ name: 'Home' }],
-    //   });
-    //   navigation.navigate('Event', { event });
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   const toggleStartDatepicker = () => {
@@ -323,6 +321,12 @@ const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
               />
             </Pressable>
           )}
+        </View>
+
+        <View style={styles.hours_container}>
+          <Text style={styles.hours_text}>
+            {formatTimeRange(currentTime, currentFinishTime, user.locale)}
+          </Text>
         </View>
 
         <View style={styles.private_container}>

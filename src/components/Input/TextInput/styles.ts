@@ -9,23 +9,14 @@ export default StyleSheet.create({
   },
   container: {
     position: 'relative',
-    // padding: 1,
-    // display: 'flex',
-    // flexDirection: 'row',
     marginBottom: 17,
     marginLeft: 8,
     marginRight: 8,
-
-    // borderWidth: 1,
-    // borderColor: 'green',
   },
   input_text: {
     minHeight: 40,
-
     borderRadius: 8,
     backgroundColor: `${colors.GRAY_INPUT_BACKGROUND}`,
-    paddingLeft: 48,
-    paddingRight: 48,
   },
   icon_container: {
     height: 40,

@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 10,
+    marginBottom: 8,
   },
   icon: {
     width: 21,

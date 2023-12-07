@@ -74,6 +74,16 @@ const styles = StyleSheet.create({
   pickerButton: {
     paddingHorizontal: 20,
   },
+  hours_container: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  hours_text: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: `${colors.GOLD}`,
+  },
   private_container: {
     display: 'flex',
     flexDirection: 'row',

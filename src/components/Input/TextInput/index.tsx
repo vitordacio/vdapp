@@ -38,7 +38,6 @@ export const TextInput = ({
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  // const [isFilled, setIsFilled] = useState(false);
   const [isFilled, setIsFilled] = useState(!!defaultValue);
   const [isSecurity, setIsSecurity] = useState(rest.secureTextEntry);
   const [isValid, setIsValid] = useState(false);

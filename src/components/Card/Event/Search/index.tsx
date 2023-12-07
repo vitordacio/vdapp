@@ -22,15 +22,19 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
     location,
     cover_photo,
     status,
-    date,
-    time,
+    start_time,
     finish_time,
-    finish_date,
     type,
     author,
     participating_count,
     emojis_count,
   } = event;
+
+  const hours = formatTimeRange(
+    new Date(start_time),
+    new Date(finish_time),
+    author.locale,
+  );
 
   return (
     <>
@@ -83,7 +87,7 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                   </Text>
                 </View>
               )}
-              {date && (
+              {hours && (
                 <View style={styles.data_text}>
                   <ImageBackground
                     style={styles.icon}
@@ -92,13 +96,7 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
                     tintColor="#fff"
                   />
                   <Text style={[styles.text_gray_color, styles.text_medium]}>
-                    {formatTimeRange(
-                      date,
-                      time,
-                      finish_date,
-                      finish_time,
-                      author.locale,
-                    )}
+                    {hours}
                   </Text>
                 </View>
               )}
