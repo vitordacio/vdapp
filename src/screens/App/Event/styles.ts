@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
     position: 'relative',
     paddingHorizontal: 8,
     width: '100%',
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
   },
   container_event: {
     width: '100%',
-
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -86,13 +84,13 @@ const styles = StyleSheet.create({
     color: `${colors.GRAY_DESCRIPTION}`,
   },
   container_author: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: 8,
     width: '100%',
 
     borderColor: `${colors.GRAY_DESCRIPTION}`,
-    // borderTopWidth: 1,
     borderBottomWidth: 1,
   },
   data_author: {
@@ -102,6 +100,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   container_actions: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
@@ -137,11 +136,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   container_participation: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 16,
+
+    paddingVertical: 8,
   },
   container_buttons: {
     display: 'flex',

@@ -2,15 +2,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '@styles/colors';
-import Event from '@screens/App/Event';
 import EmojisReceived from '@screens/App/Emojis';
 import Friends from '@screens/App/Friends';
 import Inbox from '@screens/App/Inbox';
 import Profile from '@screens/App/Profile';
-
 import Notifications from '@screens/App/Notifications';
 import User from '@screens/App/User';
 import { UpdateUserRoutes } from './user.routes';
+import { EventRoutes } from './event.routes';
 import HomeRoutes from './home.routes';
 import SearchRoutes from './search.routes';
 import CreateEventRoutes from './createEvent.routes';
@@ -120,7 +119,11 @@ const AppRoutes: React.FC = () => {
         component={BottomTabRoutes}
         options={{ headerShown: false }}
       />
-      <App.Screen name="Event" component={Event} />
+      <App.Screen
+        name="Event"
+        component={EventRoutes}
+        options={{ headerShown: false }}
+      />
       <App.Screen name="Profile" component={Profile} />
       <App.Screen name="Inbox" component={Inbox} />
       <App.Screen

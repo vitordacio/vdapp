@@ -1,10 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-// import User from '@screens/App/User';
-// import Profile from '@screens/App/Profile';
-// import EmojisReceived from '@screens/App/Emojis';
-// import Friends from '@screens/App/Friends';
-// import Inbox from '@screens/App/Inbox';
 import Achievements from '@screens/App/Top/Achievements';
 import EmojisSent from '@screens/App/Top/EmojisSent';
 import Events from '@screens/App/Top/Events';
@@ -108,49 +103,3 @@ export const UserTopTabRoutes: React.FC = () => {
     </UserTopTab.Navigator>
   );
 };
-
-// const UserStackTab = createNativeStackNavigator();
-
-// const UserRoutes: React.FC = () => {
-//   return (
-//     <UserStackTab.Navigator
-//       screenOptions={({ route }) => {
-//         return {
-//           headerStyle: { backgroundColor: 'black' },
-//           headerTitleStyle: { color: 'white' },
-//           headerTintColor: 'white',
-//           headerTitleAlign: 'center',
-//           tabBarVisible: `${route.name === 'User'}`,
-//         };
-//       }}
-//     >
-//       <UserStackTab.Screen name="User" component={User} />
-//       <UserStackTab.Screen
-//         name="Friends"
-//         component={Friends}
-//         options={{
-//           headerTitle: 'Amigos',
-//         }}
-//       />
-//       <UserStackTab.Screen
-//         name="EmojisReceived"
-//         component={EmojisReceived}
-//         options={{
-//           headerTitle: 'Emotes Recebidos',
-//         }}
-//       />
-//       <UserStackTab.Screen
-//         name="UpdateUser"
-//         component={UpdateUserRoutes}
-//         options={{
-//           headerShown: false,
-//         }}
-//       />
-//       <UserStackTab.Screen name="Inbox" component={Inbox} />
-
-//       <UserStackTab.Screen name="Profile" component={Profile} />
-//     </UserStackTab.Navigator>
-//   );
-// };
-
-// export default UserRoutes;

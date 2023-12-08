@@ -8,7 +8,7 @@ const Custom: React.FC<BottomTabScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   return (
-    <View>
+    <View style={{ minHeight: 600 }}>
       <Text>Custom</Text>
     </View>
   );
