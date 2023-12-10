@@ -17,7 +17,7 @@ import {
   ICreateSocial,
   IUpdateUsername,
 } from '@services/User/IUserService';
-
+import useMessage from '@contexts/message';
 import styles from './styles';
 
 interface IViewConfirmProps
@@ -44,6 +44,7 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   navigation,
 }) => {
   const { setUser } = useAuth();
+  const { setMessage, handleEntering, setMessageType } = useMessage();
   const [responseError, setResponseError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -51,35 +52,52 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
     setLoading(true);
     setResponseError('');
     let updatedUser: IUser;
+    let message: string;
+    let msgType = 'info';
 
     try {
       if (type === 'username') {
         updatedUser = await userService.updateUsername(data as IUpdateUsername);
+        message = 'Nome de usuário alterado';
       }
       if (type === 'name') {
         updatedUser = await userService.updateName(data as IUpdateName);
+        message = 'Nome alterado';
       }
       if (type === 'bio') {
         updatedUser = await userService.updateBio(data as IUpdateBio);
+        message = 'Biografia alterada';
       }
       if (type === 'location') {
         updatedUser = await userService.updateLocation(data as IUpdateLocation);
+        message = 'Localização alterada';
       }
       if (type === 'password') {
         updatedUser = await userService.updatePassword(data as IUpdatePassword);
+        message = 'Senha alterada';
       }
       if (type === 'create_social') {
         updatedUser = await userService.createSocial(data as ICreateSocial);
+        message = 'Rede social adicionada';
       }
       if (type === 'delete_social') {
         updatedUser = await userService.deleteSocial(data as string);
+        message = 'Rede social excluída';
       }
     } catch (error) {
-      setResponseError(error.message);
+      msgType = 'alert';
+      message = error.response.data.message;
     }
 
-    setUser(updatedUser);
-    const goBack = type !== 'create_social' && type !== 'delete_social';
+    setMessage(`${message} com sucesso!`);
+    setMessageType(msgType);
+    handleEntering();
+
+    if (msgType !== 'alert') setUser(updatedUser);
+
+    const goBack =
+      (type !== 'create_social' && type !== 'delete_social') ||
+      msgType === 'alert';
     return goBack ? navigation.goBack() : setConfirm(false);
   };
 

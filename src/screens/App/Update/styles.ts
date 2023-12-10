@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 18,
   },
   error: {
     fontSize: 16,

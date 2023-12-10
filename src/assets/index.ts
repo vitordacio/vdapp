@@ -29,6 +29,8 @@ import smile from './smile.svg';
 import coin from './coin.svg';
 import map from './map.svg';
 import verified from './verified.svg';
+import check from './check.svg';
+import alert from './alert.svg';
 
 import ongoing from './Animation/ongoing.json';
 
@@ -63,4 +65,6 @@ export default {
   coin,
   map,
   verified,
+  check,
+  alert,
 };

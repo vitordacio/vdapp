@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  // DarkTheme,
-  // DefaultTheme,
-  NavigationContainer,
-} from '@react-navigation/native';
-// import { useColorScheme } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { Message } from '@components/Message';
 import useAuth from '@contexts/auth';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Text } from '@components/Text';
@@ -16,7 +12,6 @@ import AuthRoutes from './auth.routes';
 
 const Routes: React.FC = () => {
   const { signed, loading } = useAuth();
-  // const { signed } = useAuth();
 
   if (loading) {
     return (
@@ -26,9 +21,8 @@ const Routes: React.FC = () => {
     );
   }
 
-  // const currentTheme = useColorScheme();
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, position: 'relative' }}>
       <SafeAreaProvider>
         <SafeAreaView
           style={{
@@ -36,9 +30,8 @@ const Routes: React.FC = () => {
             backgroundColor: 'transparent',
           }}
         >
-          <NavigationContainer
-          // theme={currentTheme === 'dark' ? DarkTheme : DefaultTheme}
-          >
+          <Message />
+          <NavigationContainer>
             {/* <StatusBar style="auto" /> */}
             {signed ? <AppRoutes /> : <AuthRoutes />}
           </NavigationContainer>

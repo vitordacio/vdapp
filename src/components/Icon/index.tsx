@@ -1,33 +1,21 @@
 import React from 'react';
-import {
-  ImageBackground,
-  ImageSourcePropType,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { ImageBackground, StyleProp, ViewStyle } from 'react-native';
 import assets from '@assets/index';
 import styles from './styles';
 
-const iconMapping: Record<string, ImageSourcePropType> = {
-  inbox: assets.inbox,
-  instagram: assets.instagram,
-  tiktok: assets.tiktok,
-  twitter: assets.twitter,
-  twitch: assets.twitch,
-  location: assets.location,
-};
-
 interface IIconProps {
-  name: keyof typeof iconMapping;
+  name: string;
   style?: StyleProp<ViewStyle>;
+  tintColor?: string;
 }
 
-export const Icon: React.FC<IIconProps> = ({ name, style }) => {
+export const Icon: React.FC<IIconProps> = ({ name, style, tintColor }) => {
   return (
     <ImageBackground
       style={[styles.container, style]}
-      source={iconMapping[name]}
+      source={assets[name]}
       resizeMode="cover"
+      tintColor={tintColor || null}
     />
   );
 };
