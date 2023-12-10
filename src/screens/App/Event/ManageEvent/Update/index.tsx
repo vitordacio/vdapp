@@ -1,7 +1,5 @@
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@components/Text';
-import { Picture } from '@components/Picture';
-import { CoverPhoto } from '@components/CoverPhoto';
 import { AppView, View } from '@components/View';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,16 +11,19 @@ import {
 } from '@components/Card/UpdateOptions';
 import colors from '@styles/colors';
 import useAuth from '@contexts/auth';
+import { IEvent } from '@interfaces/event';
 import styles from './styles';
 
-const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+type EventProps = NativeStackScreenProps<ParamListBase> & {
+  paramEvent: IEvent;
+};
+
+const UpdateEvent: React.FC<EventProps> = ({ navigation }) => {
   const { user } = useAuth();
 
   const options = {
     name: {
-      title: 'Name',
+      title: 'Nome',
       redirect: 'UpdateName',
       description: `${user.name}`,
     },
@@ -73,8 +74,6 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     password: ICardUpdateOption;
   };
 
-  const handlePicture = () => {};
-
   return (
     <AppView
       style={{
@@ -83,20 +82,6 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <CoverPhoto cover_photo={user.cover_photo} />
-          <TouchableOpacity
-            style={styles.picture_container}
-            onPress={handlePicture}
-          >
-            <Picture picture={user.picture} />
-            <View style={styles.camera}>
-              <Feather
-                name="camera"
-                size={17}
-                color={`${colors.TEXT_DEFAULT}`}
-              />
-            </View>
-          </TouchableOpacity>
           <View style={styles.edit_username}>
             <Text style={styles.username}>@{user.username}</Text>
             <TouchableOpacity
@@ -133,4 +118,4 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   );
 };
 
-export default UpdateUser;
+export default UpdateEvent;

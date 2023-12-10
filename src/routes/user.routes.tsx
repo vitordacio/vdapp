@@ -4,16 +4,16 @@ import Achievements from '@screens/App/Top/Achievements';
 import EmojisSent from '@screens/App/Top/EmojisSent';
 import Events from '@screens/App/Top/Events';
 import Participations from '@screens/App/Top/Participations';
-import UpdateUser from '@screens/App/Update';
-import UpdateBio from '@screens/App/Update/UpdateBio';
-import UpdateEmail from '@screens/App/Update/UpdateEmail';
-import UpdateGender from '@screens/App/Update/UpdateGender';
-import UpdateLocation from '@screens/App/Update/UpdateLocation';
-import UpdateName from '@screens/App/Update/UpdateName';
-import UpdatePassword from '@screens/App/Update/UpdatePassword';
-import UpdatePrivacy from '@screens/App/Update/UpdatePrivacy';
-import UpdateSocial from '@screens/App/Update/UpdateSocial';
-import UpdateUsername from '@screens/App/Update/UpdateUsername';
+import UpdateUser from '@screens/App/User/Update';
+import UpdateBio from '@screens/App/User/Update/UpdateBio';
+import UpdateEmail from '@screens/App/User/Update/UpdateEmail';
+import UpdateGender from '@screens/App/User/Update/UpdateGender';
+import UpdateLocation from '@screens/App/User/Update/UpdateLocation';
+import UpdateName from '@screens/App/User/Update/UpdateName';
+import UpdatePassword from '@screens/App/User/Update/UpdatePassword';
+import UpdatePrivacy from '@screens/App/User/Update/UpdatePrivacy';
+import UpdateSocial from '@screens/App/User/Update/UpdateSocial';
+import UpdateUsername from '@screens/App/User/Update/UpdateUsername';
 
 const UpdateUserStackTab = createNativeStackNavigator();
 

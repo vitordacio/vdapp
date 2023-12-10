@@ -29,7 +29,10 @@ export const Message = () => {
       ]}
     >
       <View style={styles.icon}>
-        <Icon name="check" tintColor="#fff" />
+        <Icon
+          name={messageType === 'alert' ? 'alert' : 'check'}
+          tintColor="#fff"
+        />
       </View>
       <Text style={styles.title}>{message}</Text>
     </Animated.View>

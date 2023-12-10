@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
-import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import useAuth from '@contexts/auth';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import styles from '@screens/App/Update/styles';
+import { ViewUpdate } from '../ViewUpdate';
+import { ViewConfirm } from '../ViewConfirm';
+import styles from '../styles';
 
 const schema = yup.object({
   email: yup.string().email('E-mail inválido').required('Informe o e-mail'),

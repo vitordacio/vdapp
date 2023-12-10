@@ -4,12 +4,12 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
-import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import styles from '@screens/App/Update/styles';
+import { ViewUpdate } from '../ViewUpdate';
+import { ViewConfirm } from '../ViewConfirm';
+import styles from '../styles';
 
 const schema = yup.object({
   password: yup.string().required('Informe a senha atual'),

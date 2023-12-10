@@ -344,64 +344,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                   </View>
                 </View>
 
-                {/* <View style={styles.container_actions}>
-                   <View style={styles.container_counts}>
-                    <View style={styles.counts}>
-                      <Text
-                        style={[
-                          styles.text_default_color,
-                          styles.text_extra_large,
-                        ]}
-                      >
-                        {event.participating_count}
-                      </Text>
-
-                      <View style={styles.counts_description}>
-                        <ImageBackground
-                          style={styles.icon_count}
-                          source={assets.users}
-                          resizeMode="contain"
-                          tintColor="#fff"
-                        />
-                        <Text
-                          style={[styles.text_default_color, styles.text_large]}
-                        >
-                          {event.participating_count <= 1
-                            ? 'Participante'
-                            : 'Participantes'}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View style={styles.line_y} />
-
-                    <View style={styles.counts}>
-                      <Text
-                        style={[
-                          styles.text_default_color,
-                          styles.text_extra_large,
-                        ]}
-                      >
-                        {event.emojis_count}
-                      </Text>
-
-                      <View style={styles.counts_description}>
-                        <ImageBackground
-                          style={styles.icon_count}
-                          source={assets.smile}
-                          resizeMode="contain"
-                          tintColor="#fff"
-                        />
-                        <Text
-                          style={[styles.text_default_color, styles.text_large]}
-                        >
-                          {event.emojis_count <= 1 ? 'Emote' : 'Emotes'}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View> */}
-
                 <View style={styles.container_participation}>
                   <View style={styles.container_buttons}>
                     <Button
@@ -430,9 +372,10 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                         type="dark_gold"
                         icon="chevron-right"
                         style={{ maxWidth: 200 }}
-                        // iconSize={18}
                         iconColor="#FFFFFF"
-                        onPress={handleParticipation}
+                        onPress={() =>
+                          navigation.push('ManageEvent', { event })
+                        }
                         title="Gerenciar"
                       />
                     )}

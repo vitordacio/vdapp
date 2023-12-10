@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useAuth from '@contexts/auth';
@@ -8,6 +7,7 @@ import { userService } from '@services/User';
 import { View } from '@components/View';
 import { IUser } from '@interfaces/user';
 import { ActivityIndicator, Switch } from 'react-native';
+import { ViewUpdate } from '../ViewUpdate';
 import styles from './styles';
 
 const UpdatePrivacy: React.FC<NativeStackScreenProps<ParamListBase>> = () => {

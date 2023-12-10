@@ -7,6 +7,12 @@ import Event from '@screens/App/Event';
 import Custom from '@screens/Custom';
 import { ParamListBase } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
+import ManageEvent from '@screens/App/Event/ManageEvent';
+import UpdateEvent from '@screens/App/Event/ManageEvent/Update';
+
+type EventProps = NativeStackScreenProps<ParamListBase> & {
+  paramEvent: IEvent;
+};
 
 const EventTopTab = createMaterialTopTabNavigator();
 
@@ -53,7 +59,7 @@ export const EventTopTabRoutes: React.FC = () => {
 
 const UpdateEventStackTab = createNativeStackNavigator();
 
-export const UpdateEventRoutes: React.FC = () => {
+export const UpdateEventRoutes: React.FC<EventProps> = ({ paramEvent }) => {
   return (
     <UpdateEventStackTab.Navigator
       screenOptions={{
@@ -68,7 +74,14 @@ export const UpdateEventRoutes: React.FC = () => {
         headerTitleAlign: 'center',
       }}
     >
-      <UpdateEventStackTab.Screen name="UpdateEventScreen" component={Custom} />
+      <UpdateEventStackTab.Screen name="UpdateEventScreen">
+        {props => <UpdateEvent {...props} paramEvent={paramEvent} />}
+      </UpdateEventStackTab.Screen>
+
+      {/* <UpdateEventStackTab.Screen
+        name="UpdateEventScreen"
+        component={UpdateEvent}
+      /> */}
       <UpdateEventStackTab.Screen name="UpdateEventName" component={Custom} />
       <UpdateEventStackTab.Screen
         name="UpdateEventLocation"
@@ -117,7 +130,7 @@ export const UpdateEventRoutes: React.FC = () => {
 
 const ManageEventStackTab = createNativeStackNavigator();
 
-export const ManageEventRoutes: React.FC = () => {
+export const ManageEventRoutes: React.FC<EventProps> = ({ paramEvent }) => {
   return (
     <ManageEventStackTab.Navigator
       screenOptions={{
@@ -132,11 +145,21 @@ export const ManageEventRoutes: React.FC = () => {
         headerTitleAlign: 'center',
       }}
     >
-      <ManageEventStackTab.Screen name="ManageEventScreen" component={Custom} />
+      <ManageEventStackTab.Screen name="ManageEventScreen">
+        {props => <ManageEvent {...props} paramEvent={paramEvent} />}
+      </ManageEventStackTab.Screen>
+
+      <ManageEventStackTab.Screen
+        name="UpdateEvent"
+        options={{ headerShown: false }}
+      >
+        {props => <UpdateEventRoutes {...props} paramEvent={paramEvent} />}
+      </ManageEventStackTab.Screen>
+      {/*
       <ManageEventStackTab.Screen
         name="UpdateEvent"
         component={UpdateEventRoutes}
-      />
+      /> */}
       <ManageEventStackTab.Screen name="Invite" component={Custom} />
       <ManageEventStackTab.Screen name="DeleteEvent" component={Custom} />
     </ManageEventStackTab.Navigator>
@@ -167,7 +190,12 @@ export const EventRoutes: React.FC<
         {props => <Event {...props} paramEvent={route.params.event} />}
       </EventStackTab.Screen>
 
-      <EventStackTab.Screen name="ManageEvent" component={ManageEventRoutes} />
+      <EventStackTab.Screen name="ManageEvent" options={{ headerShown: false }}>
+        {props => (
+          <ManageEventRoutes {...props} paramEvent={route.params.event} />
+        )}
+      </EventStackTab.Screen>
+
       <EventStackTab.Screen name="EventRequests" component={Custom} />
       <EventStackTab.Screen name="EventInbox" component={Custom} />
       <EventStackTab.Screen name="EventMap" component={Custom} />

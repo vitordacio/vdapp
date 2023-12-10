@@ -5,11 +5,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
-import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
 import { IUserSocial, IUserSocialType } from '@interfaces/social_network';
 import useAuth from '@contexts/auth';
-import { Pressable, ImageBackground, ImageSourcePropType } from 'react-native';
+import { Pressable, ImageBackground } from 'react-native';
 import { View } from '@components/View';
 import { Text } from '@components/Text';
 import { userService } from '@services/User';
@@ -17,16 +15,18 @@ import { Feather } from '@expo/vector-icons';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ICreateSocial } from '@services/User/IUserService';
-import generalstyle from '@screens/App/Update/styles';
+import { ViewUpdate } from '../ViewUpdate';
+import { ViewConfirm } from '../ViewConfirm';
+import generalstyle from '../styles';
 import styles from './styles';
 
-const assetMapping: Record<string, ImageSourcePropType> = {
-  instagram: assets.instagram,
-  tiktok: assets.tiktok,
-  twitter: assets.twitter,
-  twitch: assets.twitch,
-  youtube: assets.youtube,
-};
+// const assetMapping: Record<string, ImageSourcePropType> = {
+//   instagram: assets.instagram,
+//   tiktok: assets.tiktok,
+//   twitter: assets.twitter,
+//   twitch: assets.twitch,
+//   youtube: assets.youtube,
+// };
 
 const schema = yup.object({
   username: yup.string().required('Informe o nome de usuário'),
@@ -48,7 +48,7 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>([]);
   const [currentType, setCurrentType] = useState<IUserSocialType>();
-  const [disabledTypes, setDisabledTypes] = useState<IUserSocialType['type'][]>(
+  const [disabledTypes, setDisabledTypes] = useState<IUserSocialType['name'][]>(
     [],
   );
   const [userSocials, setUserSocials] = useState<IUserSocial[]>([]);
@@ -63,12 +63,12 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       const disableds =
         user.social_networks.length === 0
           ? []
-          : user.social_networks.map(userSocial => userSocial.type.type);
+          : user.social_networks.map(userSocial => userSocial.type.name);
 
       setDisabledTypes(disableds);
 
       const current = dataSocialTypes.find(
-        socialType => !disableds.includes(socialType.type),
+        socialType => !disableds.includes(socialType.name),
       );
 
       setCurrentType(current);
@@ -80,7 +80,7 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const handleCurrentType = (socialType: IUserSocialType) => {
     const isDisabled = disabledTypes.some(
-      disabled => disabled === socialType.type,
+      disabled => disabled === socialType.name,
     );
     if (isDisabled) return;
     setCurrentType(socialType);
@@ -124,15 +124,15 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             key={socialType.id_social_network_type}
             style={[
               styles.social_wrapper,
-              currentType.type === socialType.type && styles.selected,
-              disabledTypes.some(disabled => disabled === socialType.type) &&
+              currentType.name === socialType.name && styles.selected,
+              disabledTypes.some(disabled => disabled === socialType.name) &&
                 styles.disabled,
             ]}
           >
             <Pressable onPress={() => handleCurrentType(socialType)}>
               <ImageBackground
                 style={styles.social}
-                source={assetMapping[socialType.type]}
+                source={assets[socialType.name]}
               />
             </Pressable>
           </View>
@@ -169,7 +169,7 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           <View key={social.id_social_network} style={styles.user_social}>
             <ImageBackground
               style={styles.social}
-              source={assetMapping[social.type.type]}
+              source={assets[social.type.name]}
             />
             <Text style={styles.user_social_username}>/{social.username}</Text>
             <Pressable onPress={() => handleDeleteSocial(social)}>

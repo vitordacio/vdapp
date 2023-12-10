@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
-import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useAuth from '@contexts/auth';
 import { Text } from '@components/Text';
-import generalstyle from '@screens/App/Update/styles';
 import { RadioInput } from '@components/Input/RadioInput';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
 import { TextInput } from '@components/Input/TextInput';
 import { View, TouchableOpacity } from 'react-native';
+import { ViewUpdate } from '../ViewUpdate';
+import generalstyle from '../styles';
 import styles from './styles';
 
 const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = () => {

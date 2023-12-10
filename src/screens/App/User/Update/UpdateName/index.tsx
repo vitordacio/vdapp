@@ -4,21 +4,25 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { ViewUpdate } from '@screens/App/Update/ViewUpdate';
-import { ViewConfirm } from '@screens/App/Update/ViewConfirm';
-import useAuth from '@contexts/auth';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import useAuth from '@contexts/auth';
 import { View } from '@components/View';
-import styles from '@screens/App/Update/styles';
+import { ViewUpdate } from '../ViewUpdate';
+import { ViewConfirm } from '../ViewConfirm';
+import styles from '../styles';
 
 const schema = yup.object({
-  bio: yup.string().max(150, 'A biografia deve ter no máximo 150 dígitos'),
+  name: yup
+    .string()
+    .min(4, 'O nome deve ter ao menos 4 dígitos')
+    .max(30, 'O nome deve ter no máximo 30 dígitos')
+    .required('Informe um nome'),
 });
 
-type BioFormData = yup.InferType<typeof schema>;
+type NameFormData = yup.InferType<typeof schema>;
 
-const UpdateBio: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const UpdateName: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const { user } = useAuth();
@@ -26,7 +30,7 @@ const UpdateBio: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
-  const handleBio = async (data: BioFormData) => {
+  const handleName = async (data: NameFormData) => {
     setForm(data);
     setConfirm(true);
   };
@@ -35,39 +39,37 @@ const UpdateBio: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<BioFormData>({
+  } = useForm<NameFormData>({
     resolver: yupResolver(schema),
   });
 
   return (
     <ViewUpdate
-      name="Biografia"
-      description="Você pode editar a sua biografia a qualquer momento."
+      name="Nome"
+      description="Você pode alterar o seu nome uma vez a cada 7 dias."
     >
       <ControlledTextInput
-        name="bio"
+        name="name"
         control={control}
-        error={errors.bio}
-        lengthMax={150}
-        placeholder="Informe uma biografia"
-        defaultValue={user.bio}
+        placeholder="Informe um nome"
+        defaultValue={user.name}
+        error={errors.name}
+        maxLength={30}
       />
-
       <View style={styles.confirm_button_wrapper}>
-        <Button onPress={handleSubmit(handleBio)} title="Salvar" type="blue" />
+        <Button onPress={handleSubmit(handleName)} title="Salvar" type="blue" />
       </View>
-
       {confirm && (
         <ViewConfirm
           data={form}
           navigation={navigation}
           setConfirm={setConfirm}
-          type="bio"
-          description="Tem certeza que deseja mudar a sua biografia?"
+          type="name"
+          description="Tem certeza que deseja mudar o seu nome?"
         />
       )}
     </ViewUpdate>
   );
 };
 
-export default UpdateBio;
+export default UpdateName;
