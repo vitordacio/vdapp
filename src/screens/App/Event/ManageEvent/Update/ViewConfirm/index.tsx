@@ -26,7 +26,7 @@ interface IViewConfirmProps
     | 'min_amount'
     | 'performer'
     | 'club_name'
-    | 'ticket_value'
+    | 'tickets_value'
     | 'tickets_free'
     | 'privacy';
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;

@@ -8,22 +8,20 @@ import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
 import useEvent from '@contexts/event';
-import { IUpdateLocation } from '@services/Event/IEventService';
+import { IUpdatePerformer } from '@services/Event/IEventService';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
 
 const schema = yup.object({
-  location: yup
+  performer: yup
     .string()
-    .min(4, 'O local do evento deve ter ao menos 4 dígitos')
-    .max(80, 'O local do evento deve ter no máximo 80 dígitos')
-    .required('Informe um nome'),
+    .max(80, 'Informações adicionais deve ter no máximo 80 dígitos'),
 });
 
-type LocationFormData = yup.InferType<typeof schema>;
+type PerformerFormData = yup.InferType<typeof schema>;
 
-const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const UpdateEventPerformer: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const { event } = useEvent();
@@ -31,11 +29,11 @@ const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
-  const handleLocation = async (data: LocationFormData) => {
+  const handlePerformer = async (data: PerformerFormData) => {
     setForm({
       event_id: event.id_event,
-      location: data.location,
-    } as IUpdateLocation);
+      performer: data.performer,
+    } as IUpdatePerformer);
     setConfirm(true);
   };
 
@@ -43,27 +41,26 @@ const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LocationFormData>({
+  } = useForm<PerformerFormData>({
     resolver: yupResolver(schema),
   });
 
   return (
     <ViewUpdate
-      name="Local do evento"
-      description="Você pode editar o local do evento a qualquer momento."
+      name="Artista"
+      description="Você pode alterar as informações do artista a qualquer momento."
     >
       <ControlledTextInput
-        name="location"
+        name="performer"
         control={control}
-        icon="map-pin"
-        placeholder="Informe o local do evento"
-        defaultValue={event.location}
-        error={errors.location}
+        placeholder="Insira um artista"
+        defaultValue={event.performer}
+        error={errors.performer}
         maxLength={80}
       />
       <View style={styles.confirm_button_wrapper}>
         <Button
-          onPress={handleSubmit(handleLocation)}
+          onPress={handleSubmit(handlePerformer)}
           title="Salvar"
           type="blue"
         />
@@ -73,12 +70,12 @@ const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           data={form}
           navigation={navigation}
           setConfirm={setConfirm}
-          type="location"
-          description="Tem certeza que deseja mudar o local do evento?"
+          type="performer"
+          description="Tem certeza que deseja mudar as informações do artista?"
         />
       )}
     </ViewUpdate>
   );
 };
 
-export default UpdateEventLocation;
+export default UpdateEventPerformer;

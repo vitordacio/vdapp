@@ -13,9 +13,9 @@ export interface IEvent {
   cover_photo: string;
   drink_preferences: string;
   additional?: string;
-  min_amount: number;
-  tickets_free: number;
-  ticket_value: number;
+  min_amount: string;
+  tickets_free: string;
+  ticket_value: string;
   club_name: string;
   performer: string;
   author_id: string;

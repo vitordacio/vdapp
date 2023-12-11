@@ -14,7 +14,7 @@ import {
   IUpdateMinAmount,
   IUpdateName,
   IUpdatePerformer,
-  IUpdatePrivate,
+  IUpdatePrivacy,
   IUpdateTicketsFree,
   IUpdateTicketsValue,
 } from './IEventService';
@@ -27,7 +27,7 @@ interface IEventService {
   updateName: (data: IUpdateName) => Promise<IEvent>;
   updateLocation: (data: IUpdateLocation) => Promise<IEvent>;
   updateHours: (data: IUpdateHours) => Promise<IEvent>;
-  updatePrivate: (data: IUpdatePrivate) => Promise<IEvent>;
+  updatePrivacy: (data: IUpdatePrivacy) => Promise<IEvent>;
   updateAdditional: (data: IUpdateAdditional) => Promise<IEvent>;
   updateDrinkPreferences: (data: IUpdateDrinkPreferences) => Promise<IEvent>;
   updateMinAmount: (data: IUpdateMinAmount) => Promise<IEvent>;
@@ -74,7 +74,7 @@ const service: IEventService = {
     const response: AxiosResponse<IEvent> = await api.put('/event/hours', data);
     return response.data;
   },
-  updatePrivate: async (data: IUpdatePrivate): Promise<IEvent> => {
+  updatePrivacy: async (data: IUpdatePrivacy): Promise<IEvent> => {
     const response: AxiosResponse<IEvent> = await api.put(
       '/event/private',
       data,

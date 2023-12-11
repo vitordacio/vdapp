@@ -72,18 +72,6 @@ export const UpdateEventRoutes = () => {
         headerTitleAlign: 'center',
       }}
     >
-      {/* <UpdateEventStackTab.Screen name="UpdateEventScreen">
-        {props => <UpdateEvent {...props} paramEvent={paramEvent} />}
-      </UpdateEventStackTab.Screen>
-
-      <UpdateEventStackTab.Screen name="UpdateEventName">
-        {props => <UpdateEventName {...props} paramEvent={paramEvent} />}
-      </UpdateEventStackTab.Screen>
-
-      <UpdateEventStackTab.Screen name="UpdateEventLocation">
-        {props => <UpdateEventLocation {...props} paramEvent={paramEvent} />}
-      </UpdateEventStackTab.Screen> */}
-
       <UpdateEventStackTab.Screen
         name="UpdateEventScreen"
         component={UpdateEvent}
@@ -164,17 +152,6 @@ export const ManageEventRoutes = () => {
         component={UpdateEventRoutes}
         options={{ headerShown: false }}
       />
-
-      {/* <ManageEventStackTab.Screen name="ManageEventScreen">
-        {props => <ManageEvent {...props} paramEvent={paramEvent} />}
-      </ManageEventStackTab.Screen>
-
-      <ManageEventStackTab.Screen
-        name="UpdateEvent"
-        options={{ headerShown: false }}
-      >
-        {props => <UpdateEventRoutes {...props} paramEvent={paramEvent} />}
-      </ManageEventStackTab.Screen> */}
 
       <ManageEventStackTab.Screen name="Invite" component={Custom} />
       <ManageEventStackTab.Screen name="DeleteEvent" component={Custom} />

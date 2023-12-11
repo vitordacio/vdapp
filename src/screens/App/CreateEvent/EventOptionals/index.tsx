@@ -110,6 +110,7 @@ const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           control={control}
           error={errors.drink_preferences}
           placeholder="Informe a preferência de bebidas"
+          lengthMax={80}
           maxLength={80}
         />
 

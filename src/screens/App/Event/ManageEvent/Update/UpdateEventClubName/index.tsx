@@ -8,22 +8,20 @@ import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
 import useEvent from '@contexts/event';
-import { IUpdateLocation } from '@services/Event/IEventService';
+import { IUpdateClubName } from '@services/Event/IEventService';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
 
 const schema = yup.object({
-  location: yup
+  club_name: yup
     .string()
-    .min(4, 'O local do evento deve ter ao menos 4 dígitos')
-    .max(80, 'O local do evento deve ter no máximo 80 dígitos')
-    .required('Informe um nome'),
+    .max(80, 'Informações adicionais deve ter no máximo 80 dígitos'),
 });
 
-type LocationFormData = yup.InferType<typeof schema>;
+type ClubNameFormData = yup.InferType<typeof schema>;
 
-const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const UpdateEventClubName: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const { event } = useEvent();
@@ -31,11 +29,11 @@ const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
-  const handleLocation = async (data: LocationFormData) => {
+  const handleClubName = async (data: ClubNameFormData) => {
     setForm({
       event_id: event.id_event,
-      location: data.location,
-    } as IUpdateLocation);
+      club_name: data.club_name,
+    } as IUpdateClubName);
     setConfirm(true);
   };
 
@@ -43,27 +41,26 @@ const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LocationFormData>({
+  } = useForm<ClubNameFormData>({
     resolver: yupResolver(schema),
   });
 
   return (
     <ViewUpdate
-      name="Local do evento"
-      description="Você pode editar o local do evento a qualquer momento."
+      name="Nome do clube"
+      description="Você pode alterar o nome do clube a qualquer momento."
     >
       <ControlledTextInput
-        name="location"
+        name="club_name"
         control={control}
-        icon="map-pin"
-        placeholder="Informe o local do evento"
-        defaultValue={event.location}
-        error={errors.location}
+        placeholder="Informe o nome do clube"
+        defaultValue={event.club_name}
+        error={errors.club_name}
         maxLength={80}
       />
       <View style={styles.confirm_button_wrapper}>
         <Button
-          onPress={handleSubmit(handleLocation)}
+          onPress={handleSubmit(handleClubName)}
           title="Salvar"
           type="blue"
         />
@@ -73,12 +70,12 @@ const UpdateEventLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           data={form}
           navigation={navigation}
           setConfirm={setConfirm}
-          type="location"
-          description="Tem certeza que deseja mudar o local do evento?"
+          type="club_name"
+          description="Tem certeza que deseja mudar o nome do clube?"
         />
       )}
     </ViewUpdate>
   );
 };
 
-export default UpdateEventLocation;
+export default UpdateEventClubName;

@@ -37,9 +37,9 @@ export interface IUpdateHours {
   finish_time: Date;
 }
 
-export interface IUpdatePrivate {
+export interface IUpdatePrivacy {
   event_id: string;
-  is_private: boolean;
+  private: boolean;
 }
 
 export interface IUpdateAdditional {
@@ -74,7 +74,7 @@ export interface IUpdateTicketsValue {
 
 export interface IUpdateTicketsFree {
   event_id: string;
-  tickets_free: number;
+  tickets_free: string;
 }
 
 export interface IUpdateAddress {
