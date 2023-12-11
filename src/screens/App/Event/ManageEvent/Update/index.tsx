@@ -1,77 +1,100 @@
-import { Feather } from '@expo/vector-icons';
-import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
-import colors from '@styles/colors';
-import useAuth from '@contexts/auth';
-import { IEvent } from '@interfaces/event';
+import useEvent from '@contexts/event';
 import styles from './styles';
 
-type EventProps = NativeStackScreenProps<ParamListBase> & {
-  paramEvent: IEvent;
-};
-
-const UpdateEvent: React.FC<EventProps> = ({ navigation }) => {
-  const { user } = useAuth();
+const UpdateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
+  const { event } = useEvent();
 
   const options = {
     name: {
       title: 'Nome',
-      redirect: 'UpdateName',
-      description: `${user.name}`,
-    },
-    bio: {
-      title: 'Biografia',
-      redirect: 'UpdateBio',
-      description: `${user.bio || 'Adicione uma biografia'}`,
+      redirect: 'UpdateEventName',
+      description: `${event.name}`,
     },
     location: {
-      title: 'Localização',
-      redirect: 'UpdateLocation',
-      description: `${user.location || 'Adicione uma localização'}`,
+      title: 'Local',
+      redirect: 'UpdateEventLocation',
+      description: `${event.location}`,
     },
-    gender: {
-      title: 'Gênero',
-      redirect: 'UpdateGender',
-      icon: 'arrow-right',
-    },
-    socials: {
-      title: 'Ligação a redes sociais',
-      redirect: 'UpdateSocial',
-      icon: 'plus',
+    hours: {
+      title: 'Horário',
+      redirect: 'UpdateEventHours',
+      description: `${event.start_time} | ${event.finish_time}`,
     },
     privacy: {
       title: 'Privacidade',
-      redirect: 'UpdatePrivacy',
+      redirect: 'UpdateEventPrivacy',
       icon: 'arrow-right',
       description: `${
-        user.private ? 'Seu perfil é privado' : 'Seu perfil é público'
+        event.private ? 'Esse evento é privado' : 'Esse evento é público'
       }`,
     },
-    email: {
-      title: 'E-mail',
-      redirect: 'UpdateEmail',
+    address: {
+      title: 'Localização',
+      redirect: 'UpdateEventAddress',
+      icon: 'arrow-right',
+      description: `${
+        event.address?.id_address || 'Adicione a localização do evento'
+      }`,
     },
-    password: {
-      title: 'Senha',
-      redirect: 'UpdatePassword',
+    additional: {
+      title: 'Informações Adicionais',
+      redirect: 'UpdateEventAdditional',
+      icon: 'plus',
+    },
+    drink_preferences: {
+      title: 'Preferência de bebidas',
+      redirect: 'UpdateEventDrinkPreferences',
+      icon: 'plus',
+    },
+    min_amount: {
+      title: 'Valor mínimo recomendado',
+      redirect: 'UpdateEventMinAmount',
+      icon: 'plus',
+    },
+    performer: {
+      title: 'Artista',
+      redirect: 'UpdateEventPerformer',
+      description: `${event.performer || 'Informe um artista'}`,
+    },
+    club_name: {
+      title: 'Nome do clube',
+      redirect: 'UpdateEventClubName',
+      description: `${event.club_name || 'Informe o nome do clube'}`,
+    },
+    ticket_value: {
+      title: 'Valor de entrada',
+      redirect: 'UpdateEventTicketsValue',
+      description: `${event.ticket_value || 'Informe o valor da entrada'}`,
+    },
+    tickets_free: {
+      title: 'Entradas grátis',
+      redirect: 'UpdateEventTicketsFree',
+      description: `${event.tickets_free || 0} entradas grátis disponível`,
     },
   } as {
     name: ICardUpdateOption;
-    bio: ICardUpdateOption;
     location: ICardUpdateOption;
-    gender: ICardUpdateOption;
-    socials: ICardUpdateOption;
+    hours: ICardUpdateOption;
     privacy: ICardUpdateOption;
-    email: ICardUpdateOption;
-    password: ICardUpdateOption;
+    address: ICardUpdateOption;
+    additional: ICardUpdateOption;
+    drink_preferences: ICardUpdateOption;
+    min_amount: ICardUpdateOption;
+    performer: ICardUpdateOption;
+    club_name: ICardUpdateOption;
+    ticket_value: ICardUpdateOption;
+    tickets_free: ICardUpdateOption;
   };
 
   return (
@@ -81,38 +104,45 @@ const UpdateEvent: React.FC<EventProps> = ({ navigation }) => {
       }}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <View style={styles.edit_username}>
-            <Text style={styles.username}>@{user.username}</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('UpdateUsername')}
-            >
-              <Feather name="edit" size={21} color={`${colors.TEXT_DEFAULT}`} />
-            </TouchableOpacity>
+        {options && (
+          <View style={styles.container}>
+            <View style={styles.options}>
+              <CardUpdateOptions
+                navigation={navigation}
+                options={[options.name, options.location, options.hours]}
+              />
+
+              <CardUpdateOptions
+                navigation={navigation}
+                options={[options.address]}
+              />
+
+              <CardUpdateOptions
+                navigation={navigation}
+                options={[
+                  options.additional,
+                  options.drink_preferences,
+                  options.min_amount,
+                ]}
+              />
+
+              <CardUpdateOptions
+                navigation={navigation}
+                options={[
+                  options.performer,
+                  options.club_name,
+                  options.ticket_value,
+                  options.tickets_free,
+                ]}
+              />
+
+              <CardUpdateOptions
+                navigation={navigation}
+                options={[options.privacy]}
+              />
+            </View>
           </View>
-          <View style={styles.options}>
-            <CardUpdateOptions
-              navigation={navigation}
-              options={[options.name, options.bio, options.location]}
-            />
-            <CardUpdateOptions
-              navigation={navigation}
-              options={[options.gender]}
-            />
-            <CardUpdateOptions
-              navigation={navigation}
-              options={[options.socials]}
-            />
-            <CardUpdateOptions
-              navigation={navigation}
-              options={[options.privacy]}
-            />
-            <CardUpdateOptions
-              navigation={navigation}
-              options={[options.email, options.password]}
-            />
-          </View>
-        </View>
+        )}
       </ScrollView>
     </AppView>
   );

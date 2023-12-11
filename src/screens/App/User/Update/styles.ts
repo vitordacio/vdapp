@@ -4,8 +4,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingHorizontal: 14,
     paddingBottom: 32,
     paddingTop: 120,
     flexDirection: 'column',

@@ -20,13 +20,13 @@ const ManageEvent: React.FC<EventProps> = ({ navigation }) => {
 
   return (
     <AppView
-      style={{
-        padding: 0,
-      }}
+    // style={{
+    //   padding: 0,
+    // }}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <Text>TESTE</Text>
+          <Text style={{ color: 'red' }}>TESTE</Text>
           <Button
             title="Editar Evento"
             onPress={() => navigation.push('UpdateEvent')}

@@ -20,7 +20,12 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
+    marginBottom: 6,
+  },
+  info: {
+    fontSize: 14,
     marginBottom: 40,
+    color: `${colors.GRAY_DESCRIPTION}`,
   },
   error: {
     fontSize: 14,

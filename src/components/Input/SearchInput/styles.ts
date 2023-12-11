@@ -6,7 +6,7 @@ export default StyleSheet.create({
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 19,
+    marginBottom: 14,
     // marginBottom: 34,
     minHeight: 40,
   },

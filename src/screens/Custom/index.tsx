@@ -1,15 +1,14 @@
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { ParamListBase } from '@react-navigation/native';
+import { View } from '@components/View';
+import { Text } from '@components/Text';
 import React from 'react';
-import { Text, View } from 'react-native';
+import colors from '@styles/colors';
 
-const Custom: React.FC<BottomTabScreenProps<ParamListBase>> = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  navigation,
-}) => {
+const Custom = () => {
   return (
-    <View style={{ minHeight: 600 }}>
-      <Text>Custom</Text>
+    <View
+      style={{ minHeight: 600, backgroundColor: `${colors.GRAY_BACKGROUND}` }}
+    >
+      <Text style={{ color: '#fff', textAlign: 'center' }}>Custom</Text>
     </View>
   );
 };

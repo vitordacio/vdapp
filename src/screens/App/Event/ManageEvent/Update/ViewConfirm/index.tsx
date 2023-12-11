@@ -6,32 +6,29 @@ import { Button } from '@components/Button';
 import { Pressable } from '@components/Pressable';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
-import useAuth from '@contexts/auth';
-import { IUser } from '@interfaces/user';
-import { userService } from '@services/User';
-import {
-  IUpdateBio,
-  IUpdateLocation,
-  IUpdateName,
-  IUpdatePassword,
-  ICreateSocial,
-  IUpdateUsername,
-} from '@services/User/IUserService';
+import { eventService } from '@services/Event';
+import { IUpdateName, IUpdateLocation } from '@services/Event/IEventService';
 import useMessage from '@contexts/message';
+import useEvent from '@contexts/event';
+import { IEvent } from '@interfaces/event';
 import styles from './styles';
 
 interface IViewConfirmProps
   extends Partial<NativeStackScreenProps<ParamListBase>> {
   data: object | string;
   type:
-    | 'username'
-    | 'password'
     | 'name'
-    | 'email'
-    | 'bio'
     | 'location'
-    | 'create_social'
-    | 'delete_social';
+    | 'hours'
+    | 'address'
+    | 'additional'
+    | 'drink_preferences'
+    | 'min_amount'
+    | 'performer'
+    | 'club_name'
+    | 'ticket_value'
+    | 'tickets_free'
+    | 'privacy';
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
   description: string;
 }
@@ -43,60 +40,44 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   description,
   navigation,
 }) => {
-  const { setUser } = useAuth();
+  const { setEvent } = useEvent();
+
   const { setMessage, handleEntering, setMessageType } = useMessage();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
-    let updatedUser: IUser;
+    let updatedEvent: IEvent;
     let message: string;
     let msgType = 'info';
 
     try {
-      if (type === 'username') {
-        updatedUser = await userService.updateUsername(data as IUpdateUsername);
-        message = 'Nome de usuário alterado com sucesso!';
-      }
       if (type === 'name') {
-        updatedUser = await userService.updateName(data as IUpdateName);
-        message = 'Nome alterado com sucesso!';
-      }
-      if (type === 'bio') {
-        updatedUser = await userService.updateBio(data as IUpdateBio);
-        message = 'Biografia alterada com sucesso!';
+        updatedEvent = await eventService.updateName(data as IUpdateName);
+        message = 'Nome do evento alterado com sucesso!';
       }
       if (type === 'location') {
-        updatedUser = await userService.updateLocation(data as IUpdateLocation);
-        message = 'Localização alterada com sucesso!';
-      }
-      if (type === 'password') {
-        updatedUser = await userService.updatePassword(data as IUpdatePassword);
-        message = 'Senha alterada com sucesso!';
-      }
-      if (type === 'create_social') {
-        updatedUser = await userService.createSocial(data as ICreateSocial);
-        message = 'Rede social adicionada com sucesso!';
-      }
-      if (type === 'delete_social') {
-        updatedUser = await userService.deleteSocial(data as string);
-        message = 'Rede social excluída com sucesso!';
+        updatedEvent = await eventService.updateLocation(
+          data as IUpdateLocation,
+        );
+        message = 'Local do evento alterado com sucesso!';
       }
     } catch (error) {
       msgType = 'alert';
       message = error.response.data.message;
     }
 
+    if (msgType !== 'alert') setEvent(updatedEvent);
+
     setMessageType(msgType);
     setMessage(message);
     handleEntering();
 
-    if (msgType !== 'alert') setUser(updatedUser);
-
-    const goBack =
-      (type !== 'create_social' && type !== 'delete_social') ||
-      msgType === 'alert';
-    return goBack ? navigation.goBack() : setConfirm(false);
+    return navigation.goBack();
+    // const goBack =
+    //   (type !== 'create_social' && type !== 'delete_social') ||
+    //   msgType === 'alert';
+    // return goBack ? navigation.goBack() : setConfirm(false);
   };
 
   return (

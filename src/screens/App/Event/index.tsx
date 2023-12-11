@@ -1,8 +1,6 @@
 import { Text } from '@components/Text';
 import LottieView from 'lottie-react-native';
 import { AppView, View } from '@components/View';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CoverPhoto } from '@components/CoverPhoto';
 import React, { useEffect, useState } from 'react';
 import {
@@ -13,7 +11,6 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-// import { UserTopTabRoutes } from '@routes/user.routes';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import assets from '@assets/index';
@@ -24,8 +21,12 @@ import colors from '@styles/colors';
 import { participationService } from '@services/Participation';
 import Feather from 'react-native-vector-icons/Feather';
 import { EventTopTabRoutes } from '@routes/event.routes';
-import styles from './styles';
+import useEvent from '@contexts/event';
+import useMessage from '@contexts/message';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ParamListBase } from '@react-navigation/native';
 import { ViewPrivate } from './ViewPrivate';
+import styles from './styles';
 
 type ParticipationStatus = {
   participation_status: IEvent['participation_status'];
@@ -61,13 +62,10 @@ type EventProps = NativeStackScreenProps<ParamListBase> & {
 };
 
 const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
-  // const route = useRoute();
-  // const { event: paramEvent } = route.params as EventParam;
+  const { setMessage, setMessageType, handleEntering } = useMessage();
+  const { event, setEvent } = useEvent();
 
-  const [event, setEvent] = useState<IEvent>();
   const [showLoader, setShowLoader] = useState<boolean>(false);
-
-  const [responseError, setResponseError] = useState<string>();
 
   const [showPrivate, setShowPrivate] = useState<boolean>(false);
   const [userIn, setUserIn] = useState<boolean>(false);
@@ -78,11 +76,8 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
   const [participationStatus, setParticipationStatus] = useState(
     {} as ParticipationStatus,
   );
-  // const [canSeeContent, setCanSeeContent] = useState<boolean>();
 
-  const fetchData = async () => {
-    setShowLoader(true);
-
+  const fetchData = async (event_id: string) => {
     let dataEvent: IEvent;
     let handleIn: boolean = false;
 
@@ -91,8 +86,9 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
     let icon: ParticipationStatus['icon'];
     let buttonTitle: string = '';
 
+    setShowLoader(true);
     try {
-      dataEvent = await eventService.findById(paramEvent.id_event);
+      dataEvent = await eventService.findById(event_id);
 
       const { participation_status } = dataEvent;
 
@@ -108,13 +104,7 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
         type = 'blue';
         icon = 'plus-circle';
         buttonTitle = 'Solicitar entrada';
-      }
-      // else if (participation_status === 'author') {
-      //   type = 'dark_gold';
-      //   icon = 'chevron-right';
-      //   buttonTitle = 'Gerenciar';
-      // }
-      else if (participation_status === 'user_out') {
+      } else if (participation_status === 'user_out') {
         type = 'gray';
         icon = 'x-circle';
         buttonTitle = 'Cancelar solicitação';
@@ -140,15 +130,15 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
         buttonTitle,
       };
 
-      // setCanSeeContent(!dataEvent.private);
-      setEvent(dataEvent);
       setUserIn(handleIn);
       setParticipationTitle(title);
       setParticipationStatus(handleParticipationStatus);
-      setShowLoader(false);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      setMessageType('alert');
+      setMessage(error.response.data.message);
     }
+    setShowLoader(false);
+    return dataEvent ? setEvent(dataEvent) : handleEntering();
   };
 
   const handleParticipation = async () => {
@@ -170,9 +160,11 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
       }
 
       setParticipationLoader(false);
-      fetchData();
+      fetchData(paramEvent.id_event);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      setMessageType('alert');
+      setMessage(error.response.data.message);
+      handleEntering();
     }
   };
 
@@ -198,10 +190,14 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
     navigation.setOptions({
       title,
     });
-  }, [navigation, paramEvent.type_id]);
+  }, [paramEvent.type_id]);
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
-    fetchData();
+    fetchData(paramEvent.id_event);
   }, []);
 
   return (
@@ -215,7 +211,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
           <ActivityIndicator size="large" />
         ) : (
           <>
-            {responseError && <Text style={styles.error}>{responseError}</Text>}
             {event && (
               <View style={styles.container}>
                 <View style={styles.cover_photo}>

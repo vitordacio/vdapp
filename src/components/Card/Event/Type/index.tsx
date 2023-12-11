@@ -36,7 +36,7 @@ const CardEventType = ({ eventType, index, navigation }: CardProps) => {
     if (name === 'birthday') handleName = 'Aniversário';
     if (name === 'boat') handleName = 'Barco';
     if (name === 'culinary') handleName = 'Culinária';
-    if (name === 'exercise') handleName = 'Exercício';
+    if (name === 'exercise') handleName = 'Exercício Físico';
     if (name === 'fishing') handleName = 'Pesca';
     if (name === 'games') handleName = 'Jogos';
     if (name === 'meeting') handleName = 'Reunião';

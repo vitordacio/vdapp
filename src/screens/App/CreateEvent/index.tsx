@@ -65,6 +65,10 @@ const CreateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             <Text style={[styles.text, styles.description]}>
               Selecione a categoria do evento
             </Text>
+            <Text style={[styles.text, styles.info]}>
+              A categoria do evento é fixa e não poderá ser modificada após a
+              criação do evento.
+            </Text>
             <FlatList
               data={data}
               renderItem={renderItem}
