@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Achievements = () => {
+const UserEmojisSent = () => {
   return (
     <View>
-      <Text>Achievements</Text>
+      <Text>EmojisSent</Text>
     </View>
   );
 };
 
-export default Achievements;
+export default UserEmojisSent;

@@ -4,6 +4,12 @@ export interface ISearchByName {
   limit?: number;
 }
 
+export interface IFindByUserId {
+  user_id: string;
+  page?: number;
+  limit?: number;
+}
+
 export interface ICreateEvent {
   type_id: string;
   name: string;

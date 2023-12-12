@@ -5,11 +5,11 @@ export default StyleSheet.create({
   lineY: {
     width: 1,
     height: '100%',
-    backgroundColor: `${colors.WHITE}`,
+    backgroundColor: `${colors.TEXT_DEFAULT}`,
   },
   lineX: {
     height: 1,
     width: '100%',
-    backgroundColor: `${colors.WHITE}`,
+    backgroundColor: `${colors.TEXT_DEFAULT}`,
   },
 });

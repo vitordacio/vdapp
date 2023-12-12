@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Participations = () => {
+const UserAchievements = () => {
   return (
     <View>
-      <Text>Participations</Text>
+      <Text>Achievements</Text>
     </View>
   );
 };
 
-export default Participations;
+export default UserAchievements;

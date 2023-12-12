@@ -11,6 +11,14 @@ import ManageEvent from '@screens/App/Event/ManageEvent';
 import UpdateEvent from '@screens/App/Event/ManageEvent/Update';
 import UpdateEventName from '@screens/App/Event/ManageEvent/Update/UpdateEventName';
 import UpdateEventLocation from '@screens/App/Event/ManageEvent/Update/UpdateEventLocation';
+import UpdateEventAdditional from '@screens/App/Event/ManageEvent/Update/UpdateEventAdditional';
+import UpdateEventClubName from '@screens/App/Event/ManageEvent/Update/UpdateEventClubName';
+import UpdateEventDrinkPreferences from '@screens/App/Event/ManageEvent/Update/UpdateEventDrinkPreferences';
+import UpdateEventMinAmount from '@screens/App/Event/ManageEvent/Update/UpdateEventMinAmount';
+import UpdateEventPerformer from '@screens/App/Event/ManageEvent/Update/UpdateEventPerformer';
+import UpdateEventPrivacy from '@screens/App/Event/ManageEvent/Update/UpdateEventPrivacy';
+import UpdateEventTicketsFree from '@screens/App/Event/ManageEvent/Update/UpdateEventTicketsFree';
+import UpdateEventTicketsValue from '@screens/App/Event/ManageEvent/Update/UpdateEventTicketsValue';
 
 const EventTopTab = createMaterialTopTabNavigator();
 
@@ -88,35 +96,35 @@ export const UpdateEventRoutes = () => {
       <UpdateEventStackTab.Screen name="UpdateEventHours" component={Custom} />
       <UpdateEventStackTab.Screen
         name="UpdateEventPrivacy"
-        component={Custom}
+        component={UpdateEventPrivacy}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventAdditional"
-        component={Custom}
+        component={UpdateEventAdditional}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventDrinkPreferences"
-        component={Custom}
+        component={UpdateEventDrinkPreferences}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventMinAmount"
-        component={Custom}
+        component={UpdateEventMinAmount}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventPerformer"
-        component={Custom}
+        component={UpdateEventPerformer}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventClubName"
-        component={Custom}
+        component={UpdateEventClubName}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventTicketsValue"
-        component={Custom}
+        component={UpdateEventTicketsValue}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventTicketsFree"
-        component={Custom}
+        component={UpdateEventTicketsFree}
       />
       <UpdateEventStackTab.Screen
         name="UpdateEventAddress"

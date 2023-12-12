@@ -84,7 +84,7 @@ const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
               </View>
             </View>
             <View style={{ minHeight: 500 }}>
-              <UserTopTabRoutes />
+              <UserTopTabRoutes user={user} />
             </View>
           </>
         )}

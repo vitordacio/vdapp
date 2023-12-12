@@ -39,6 +39,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     gap: 11,
+    marginBottom: 14,
   },
   data_text: {
     display: 'flex',
@@ -63,17 +64,6 @@ export default StyleSheet.create({
   },
   text_gray_color: {
     color: `${colors.GRAY_DESCRIPTION}`,
-  },
-  container_author: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingVertical: 8,
-  },
-  data_author: {
-    marginLeft: 19,
-    justifyContent: 'center',
-    flex: 1,
-    flexDirection: 'column',
   },
   container_counts: {
     display: 'flex',

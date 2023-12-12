@@ -4,6 +4,7 @@ import { IEvent } from '@interfaces/event';
 import { IEventType } from '@interfaces/types';
 import {
   ISearchByName,
+  IFindByUserId,
   ICreateEvent,
   IUpdateAdditional,
   IUpdateAddress,
@@ -23,6 +24,7 @@ interface IEventService {
   createEvent: (data: ICreateEvent) => Promise<IEvent>;
   findEventTypes: () => Promise<IEventType[]>;
   findById: (data: string) => Promise<IEvent>;
+  findByUserId: (data: IFindByUserId) => Promise<IEvent[]>;
   searchEventByName: (data: ISearchByName) => Promise<IEvent[]>;
   updateName: (data: IUpdateName) => Promise<IEvent>;
   updateLocation: (data: IUpdateLocation) => Promise<IEvent>;
@@ -49,6 +51,12 @@ const service: IEventService = {
   },
   findById: async (data: string): Promise<IEvent> => {
     const response: AxiosResponse<IEvent> = await api.get(`/event/${data}`);
+    return response.data;
+  },
+  findByUserId: async (data: IFindByUserId): Promise<IEvent[]> => {
+    const response: AxiosResponse<IEvent[]> = await api.get(
+      `/event/user/${data.user_id}?page=${data.page || 1}`,
+    );
     return response.data;
   },
   searchEventByName: async (data: ISearchByName): Promise<IEvent[]> => {

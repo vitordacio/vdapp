@@ -1,46 +1,46 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase } from '@react-navigation/native';
 import { ActivityIndicator, FlatList, View } from 'react-native';
-import { IUser } from '@interfaces/user';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { userService } from '@services/User';
-import CardUser from '@components/Card/User';
-import useSearch from '@contexts/search';
+import CardEventProfile from '@components/Card/Event/Profile';
+import { IEvent } from '@interfaces/event';
+import { eventService } from '@services/Event';
+import { IUser } from '@interfaces/user';
 import useMessage from '@contexts/message';
 import styles from './styles';
 
 let loadMore = true;
 
-const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { search, debouncedSearch, refreshing, setRefreshing } = useSearch();
+type UserEventsProps = NativeStackScreenProps<ParamListBase> & {
+  user: IUser;
+};
+
+const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
   const { setMessage, setMessageType, handleEntering } = useMessage();
 
-  const [data, setData] = useState<IUser[] | []>([]);
+  const [data, setData] = useState<IEvent[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState(false);
 
   const fetchData = async () => {
     setShowLoader(true);
 
-    let users: IUser[];
+    let events: IEvent[];
     let message: string;
     let msgType = 'info';
 
     try {
-      users = await userService.searchUserByName({
-        name: debouncedSearch,
+      events = await eventService.findByUserId({
+        user_id: user.id_user,
         page: 1,
       });
 
-      if (users.length === 0) {
+      if (events.length === 0) {
         loadMore = false;
       }
 
-      setData(users);
+      setData(events);
       setShowLoader(false);
-      if (refreshing) setRefreshing(false);
     } catch (error) {
       msgType = 'alert';
       message = error.response.data.message;
@@ -55,24 +55,23 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const fetchNewData = async () => {
     setShowLoader(true);
-    let users: IUser[];
+    let events: IEvent[];
     let message: string;
     let msgType = 'info';
 
     try {
-      users = await userService.searchUserByName({
-        name: search,
+      events = await eventService.findByUserId({
+        user_id: user.id_user,
         page,
       });
 
-      if (users.length === 0) {
+      if (events.length === 0) {
         loadMore = false;
       }
 
-      setData(prev => [...prev, ...users]);
+      setData(prev => [...prev, ...events]);
       setPage(page + 1);
       setShowLoader(false);
-      if (refreshing) setRefreshing(false);
     } catch (error) {
       msgType = 'alert';
       message = error.response.data.message;
@@ -87,12 +86,12 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardUser navigation={navigation} user={item} />;
+      return <CardEventProfile navigation={navigation} event={item} />;
     },
     [data],
   );
 
-  const keyExtractor = useCallback((item: IUser) => `${item.id_user}`, []);
+  const keyExtractor = useCallback((item: IEvent) => `${item.id_event}`, []);
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ height: 14 }} />;
@@ -110,7 +109,7 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   useEffect(() => {
     fetchData();
-  }, [debouncedSearch, refreshing]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -128,4 +127,4 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   );
 };
 
-export default SearchUser;
+export default UserEvents;

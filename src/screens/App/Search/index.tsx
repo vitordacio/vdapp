@@ -7,14 +7,12 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
-import { Text } from '@components/Text';
 import { SearchTopRoutes } from '@routes/search.routes';
 import { useNavigation } from '@react-navigation/native';
 import useSearch from '@contexts/search';
-import styles from './styles';
 
 const Search: React.FC = () => {
-  const { search, setSearch, responseError, setRefreshing } = useSearch();
+  const { search, setSearch, setRefreshing } = useSearch();
   const navigation = useNavigation();
 
   React.useLayoutEffect(() => {
@@ -32,7 +30,6 @@ const Search: React.FC = () => {
             onChangeText={e => setSearch(e)}
             value={search}
           />
-          {responseError && <Text style={styles.error}>{responseError}</Text>}
 
           <SearchTopRoutes />
         </KeyboardAvoidingView>

@@ -15,7 +15,8 @@ import styles from '../styles';
 
 const schema = yup.object({
   tickets_free: yup
-    .string()
+    .number()
+    .typeError('Por favor, insira um número válido')
     .max(5, 'Entradas grátis deve ter no máximo 5 dígitos'),
 });
 
@@ -32,7 +33,7 @@ const UpdateEventTicketsFree: React.FC<
   const handleTicketsFree = async (data: TicketsFreeFormData) => {
     setForm({
       event_id: event.id_event,
-      tickets_free: data.tickets_free,
+      tickets_free: data.tickets_free.toString(),
     } as IUpdateTicketsFree);
     setConfirm(true);
   };

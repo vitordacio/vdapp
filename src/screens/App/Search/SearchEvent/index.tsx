@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase } from '@react-navigation/native';
 import { ActivityIndicator, FlatList, View } from 'react-native';
@@ -7,6 +6,7 @@ import CardEventSearch from '@components/Card/Event/Search';
 import useSearch from '@contexts/search';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
+import useMessage from '@contexts/message';
 import styles from './styles';
 
 let loadMore = true;
@@ -14,13 +14,9 @@ let loadMore = true;
 const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  const {
-    search,
-    setResponseError,
-    debouncedSearch,
-    refreshing,
-    setRefreshing,
-  } = useSearch();
+  const { search, debouncedSearch, refreshing, setRefreshing } = useSearch();
+
+  const { setMessage, setMessageType, handleEntering } = useMessage();
 
   const [data, setData] = useState<IEvent[] | []>([]);
   const [page, setPage] = useState(2);
@@ -30,6 +26,8 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     setShowLoader(true);
 
     let events: IEvent[];
+    let message: string;
+    let msgType = 'info';
 
     try {
       events = await eventService.searchEventByName({
@@ -45,13 +43,22 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setShowLoader(false);
       if (refreshing) setRefreshing(false);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      msgType = 'alert';
+      message = error.response.data.message;
+    }
+
+    if (msgType === 'alert') {
+      setMessageType(msgType);
+      setMessage(message);
+      handleEntering();
     }
   };
 
   const fetchNewData = async () => {
     setShowLoader(true);
     let events: IEvent[];
+    let message: string;
+    let msgType = 'info';
 
     try {
       events = await eventService.searchEventByName({
@@ -68,7 +75,14 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setShowLoader(false);
       if (refreshing) setRefreshing(false);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      msgType = 'alert';
+      message = error.response.data.message;
+    }
+
+    if (msgType === 'alert') {
+      setMessageType(msgType);
+      setMessage(message);
+      handleEntering();
     }
   };
 

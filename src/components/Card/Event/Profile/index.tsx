@@ -7,16 +7,17 @@ import { Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
-import { Picture } from '@components/Picture';
 import { formatTimeRange } from '@utils/formaters';
 import { LineX } from '@components/Line';
+import useAuth from '@contexts/auth';
 import styles from './styles';
 
 type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
   event: IEvent;
 };
 
-const CardEventSearch = ({ event, navigation }: CardProps) => {
+const CardEventProfile = ({ event, navigation }: CardProps) => {
+  const { user } = useAuth();
   const {
     name,
     location,
@@ -25,7 +26,6 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
     start_time,
     finish_time,
     type,
-    author,
     participating_count,
     emojis_count,
   } = event;
@@ -33,7 +33,7 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
   const hours = formatTimeRange(
     new Date(start_time),
     new Date(finish_time),
-    author.locale,
+    user.locale,
   );
 
   return (
@@ -102,23 +102,6 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
               )}
             </View>
 
-            <View style={styles.container_author}>
-              <Picture card={true} picture={author.picture} />
-              <View style={styles.data_author}>
-                {author.username && (
-                  <Text style={[styles.text_default_color, styles.text_medium]}>
-                    {author.username}
-                  </Text>
-                )}
-
-                {author.name && (
-                  <Text style={[styles.text_gray_color, styles.text_medium]}>
-                    {author.name}
-                  </Text>
-                )}
-              </View>
-            </View>
-
             <LineX />
 
             <View style={styles.container_counts}>
@@ -153,4 +136,4 @@ const CardEventSearch = ({ event, navigation }: CardProps) => {
   );
 };
 
-export default CardEventSearch;
+export default CardEventProfile;

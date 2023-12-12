@@ -7,8 +7,6 @@ interface ISearchContextData {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  responseError: string;
-  setResponseError: React.Dispatch<React.SetStateAction<string>>;
   refreshing: boolean;
   setRefreshing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -24,7 +22,6 @@ const SearchContext = createContext<ISearchContextData>(
 export const SearchProvider: React.FC<IProps> = ({ children }) => {
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [responseError, setResponseError] = useState<string>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const debouncedSearch = useDebounce(search, 500);
@@ -37,8 +34,6 @@ export const SearchProvider: React.FC<IProps> = ({ children }) => {
         setSearch,
         loading,
         setLoading,
-        responseError,
-        setResponseError,
         refreshing,
         setRefreshing,
       }}
