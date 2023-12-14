@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase } from '@react-navigation/native';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import CardEventProfile from '@components/Card/Event/Profile';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import { IUser } from '@interfaces/user';
 import useMessage from '@contexts/message';
+import CardEvent from '@components/Card/Event';
 import styles from './styles';
 
 let loadMore = true;
@@ -16,18 +16,17 @@ type UserEventsProps = NativeStackScreenProps<ParamListBase> & {
 };
 
 const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
-  const { setMessage, setMessageType, handleEntering } = useMessage();
+  const { throwError } = useMessage();
 
+  // const [showContent, setShowContent] = useState<boolean>(false);
   const [data, setData] = useState<IEvent[] | []>([]);
   const [page, setPage] = useState(2);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState<boolean>(false);
 
   const fetchData = async () => {
     setShowLoader(true);
 
     let events: IEvent[];
-    let message: string;
-    let msgType = 'info';
 
     try {
       events = await eventService.findByUserId({
@@ -42,22 +41,13 @@ const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
       setData(events);
       setShowLoader(false);
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
-    }
-
-    if (msgType === 'alert') {
-      setMessageType(msgType);
-      setMessage(message);
-      handleEntering();
+      throwError(error.response.data.message);
     }
   };
 
   const fetchNewData = async () => {
     setShowLoader(true);
     let events: IEvent[];
-    let message: string;
-    let msgType = 'info';
 
     try {
       events = await eventService.findByUserId({
@@ -73,20 +63,13 @@ const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
-    }
-
-    if (msgType === 'alert') {
-      setMessageType(msgType);
-      setMessage(message);
-      handleEntering();
+      throwError(error.response.data.message);
     }
   };
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardEventProfile navigation={navigation} event={item} />;
+      return <CardEvent navigation={navigation} event={item} />;
     },
     [data],
   );

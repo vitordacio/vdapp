@@ -19,6 +19,7 @@ import UpdateSocial from '@screens/App/User/Update/UpdateSocial';
 import UpdateUsername from '@screens/App/User/Update/UpdateUsername';
 import { ParamListBase } from '@react-navigation/native';
 import { IUser } from '@interfaces/user';
+import { PrivateContentView } from '@components/View/PrivateContent';
 
 const UpdateUserStackTab = createNativeStackNavigator();
 
@@ -63,6 +64,49 @@ export const UpdateUserRoutes: React.FC = () => {
         component={UpdatePassword}
       />
     </UpdateUserStackTab.Navigator>
+  );
+};
+
+const UserPrivateTopTab = createMaterialTopTabNavigator();
+
+export const UserPrivateTopTabRoutes: React.FC = () => {
+  return (
+    <UserPrivateTopTab.Navigator
+      screenOptions={{
+        tabBarLabelStyle: { color: 'white' },
+        tabBarStyle: { backgroundColor: 'black' },
+        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
+      }}
+    >
+      <UserPrivateTopTab.Screen
+        name="UserPrivateEvents"
+        component={PrivateContentView}
+        options={{
+          tabBarLabel: 'Eventos',
+        }}
+      />
+      <UserPrivateTopTab.Screen
+        name="UserPrivateParticipations"
+        component={PrivateContentView}
+        options={{
+          tabBarLabel: 'Participações',
+        }}
+      />
+      <UserPrivateTopTab.Screen
+        name="UserPrivateEmojisSent"
+        component={PrivateContentView}
+        options={{
+          tabBarLabel: '😊',
+        }}
+      />
+      <UserPrivateTopTab.Screen
+        name="UserPrivateAchievements"
+        component={PrivateContentView}
+        options={{
+          tabBarLabel: 'Conquistas',
+        }}
+      />
+    </UserPrivateTopTab.Navigator>
   );
 };
 

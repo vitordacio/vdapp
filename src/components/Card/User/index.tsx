@@ -9,6 +9,7 @@ import { ParamListBase } from '@react-navigation/native';
 import { IUser } from '@interfaces/user';
 import { friendshipService } from '@services/Friendship';
 import useAuth from '@contexts/auth';
+import useMessage from '@contexts/message';
 import styles from './styles';
 
 type Situation = {
@@ -23,9 +24,9 @@ type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
 
 const CardUser = ({ user, navigation }: CardProps) => {
   const { user: self } = useAuth();
+  const { throwError } = useMessage();
   const { username, name, picture, friendship_status } = user;
 
-  const [responseError, setResponseError] = useState('');
   const [situation, setSituation] = useState({} as Situation);
 
   const handleFriendship = async () => {
@@ -58,7 +59,7 @@ const CardUser = ({ user, navigation }: CardProps) => {
         });
       }
     } catch (error) {
-      setResponseError(error.response.data.message);
+      throwError(error.response.data.message);
     }
   };
 
@@ -101,7 +102,7 @@ const CardUser = ({ user, navigation }: CardProps) => {
           }
         >
           <Picture card={true} picture={picture} />
-          <View style={styles.data}>
+          <View style={styles.content}>
             {name && <Text style={styles.name}>{name}</Text>}
             {username && <Text style={styles.username}>@{username}</Text>}
           </View>
@@ -115,8 +116,6 @@ const CardUser = ({ user, navigation }: CardProps) => {
               onPress={handleFriendship}
             />
           )}
-
-          <Text style={styles.error}>{responseError}</Text>
         </TouchableOpacity>
       )}
     </>

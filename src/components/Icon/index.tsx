@@ -1,21 +1,38 @@
 import React from 'react';
-import { ImageBackground, StyleProp, ViewStyle } from 'react-native';
+import { Image, StyleProp, ImageStyle } from 'react-native';
 import assets from '@assets/index';
+import colors from '@styles/colors';
 import styles from './styles';
 
 interface IIconProps {
   name: string;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ImageStyle>;
   tintColor?: string;
+  description?: boolean;
+  size?: number;
 }
 
-export const Icon: React.FC<IIconProps> = ({ name, style, tintColor }) => {
+export const Icon: React.FC<IIconProps> = ({
+  name,
+  style,
+  tintColor,
+  description,
+  size,
+}) => {
   return (
-    <ImageBackground
-      style={[styles.container, style]}
+    <Image
+      style={[
+        styles.container,
+        { width: size || 21, height: size || 21 },
+        style,
+      ]}
       source={assets[name]}
-      resizeMode="cover"
-      tintColor={tintColor || null}
+      resizeMode="contain"
+      // tintColor={tintColor || `${colors.TEXT_DEFAULT}`}
+      tintColor={
+        tintColor ||
+        `${!description ? colors.TEXT_DEFAULT : colors.GRAY_DESCRIPTION}`
+      }
     />
   );
 };

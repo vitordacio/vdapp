@@ -62,7 +62,7 @@ type EventProps = NativeStackScreenProps<ParamListBase> & {
 };
 
 const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
-  const { setMessage, setMessageType, handleEntering } = useMessage();
+  const { throwError } = useMessage();
   const { event, setEvent } = useEvent();
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -134,11 +134,12 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
       setParticipationTitle(title);
       setParticipationStatus(handleParticipationStatus);
     } catch (error) {
-      setMessageType('alert');
-      setMessage(error.response.data.message);
+      throwError(error.response.data.message);
     }
     setShowLoader(false);
-    return dataEvent ? setEvent(dataEvent) : handleEntering();
+    return dataEvent
+      ? setEvent(dataEvent)
+      : throwError('Ops! Algo deu errado, tente novamente mais tarde');
   };
 
   const handleParticipation = async () => {
@@ -162,9 +163,7 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
       setParticipationLoader(false);
       fetchData(paramEvent.id_event);
     } catch (error) {
-      setMessageType('alert');
-      setMessage(error.response.data.message);
-      handleEntering();
+      throwError(error.response.data.message);
     }
   };
 

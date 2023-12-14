@@ -31,6 +31,8 @@ import map from './map.svg';
 import verified from './verified.svg';
 import check from './check.svg';
 import alert from './alert.svg';
+import lock from './lock.svg';
+import unlock from './unlock.svg';
 
 import ongoing from './Animation/ongoing.json';
 
@@ -67,4 +69,6 @@ export default {
   verified,
   check,
   alert,
+  lock,
+  unlock,
 };

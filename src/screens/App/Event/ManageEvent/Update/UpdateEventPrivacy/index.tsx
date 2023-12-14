@@ -15,7 +15,7 @@ const UpdateEventPrivacy: React.FC<
   NativeStackScreenProps<ParamListBase>
 > = () => {
   const { event, setEvent } = useEvent();
-  const { setMessage, setMessageType, handleEntering } = useMessage();
+  const { throwInfo, throwError } = useMessage();
 
   const [value, setValue] = useState(event.private);
   const [loading, setLoading] = useState(false);
@@ -23,8 +23,6 @@ const UpdateEventPrivacy: React.FC<
   const handlePrivate = async () => {
     setLoading(true);
     let updatedEvent: IEvent;
-    let message: string;
-    let msgType = 'info';
 
     try {
       updatedEvent = await eventService.updatePrivacy({
@@ -32,15 +30,14 @@ const UpdateEventPrivacy: React.FC<
         private: !value,
       });
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
+      throwError(error.response.data.message);
     }
 
-    if (msgType !== 'alert') setEvent(updatedEvent);
+    if (updatedEvent) {
+      setEvent(updatedEvent);
+      throwInfo('Privacidade do evento atualizada com sucesso!');
+    }
 
-    setMessageType(msgType);
-    setMessage(message);
-    handleEntering();
     setValue(prev => !prev);
     setLoading(false);
   };

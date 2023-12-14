@@ -13,11 +13,12 @@ import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import colors from '@styles/colors';
 import { Icon } from '@components/Icon';
-import { UserTopTabRoutes } from '@routes/user.routes';
+import { UserPrivateTopTabRoutes, UserTopTabRoutes } from '@routes/user.routes';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
 import { friendshipService } from '@services/Friendship';
 import useAuth from '@contexts/auth';
+import useMessage from '@contexts/message';
 import styles from './styles';
 import { ViewPrivate } from './ViewPrivate';
 
@@ -35,15 +36,14 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const { user, setUser } = useAuth();
+  const { throwError } = useMessage();
   const route = useRoute();
   const { user: paramUser } = route.params as UserParam;
 
   const [profileUser, setProfileUser] = useState<IUser>();
-  const [responseError, setResponseError] = useState<string>();
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const [showPrivate, setShowPrivate] = useState<boolean>(false);
   const [privateViewType, setPrivateViewType] = useState<'info' | 'warning'>();
-  const [canSeeContent, setCanSeeContent] = useState<boolean>();
   const [friendshipLoader, setFriendshipLoader] = useState<boolean>(false);
   const [friendshipTitle, setFriendshipTitle] = useState<string>('');
   const [situation, setSituation] = useState({} as Situation);
@@ -85,15 +85,12 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         icon,
       };
 
-      setCanSeeContent(
-        !profile.private ? true : friendship_status === 'friends',
-      );
       setSituation(handleSituation);
       setFriendshipTitle(currentTitle);
       setProfileUser(profile);
       setShowLoader(false);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      throwError(error.response.data.message);
     }
   };
 
@@ -139,7 +136,7 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setProfileUser(profileUser);
       setFriendshipLoader(false);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      throwError(error.response.data.message);
     }
   };
 
@@ -169,7 +166,6 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           <ActivityIndicator size="large" />
         ) : (
           <>
-            {responseError && <Text style={styles.error}>{responseError}</Text>}
             <View style={styles.container}>
               {profileUser && (
                 <>
@@ -181,9 +177,9 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                       number={profileUser.friends_count}
                       description="Amigos"
                       onPress={() =>
-                        canSeeContent
+                        profileUser.can_see_content
                           ? navigation.push('Friends', { user: profileUser })
-                          : handlePrivacy('warning')
+                          : throwError('Conta Privada')
                       }
                     />
                     <LineY />
@@ -234,7 +230,11 @@ const Profile: React.FC<NativeStackScreenProps<ParamListBase>> = ({
               )}
             </View>
             <View style={{ minHeight: 500 }}>
-              <UserTopTabRoutes />
+              {profileUser && profileUser.can_see_content ? (
+                <UserTopTabRoutes user={profileUser} />
+              ) : (
+                <UserPrivateTopTabRoutes />
+              )}
             </View>
           </>
         )}

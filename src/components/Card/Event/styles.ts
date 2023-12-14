@@ -43,12 +43,9 @@ export default StyleSheet.create({
   data_text: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     flexDirection: 'row',
     gap: 10,
-  },
-  icon: {
-    width: 21,
-    height: 21,
   },
   text_large: {
     flex: 1,
@@ -65,9 +62,9 @@ export default StyleSheet.create({
     color: `${colors.GRAY_DESCRIPTION}`,
   },
   container_author: {
+    marginTop: 8,
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: 8,
   },
   data_author: {
     marginLeft: 19,

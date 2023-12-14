@@ -1,6 +1,5 @@
 import React from 'react';
 import useAuth from '@contexts/auth';
-import colors from '@styles/colors';
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
@@ -12,7 +11,6 @@ import { Socials } from '@components/Socials';
 import { Counts } from '@components/Counts';
 import { LineY } from '@components/Line';
 import { ScrollView } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { Icon } from '@components/Icon';
 import { UserTopTabRoutes } from '@routes/user.routes';
 import styles from './styles';
@@ -76,11 +74,7 @@ const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
               )}
               {user.bio && <Text style={styles.text}>{user.bio}</Text>}
               <View style={styles.private}>
-                <Feather
-                  name={user.private ? 'lock' : 'unlock'}
-                  size={19}
-                  color={`${colors.TEXT_DEFAULT}`}
-                />
+                <Icon name={user.private ? 'lock' : 'unlock'} size={19} />
               </View>
             </View>
             <View style={{ minHeight: 500 }}>

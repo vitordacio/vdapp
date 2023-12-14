@@ -55,14 +55,13 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
 }) => {
   const { event, setEvent } = useEvent();
 
-  const { setMessage, handleEntering, setMessageType } = useMessage();
+  const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
     let updatedEvent: IEvent;
     let message: string;
-    let msgType = 'info';
 
     try {
       if (type === 'name') {
@@ -130,24 +129,17 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
         message = 'Número de entradas grátis alterado com sucesso!';
       }
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
+      throwError(error.response.data.message);
     }
 
-    updatedEvent.status = event.status;
-    updatedEvent.participation_status = event.participation_status;
-
-    if (msgType !== 'alert') setEvent(updatedEvent);
-
-    setMessageType(msgType);
-    setMessage(message);
-    handleEntering();
+    if (updatedEvent) {
+      updatedEvent.status = event.status;
+      updatedEvent.participation_status = event.participation_status;
+      setEvent(updatedEvent);
+      throwInfo(message);
+    }
 
     return navigation.goBack();
-    // const goBack =
-    //   (type !== 'create_social' && type !== 'delete_social') ||
-    //   msgType === 'alert';
-    // return goBack ? navigation.goBack() : setConfirm(false);
   };
 
   return (

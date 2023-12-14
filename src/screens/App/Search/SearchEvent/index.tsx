@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase } from '@react-navigation/native';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import CardEventSearch from '@components/Card/Event/Search';
 import useSearch from '@contexts/search';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
+import CardEvent from '@components/Card/Event';
 import useMessage from '@contexts/message';
 import styles from './styles';
 
@@ -16,7 +16,7 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 }) => {
   const { search, debouncedSearch, refreshing, setRefreshing } = useSearch();
 
-  const { setMessage, setMessageType, handleEntering } = useMessage();
+  const { throwError } = useMessage();
 
   const [data, setData] = useState<IEvent[] | []>([]);
   const [page, setPage] = useState(2);
@@ -43,14 +43,7 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setShowLoader(false);
       if (refreshing) setRefreshing(false);
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
-    }
-
-    if (msgType === 'alert') {
-      setMessageType(msgType);
-      setMessage(message);
-      handleEntering();
+      throwError(error.response.data.message);
     }
   };
 
@@ -75,20 +68,13 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setShowLoader(false);
       if (refreshing) setRefreshing(false);
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
-    }
-
-    if (msgType === 'alert') {
-      setMessageType(msgType);
-      setMessage(message);
-      handleEntering();
+      throwError(error.response.data.message);
     }
   };
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardEventSearch navigation={navigation} event={item} />;
+      return <CardEvent navigation={navigation} event={item} />;
     },
     [data],
   );

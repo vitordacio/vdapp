@@ -14,14 +14,21 @@ type style = {
   opacity: number;
 };
 
-interface IMessageContextData {
+type handleMessage = {
   message: string;
-  setMessage: React.Dispatch<React.SetStateAction<string>>;
-  messageType: string;
-  setMessageType: React.Dispatch<React.SetStateAction<string>>;
+  type?: 'info' | 'error' | '';
+  icon?: string;
+};
+
+interface IMessageContextData {
+  // message: string;
+  // messageType: string;
+  handleMessage: handleMessage;
   animatedStyle: style;
   handleEntering: () => void;
   handleExiting: () => void;
+  throwInfo: (data: string) => void;
+  throwError: (data: string) => void;
   refresh: boolean;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -38,9 +45,14 @@ export const MessageProvider: React.FC<IProps> = ({ children }) => {
   const translateY = useSharedValue(-100);
   const opac = useSharedValue(0);
 
-  const [message, setMessage] = useState<string>();
-  const [messageType, setMessageType] = useState<string>('info');
+  // const [message, setMessage] = useState<string>();
+  // const [messageType, setMessageType] = useState<'info' | 'alert'>('info');
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [handleMessage, setHandleMessage] = useState<handleMessage>({
+    message: '',
+    icon: '',
+    type: '',
+  });
 
   const handleEntering = () => {
     translateY.value = withSpring(15);
@@ -53,6 +65,26 @@ export const MessageProvider: React.FC<IProps> = ({ children }) => {
     opac.value = withTiming(0, { easing: Easing.bezier(0.5, 0.01, 0, 1) });
   };
 
+  const throwInfo = (infoMessage: string) => {
+    setHandleMessage({
+      message: infoMessage,
+    });
+    // setMessageType('info');
+    // setMessage(infoMessage);
+    handleEntering();
+  };
+
+  const throwError = (errorMessage: string) => {
+    setHandleMessage({
+      type: 'error',
+      message: errorMessage,
+      icon: 'alert',
+    });
+    // setMessageType('alert');
+    // setMessage(errorMessage);
+    handleEntering();
+  };
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: translateY.value }],
@@ -63,15 +95,14 @@ export const MessageProvider: React.FC<IProps> = ({ children }) => {
   return (
     <MessageContext.Provider
       value={{
-        message,
-        setMessage,
-        messageType,
-        setMessageType,
+        handleMessage,
         animatedStyle,
         handleEntering,
         handleExiting,
         refresh,
         setRefresh,
+        throwInfo,
+        throwError,
       }}
     >
       {children}

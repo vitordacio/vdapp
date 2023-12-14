@@ -1,11 +1,16 @@
 import React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { View } from '@components/View';
 import styles from './styles';
 
-export function LineY() {
-  return <View style={styles.lineY} />;
+interface ILineProps {
+  style?: StyleProp<ViewStyle>;
 }
 
-export function LineX() {
-  return <View style={styles.lineX} />;
-}
+export const LineY: React.FC<ILineProps> = ({ style }) => {
+  return <View style={[styles.lineY, style]} />;
+};
+
+export const LineX: React.FC<ILineProps> = ({ style }) => {
+  return <View style={[styles.lineX, style]} />;
+};

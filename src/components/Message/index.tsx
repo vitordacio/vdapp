@@ -7,8 +7,7 @@ import { Icon } from '@components/Icon';
 import styles from './styles';
 
 export const Message = () => {
-  const { handleExiting, message, messageType, animatedStyle, refresh } =
-    useMessage();
+  const { handleMessage, handleExiting, animatedStyle, refresh } = useMessage();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,16 +24,13 @@ export const Message = () => {
       style={[
         styles.container,
         animatedStyle,
-        messageType === 'alert' && { backgroundColor: '#E63C3D' },
+        handleMessage.type === 'error' && { backgroundColor: '#E63C3D' },
       ]}
     >
       <View style={styles.icon}>
-        <Icon
-          name={messageType === 'alert' ? 'alert' : 'check'}
-          tintColor="#fff"
-        />
+        <Icon name={handleMessage.icon || 'check'} tintColor="#fff" />
       </View>
-      <Text style={styles.title}>{message}</Text>
+      <Text style={styles.title}>{handleMessage.message}</Text>
     </Animated.View>
   );
 };

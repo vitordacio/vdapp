@@ -44,14 +44,13 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   navigation,
 }) => {
   const { setUser } = useAuth();
-  const { setMessage, handleEntering, setMessageType } = useMessage();
+  const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
     let updatedUser: IUser;
     let message: string;
-    let msgType = 'info';
 
     try {
       if (type === 'username') {
@@ -83,19 +82,15 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
         message = 'Rede social excluída com sucesso!';
       }
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
+      throwError(error.response.data.message);
     }
 
-    setMessageType(msgType);
-    setMessage(message);
-    handleEntering();
-
-    if (msgType !== 'alert') setUser(updatedUser);
+    if (updatedUser) setUser(updatedUser);
+    throwInfo(message);
 
     const goBack =
-      (type !== 'create_social' && type !== 'delete_social') ||
-      msgType === 'alert';
+      !updatedUser || !['create_social', 'delete_social'].includes(type);
+
     return goBack ? navigation.goBack() : setConfirm(false);
   };
 

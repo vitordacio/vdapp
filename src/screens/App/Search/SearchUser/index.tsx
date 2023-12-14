@@ -15,7 +15,7 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
   const { search, debouncedSearch, refreshing, setRefreshing } = useSearch();
-  const { setMessage, setMessageType, handleEntering } = useMessage();
+  const { throwError } = useMessage();
 
   const [data, setData] = useState<IUser[] | []>([]);
   const [page, setPage] = useState(2);
@@ -25,8 +25,6 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     setShowLoader(true);
 
     let users: IUser[];
-    let message: string;
-    let msgType = 'info';
 
     try {
       users = await userService.searchUserByName({
@@ -42,22 +40,13 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setShowLoader(false);
       if (refreshing) setRefreshing(false);
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
-    }
-
-    if (msgType === 'alert') {
-      setMessageType(msgType);
-      setMessage(message);
-      handleEntering();
+      throwError(error.response.data.message);
     }
   };
 
   const fetchNewData = async () => {
     setShowLoader(true);
     let users: IUser[];
-    let message: string;
-    let msgType = 'info';
 
     try {
       users = await userService.searchUserByName({
@@ -74,14 +63,7 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setShowLoader(false);
       if (refreshing) setRefreshing(false);
     } catch (error) {
-      msgType = 'alert';
-      message = error.response.data.message;
-    }
-
-    if (msgType === 'alert') {
-      setMessageType(msgType);
-      setMessage(message);
-      handleEntering();
+      throwError(error.response.data.message);
     }
   };
 

@@ -9,7 +9,7 @@ const Home: React.FC<BottomTabScreenProps<ParamListBase>> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   navigation,
 }) => {
-  const { handleEntering, handleExiting, setMessage } = useMessage();
+  const { handleEntering, handleExiting } = useMessage();
 
   return (
     <View>
@@ -17,7 +17,6 @@ const Home: React.FC<BottomTabScreenProps<ParamListBase>> = ({
         title="ENTRADA"
         style={{ backgroundColor: 'green', marginTop: 100 }}
         onPress={() => {
-          setMessage('ENTRANDO');
           handleEntering();
         }}
       />
@@ -25,7 +24,6 @@ const Home: React.FC<BottomTabScreenProps<ParamListBase>> = ({
         title="SAÍDA"
         style={{ backgroundColor: 'red', marginTop: 15 }}
         onPress={() => {
-          setMessage('SAINDO');
           handleExiting();
         }}
       />

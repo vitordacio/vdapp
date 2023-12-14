@@ -15,7 +15,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     // gap: 19,
   },
-  data: {
+  content: {
     marginLeft: 19,
     justifyContent: 'center',
     fontSize: 16,
@@ -34,12 +34,5 @@ export default StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 8,
-  },
-  error: {
-    fontSize: 16,
-    maxWidth: 326,
-    height: 19,
-    textAlign: 'center',
-    color: `${colors.RED}`,
   },
 });

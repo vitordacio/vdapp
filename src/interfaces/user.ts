@@ -17,6 +17,7 @@ export interface IUser {
   role_name: string;
   google_id: string;
   friendship_status: 'friends' | 'request_sent' | 'request_received' | '';
+  can_see_content: boolean;
   friends_count: number;
   emojis_count: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

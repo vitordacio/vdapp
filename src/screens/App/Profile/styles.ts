@@ -49,11 +49,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: 5,
   },
-  error: {
-    fontSize: 14,
-    textAlign: 'center',
-    color: 'red',
-  },
 });
 
 export default styles;
