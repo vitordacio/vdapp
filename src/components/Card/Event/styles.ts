@@ -8,6 +8,7 @@ export default StyleSheet.create({
     flex: 1,
     padding: 8,
     backgroundColor: `${colors.BLACK}`,
+    // backgroundColor: `${colors.GRAY_BACKGROUND}`,
     borderRadius: 8,
   },
   cover_photo: {

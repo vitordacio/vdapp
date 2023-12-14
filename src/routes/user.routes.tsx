@@ -96,7 +96,7 @@ export const UserPrivateTopTabRoutes: React.FC = () => {
         name="UserPrivateEmojisSent"
         component={PrivateContentView}
         options={{
-          tabBarLabel: '😊',
+          tabBarLabel: 'Reações',
         }}
       />
       <UserPrivateTopTab.Screen

@@ -13,12 +13,6 @@ let loadMore = true;
 const Notifications: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Notificações',
-    });
-  }, []);
-
   const [data, setData] = useState<INotification[] | []>([]);
   const [page, setPage] = useState(1);
   const [showLoader, setShowLoader] = useState(false);

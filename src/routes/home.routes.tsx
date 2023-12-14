@@ -1,28 +1,40 @@
-import Home from '@screens/App/Home';
-import Custom from '@screens/Custom';
-import colors from '@styles/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import ForYou from '@screens/App/Home/Top/ForYou';
+import Latest from '@screens/App/Home/Top/Latest';
+import Trending from '@screens/App/Home/Top/Trending';
 
 const HomeTopTab = createMaterialTopTabNavigator();
 
-const HomeRoutes: React.FC = () => {
+export const HomeTopRoutes: React.FC = () => {
   return (
     <HomeTopTab.Navigator
       screenOptions={{
-        tabBarLabelStyle: {
-          textTransform: 'capitalize',
-          fontWeight: 'bold',
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: `${colors.GOLD}`,
-        },
+        tabBarLabelStyle: { color: 'white' },
+        tabBarStyle: { backgroundColor: 'black' },
+        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
       }}
     >
-      <HomeTopTab.Screen name="main" component={Home} />
-      <HomeTopTab.Screen name="Latest" component={Custom} />
-      <HomeTopTab.Screen name="Trending" component={Custom} />
+      <HomeTopTab.Screen
+        name="ForYou"
+        component={ForYou}
+        options={{
+          tabBarLabel: 'Para Você',
+        }}
+      />
+      <HomeTopTab.Screen
+        name="Latest"
+        component={Latest}
+        options={{
+          tabBarLabel: 'Mais Novos',
+        }}
+      />
+      <HomeTopTab.Screen
+        name="Trending"
+        component={Trending}
+        options={{
+          tabBarLabel: 'Em Alta',
+        }}
+      />
     </HomeTopTab.Navigator>
   );
 };
-
-export default HomeRoutes;

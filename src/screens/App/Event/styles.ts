@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: `${colors.GREEN}`,
   },
+  status_animation: {
+    width: 20,
+    height: 20,
+  },
   container_event: {
     width: '100%',
     display: 'flex',
@@ -56,10 +60,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 10,
-  },
-  icon: {
-    width: 21,
-    height: 21,
   },
   icon_count: {
     width: 24,

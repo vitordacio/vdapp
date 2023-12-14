@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase } from '@react-navigation/native';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useSearch from '@contexts/search';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import CardEvent from '@components/Card/Event';
 import useMessage from '@contexts/message';
-import styles from './styles';
+import { Loading } from '@components/View/Loading';
+import styles from '../styles';
 
 let loadMore = true;
 
@@ -26,8 +27,6 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     setShowLoader(true);
 
     let events: IEvent[];
-    let message: string;
-    let msgType = 'info';
 
     try {
       events = await eventService.searchEventByName({
@@ -50,8 +49,6 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const fetchNewData = async () => {
     setShowLoader(true);
     let events: IEvent[];
-    let message: string;
-    let msgType = 'info';
 
     try {
       events = await eventService.searchEventByName({
@@ -92,7 +89,7 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   };
 
   const listFooterComponent = useCallback(() => {
-    return <ActivityIndicator style={{ marginVertical: 16 }} size="large" />;
+    return <Loading size={80} />;
   }, []);
 
   useEffect(() => {

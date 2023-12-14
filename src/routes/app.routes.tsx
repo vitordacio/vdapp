@@ -4,15 +4,17 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '@styles/colors';
 import EmojisReceived from '@screens/App/Emojis';
 import Friends from '@screens/App/Friends';
+import Custom from '@screens/Custom';
 import Inbox from '@screens/App/Inbox';
 import Profile from '@screens/App/Profile';
 import Notifications from '@screens/App/Notifications';
+import Home from '@screens/App/Home';
 import User from '@screens/App/User';
 import { UpdateUserRoutes } from './user.routes';
 import { EventRoutes } from './event.routes';
-import HomeRoutes from './home.routes';
 import SearchRoutes from './search.routes';
 import CreateEventRoutes from './createEvent.routes';
+// import HomeRoutes from './home.routes';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -39,6 +41,7 @@ const BottomTabRoutes: React.FC = () => {
             <Ionicons name={iconName as 'key'} size={size} color={color} />
           );
         },
+        tabBarShowLabel: false,
         tabBarInactiveBackgroundColor: `${colors.BLACK}`,
         tabBarActiveBackgroundColor: `${colors.BLACK}`,
         tabBarActiveTintColor: `${colors.GOLD}`,
@@ -55,10 +58,10 @@ const BottomTabRoutes: React.FC = () => {
     >
       <BottomTab.Screen
         name="Home"
-        component={HomeRoutes}
+        component={Home}
         options={{
-          tabBarLabel: 'Início',
-          headerShown: false,
+          // tabBarLabel: 'Início',
+          headerTitle: 'Eventos',
         }}
       />
 
@@ -66,7 +69,8 @@ const BottomTabRoutes: React.FC = () => {
         name="Search"
         component={SearchRoutes}
         options={{
-          tabBarLabel: 'Explorar',
+          // tabBarLabel: 'Explorar',
+          headerTitle: 'Explorar',
         }}
       />
 
@@ -74,7 +78,7 @@ const BottomTabRoutes: React.FC = () => {
         name="CreateEvent"
         component={CreateEventRoutes}
         options={{
-          tabBarLabel: 'Criar Evento',
+          // tabBarLabel: 'Criar Evento',
           headerShown: false,
         }}
       />
@@ -83,16 +87,19 @@ const BottomTabRoutes: React.FC = () => {
         name="Notifications"
         component={Notifications}
         options={{
-          tabBarLabel: 'Notificações',
+          // tabBarLabel: 'Notificações',
+          headerTitle: 'Notificações',
         }}
       />
 
       <BottomTab.Screen
         name="User"
         component={User}
-        options={{
-          tabBarLabel: 'Perfil',
-        }}
+        options={
+          {
+            // tabBarLabel: 'Perfil',
+          }
+        }
       />
     </BottomTab.Navigator>
   );
@@ -126,6 +133,7 @@ const AppRoutes: React.FC = () => {
       />
       <App.Screen name="Profile" component={Profile} />
       <App.Screen name="Inbox" component={Inbox} />
+      <App.Screen name="Map" component={Custom} />
       <App.Screen
         name="Friends"
         component={Friends}

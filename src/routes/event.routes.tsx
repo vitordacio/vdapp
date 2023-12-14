@@ -35,21 +35,21 @@ export const EventTopTabRoutes: React.FC = () => {
         name="EventPictures"
         component={Custom}
         options={{
-          tabBarLabel: 'Fotos',
+          tabBarLabel: 'Momentos',
         }}
       />
       <EventTopTab.Screen
         name="EventParticipations"
         component={Custom}
         options={{
-          tabBarLabel: 'Participações',
+          tabBarLabel: 'Participando',
         }}
       />
       <EventTopTab.Screen
         name="EventEmojisReceived"
         component={Custom}
         options={{
-          tabBarLabel: '😊',
+          tabBarLabel: 'Emotes',
         }}
       />
       <EventTopTab.Screen
@@ -199,7 +199,6 @@ export const EventRoutes: React.FC<
 
       <EventStackTab.Screen name="EventRequests" component={Custom} />
       <EventStackTab.Screen name="EventInbox" component={Custom} />
-      <EventStackTab.Screen name="EventMap" component={Custom} />
       <EventStackTab.Screen name="EventLists" component={Custom} />
     </EventStackTab.Navigator>
   );

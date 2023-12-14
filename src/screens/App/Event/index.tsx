@@ -3,14 +3,7 @@ import LottieView from 'lottie-react-native';
 import { AppView, View } from '@components/View';
 import { CoverPhoto } from '@components/CoverPhoto';
 import React, { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  Image,
-  ImageSourcePropType,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
+import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import assets from '@assets/index';
@@ -24,6 +17,7 @@ import { EventTopTabRoutes } from '@routes/event.routes';
 import useEvent from '@contexts/event';
 import useMessage from '@contexts/message';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Icon } from '@components/Icon';
 import { ParamListBase } from '@react-navigation/native';
 import { ViewPrivate } from './ViewPrivate';
 import styles from './styles';
@@ -38,23 +32,6 @@ type ParticipationStatus = {
     | 'minus-circle'
     | 'chevron-right';
   buttonTitle: string;
-};
-
-const assetMapping: Record<string, ImageSourcePropType> = {
-  auditorium: assets.auditorium,
-  beach: assets.beach,
-  birthday: assets.birthday,
-  boat: assets.boat,
-  culinary: assets.culinary,
-  exercise: assets.exercise,
-  fishing: assets.fishing,
-  games: assets.games,
-  meeting: assets.meeting,
-  moon: assets.moon,
-  nature: assets.nature,
-  party: assets.party,
-  pool: assets.pool,
-  table: assets.table,
 };
 
 type EventProps = NativeStackScreenProps<ParamListBase> & {
@@ -191,10 +168,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
     });
   }, [paramEvent.type_id]);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
     fetchData(paramEvent.id_event);
   }, []);
@@ -228,7 +201,7 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                           Acontecendo agora!
                         </Text>
                         <LottieView
-                          style={styles.icon}
+                          style={styles.status_animation}
                           source={assets.ongoing}
                           autoPlay
                           loop
@@ -238,12 +211,13 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                   )}
                   <View style={styles.container_event}>
                     <View style={styles.data_text}>
-                      <Image
+                      <Icon name={event.type.name} />
+                      {/* <Image
                         style={styles.icon}
                         source={assetMapping[event.type.name]}
                         resizeMode="contain"
                         tintColor="#fff"
-                      />
+                      /> */}
                       <Text
                         style={[styles.text_default_color, styles.text_large]}
                       >
@@ -251,12 +225,8 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                       </Text>
                     </View>
                     <View style={styles.data_text}>
-                      <ImageBackground
-                        style={styles.icon}
-                        source={assets.location}
-                        resizeMode="contain"
-                        tintColor="#fff"
-                      />
+                      <Icon name="location" />
+
                       <Text
                         style={[styles.text_default_color, styles.text_medium]}
                       >
@@ -264,12 +234,8 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                       </Text>
                     </View>
                     <View style={styles.data_text}>
-                      <ImageBackground
-                        style={styles.icon}
-                        source={assets.clock}
-                        resizeMode="contain"
-                        tintColor="#fff"
-                      />
+                      <Icon name="clock" />
+
                       <Text
                         style={[styles.text_default_color, styles.text_medium]}
                       >
@@ -281,12 +247,8 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                       </Text>
                     </View>
                     <View style={styles.data_text}>
-                      <ImageBackground
-                        style={styles.icon}
-                        source={assets.attach}
-                        resizeMode="contain"
-                        tintColor="#fff"
-                      />
+                      <Icon name="attach" />
+
                       <Text
                         style={[styles.text_gray_color, styles.text_medium]}
                       >
@@ -294,12 +256,8 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                       </Text>
                     </View>
                     <View style={styles.data_text}>
-                      <ImageBackground
-                        style={styles.icon}
-                        source={assets.drink}
-                        resizeMode="contain"
-                        tintColor="#fff"
-                      />
+                      <Icon name="drink" />
+
                       <Text
                         style={[styles.text_gray_color, styles.text_medium]}
                       >
@@ -307,12 +265,8 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                       </Text>
                     </View>
                     <View style={styles.data_text}>
-                      <ImageBackground
-                        style={styles.icon}
-                        source={assets.coin}
-                        resizeMode="contain"
-                        tintColor="#fff"
-                      />
+                      <Icon name="coin" />
+
                       <Text
                         style={[styles.text_gray_color, styles.text_medium]}
                       >
@@ -349,7 +303,7 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                     <Button
                       style={{ width: 160 }}
                       svgSize={22}
-                      onPress={() => console.log('handle map')}
+                      onPress={() => navigation.push('Map')}
                       title="Ver no mapa"
                       svg="map"
                     />

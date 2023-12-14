@@ -1,24 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase } from '@react-navigation/native';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
-import { IUser } from '@interfaces/user';
 import useMessage from '@contexts/message';
 import CardEvent from '@components/Card/Event';
+import { Loading } from '@components/View/Loading';
 import styles from '../styles';
 
 let loadMore = true;
 
-type UserEventsProps = NativeStackScreenProps<ParamListBase> & {
-  user: IUser;
-};
-
-const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
+const Trending: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
   const { throwError } = useMessage();
 
-  // const [showContent, setShowContent] = useState<boolean>(false);
   const [data, setData] = useState<IEvent[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -29,8 +26,8 @@ const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
     let events: IEvent[];
 
     try {
-      events = await eventService.findByUserId({
-        user_id: user.id_user,
+      events = await eventService.searchEventByName({
+        name: '',
         page: 1,
       });
 
@@ -50,8 +47,8 @@ const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
     let events: IEvent[];
 
     try {
-      events = await eventService.findByUserId({
-        user_id: user.id_user,
+      events = await eventService.searchEventByName({
+        name: '',
         page,
       });
 
@@ -87,7 +84,7 @@ const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
   };
 
   const listFooterComponent = useCallback(() => {
-    return <ActivityIndicator style={{ marginVertical: 16 }} size="large" />;
+    return <Loading size={80} />;
   }, []);
 
   useEffect(() => {
@@ -110,4 +107,4 @@ const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
   );
 };
 
-export default UserEvents;
+export default Trending;

@@ -8,18 +8,10 @@ import {
 } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
 import { SearchTopRoutes } from '@routes/search.routes';
-import { useNavigation } from '@react-navigation/native';
 import useSearch from '@contexts/search';
 
 const Search: React.FC = () => {
   const { search, setSearch, setRefreshing } = useSearch();
-  const navigation = useNavigation();
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Explorar',
-    });
-  }, [navigation]);
 
   return (
     <AppView style={{ paddingBottom: 14 }}>

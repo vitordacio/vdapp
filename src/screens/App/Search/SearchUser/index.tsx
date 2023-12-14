@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ParamListBase } from '@react-navigation/native';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { IUser } from '@interfaces/user';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { userService } from '@services/User';
 import CardUser from '@components/Card/User';
 import useSearch from '@contexts/search';
 import useMessage from '@contexts/message';
-import styles from './styles';
+import { Loading } from '@components/View/Loading';
+import styles from '../styles';
 
 let loadMore = true;
 
@@ -87,7 +88,7 @@ const SearchUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   };
 
   const listFooterComponent = useCallback(() => {
-    return <ActivityIndicator style={{ marginVertical: 16 }} size="large" />;
+    return <Loading size={80} />;
   }, []);
 
   useEffect(() => {

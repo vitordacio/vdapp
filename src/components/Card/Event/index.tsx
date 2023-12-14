@@ -23,13 +23,16 @@ type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
 const CardEvent = ({ event, navigation, hideAuthor }: CardProps) => {
   const { user } = useAuth();
   const {
+    type,
+    cover_photo,
     name,
     location,
-    cover_photo,
     status,
     start_time,
     finish_time,
-    type,
+    additional,
+    drink_preferences,
+    min_amount,
     participating_count,
     emojis_count,
     author,
@@ -87,6 +90,30 @@ const CardEvent = ({ event, navigation, hideAuthor }: CardProps) => {
                   <Icon name="clock" />
                   <Text style={[styles.text_default_color, styles.text_medium]}>
                     {hours}
+                  </Text>
+                </View>
+              )}
+              {additional && (
+                <View style={styles.data_text}>
+                  <Icon name="attach" />
+                  <Text style={[styles.text_gray_color, styles.text_medium]}>
+                    {additional}
+                  </Text>
+                </View>
+              )}
+              {drink_preferences && (
+                <View style={styles.data_text}>
+                  <Icon name="drink" />
+                  <Text style={[styles.text_gray_color, styles.text_medium]}>
+                    {drink_preferences}
+                  </Text>
+                </View>
+              )}
+              {min_amount && (
+                <View style={styles.data_text}>
+                  <Icon name="coin" />
+                  <Text style={[styles.text_gray_color, styles.text_medium]}>
+                    {min_amount}
                   </Text>
                 </View>
               )}

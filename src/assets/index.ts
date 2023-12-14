@@ -35,6 +35,8 @@ import lock from './lock.svg';
 import unlock from './unlock.svg';
 
 import ongoing from './Animation/ongoing.json';
+import loading from './Animation/loading.json';
+import loading_view from './Animation/loading_view.json';
 
 export default {
   instagram,
@@ -71,4 +73,6 @@ export default {
   alert,
   lock,
   unlock,
+  loading,
+  loading_view,
 };
