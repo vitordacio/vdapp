@@ -12,7 +12,7 @@ type EventProps = NativeStackScreenProps<ParamListBase> & {
   paramEvent: IEvent;
 };
 
-const ManageEvent: React.FC<EventProps> = ({ navigation }) => {
+const EventManage: React.FC<EventProps> = ({ navigation }) => {
   // const [canSeeContent, setCanSeeContent] = useState<boolean>();
 
   // useEffect(() => {
@@ -37,4 +37,4 @@ const ManageEvent: React.FC<EventProps> = ({ navigation }) => {
   );
 };
 
-export default ManageEvent;
+export default EventManage;

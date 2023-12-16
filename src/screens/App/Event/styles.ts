@@ -61,27 +61,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
   },
-  icon_count: {
-    width: 24,
-    height: 24,
-  },
-  text_extra_large: {
-    flex: 1,
-    fontSize: 22,
-  },
-  text_large: {
-    flex: 1,
-    fontSize: 18,
-  },
-  text_medium: {
-    flex: 1,
-    fontSize: 14,
-  },
-  text_default_color: {
-    color: `${colors.TEXT_DEFAULT}`,
-  },
-  text_gray_color: {
-    color: `${colors.GRAY_DESCRIPTION}`,
+  data_footer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+
+    borderColor: `${colors.GRAY_DESCRIPTION}`,
+    borderBottomWidth: 1,
   },
   container_author: {
     flex: 1,
@@ -89,9 +77,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 8,
     width: '100%',
-
-    borderColor: `${colors.GRAY_DESCRIPTION}`,
-    borderBottomWidth: 1,
   },
   data_author: {
     marginLeft: 19,
@@ -150,6 +135,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    flexWrap: 'wrap',
     gap: 5,
   },
   container_footer: {
@@ -162,10 +148,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
   },
-  error: {
+  text_extra_large: {
+    flex: 1,
+    fontSize: 22,
+  },
+  text_large: {
+    flex: 1,
+    fontSize: 18,
+  },
+  text_medium: {
+    flex: 1,
     fontSize: 14,
-    textAlign: 'center',
-    color: 'red',
+  },
+  text_default_color: {
+    color: `${colors.TEXT_DEFAULT}`,
+  },
+  text_gray_color: {
+    color: `${colors.GRAY_DESCRIPTION}`,
   },
 });
 

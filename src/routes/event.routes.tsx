@@ -7,18 +7,20 @@ import Event from '@screens/App/Event';
 import Custom from '@screens/Custom';
 import { ParamListBase } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
-import ManageEvent from '@screens/App/Event/ManageEvent';
-import UpdateEvent from '@screens/App/Event/ManageEvent/Update';
-import UpdateEventName from '@screens/App/Event/ManageEvent/Update/UpdateEventName';
-import UpdateEventLocation from '@screens/App/Event/ManageEvent/Update/UpdateEventLocation';
-import UpdateEventAdditional from '@screens/App/Event/ManageEvent/Update/UpdateEventAdditional';
-import UpdateEventClubName from '@screens/App/Event/ManageEvent/Update/UpdateEventClubName';
-import UpdateEventDrinkPreferences from '@screens/App/Event/ManageEvent/Update/UpdateEventDrinkPreferences';
-import UpdateEventMinAmount from '@screens/App/Event/ManageEvent/Update/UpdateEventMinAmount';
-import UpdateEventPerformer from '@screens/App/Event/ManageEvent/Update/UpdateEventPerformer';
-import UpdateEventPrivacy from '@screens/App/Event/ManageEvent/Update/UpdateEventPrivacy';
-import UpdateEventTicketsFree from '@screens/App/Event/ManageEvent/Update/UpdateEventTicketsFree';
-import UpdateEventTicketsValue from '@screens/App/Event/ManageEvent/Update/UpdateEventTicketsValue';
+import EventManage from '@screens/App/Event/EventManage';
+import UpdateEvent from '@screens/App/Event/EventManage/Update';
+import UpdateEventName from '@screens/App/Event/EventManage/Update/UpdateEventName';
+import UpdateEventLocation from '@screens/App/Event/EventManage/Update/UpdateEventLocation';
+import UpdateEventAdditional from '@screens/App/Event/EventManage/Update/UpdateEventAdditional';
+import UpdateEventClubName from '@screens/App/Event/EventManage/Update/UpdateEventClubName';
+import UpdateEventDrinkPreferences from '@screens/App/Event/EventManage/Update/UpdateEventDrinkPreferences';
+import UpdateEventMinAmount from '@screens/App/Event/EventManage/Update/UpdateEventMinAmount';
+import UpdateEventPerformer from '@screens/App/Event/EventManage/Update/UpdateEventPerformer';
+import UpdateEventPrivacy from '@screens/App/Event/EventManage/Update/UpdateEventPrivacy';
+import UpdateEventTicketsFree from '@screens/App/Event/EventManage/Update/UpdateEventTicketsFree';
+import UpdateEventTicketsValue from '@screens/App/Event/EventManage/Update/UpdateEventTicketsValue';
+import EventInvite from '@screens/App/Event/EventInvite';
+import EventInviteConfirm from '@screens/App/Event/EventInvite/EventInviteConfirm';
 
 const EventTopTab = createMaterialTopTabNavigator();
 
@@ -134,11 +136,11 @@ export const UpdateEventRoutes = () => {
   );
 };
 
-const ManageEventStackTab = createNativeStackNavigator();
+const EventManageStackTab = createNativeStackNavigator();
 
-export const ManageEventRoutes = () => {
+export const EventManageRoutes = () => {
   return (
-    <ManageEventStackTab.Navigator
+    <EventManageStackTab.Navigator
       screenOptions={{
         headerTitle: 'Gerenciar Evento',
         headerStyle: {
@@ -151,19 +153,47 @@ export const ManageEventRoutes = () => {
         headerTitleAlign: 'center',
       }}
     >
-      <ManageEventStackTab.Screen
-        name="ManageEventScreen"
-        component={ManageEvent}
+      <EventManageStackTab.Screen
+        name="EventManageScreen"
+        component={EventManage}
       />
-      <ManageEventStackTab.Screen
+      <EventManageStackTab.Screen
         name="UpdateEvent"
         component={UpdateEventRoutes}
         options={{ headerShown: false }}
       />
 
-      <ManageEventStackTab.Screen name="Invite" component={Custom} />
-      <ManageEventStackTab.Screen name="DeleteEvent" component={Custom} />
-    </ManageEventStackTab.Navigator>
+      <EventManageStackTab.Screen name="DeleteEvent" component={Custom} />
+    </EventManageStackTab.Navigator>
+  );
+};
+
+const EventInviteStackTab = createNativeStackNavigator();
+
+export const EventInviteRoutes = () => {
+  return (
+    <EventInviteStackTab.Navigator
+      screenOptions={{
+        headerTitle: 'Convidar',
+        headerStyle: {
+          backgroundColor: 'black',
+        },
+        headerTitleStyle: {
+          color: 'white',
+        },
+        headerTintColor: 'white',
+        headerTitleAlign: 'center',
+      }}
+    >
+      <EventInviteStackTab.Screen
+        name="EventInviteScreen"
+        component={EventInvite}
+      />
+      <EventInviteStackTab.Screen
+        name="EventInviteConfirm"
+        component={EventInviteConfirm}
+      />
+    </EventInviteStackTab.Navigator>
   );
 };
 
@@ -192,9 +222,15 @@ export const EventRoutes: React.FC<
       </EventStackTab.Screen>
 
       <EventStackTab.Screen
-        name="ManageEvent"
+        name="EventManage"
         options={{ headerShown: false }}
-        component={ManageEventRoutes}
+        component={EventManageRoutes}
+      />
+
+      <EventStackTab.Screen
+        name="EventInvite"
+        options={{ headerShown: false }}
+        component={EventInviteRoutes}
       />
 
       <EventStackTab.Screen name="EventRequests" component={Custom} />

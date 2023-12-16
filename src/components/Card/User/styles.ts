@@ -10,10 +10,8 @@ export default StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: `${colors.BLACK}`,
     borderRadius: 8,
-    // marginBottom: 14,
     alignItems: 'center',
     justifyContent: 'space-between',
-    // gap: 19,
   },
   content: {
     marginLeft: 19,

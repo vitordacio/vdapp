@@ -1,7 +1,6 @@
 import { View } from '@components/View';
 import { Text } from '@components/Text';
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
 import { Button } from '@components/Button';
 import { Picture } from '@components/Picture';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -10,6 +9,7 @@ import { IUser } from '@interfaces/user';
 import { friendshipService } from '@services/Friendship';
 import useAuth from '@contexts/auth';
 import useMessage from '@contexts/message';
+import { Pressable } from '@components/Pressable';
 import styles from './styles';
 
 type Situation = {
@@ -93,7 +93,7 @@ const CardUser = ({ user, navigation }: CardProps) => {
   return (
     <>
       {user && (
-        <TouchableOpacity
+        <Pressable
           style={styles.container}
           onPress={() =>
             self.id_user !== user.id_user
@@ -116,7 +116,7 @@ const CardUser = ({ user, navigation }: CardProps) => {
               onPress={handleFriendship}
             />
           )}
-        </TouchableOpacity>
+        </Pressable>
       )}
     </>
   );

@@ -275,20 +275,33 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                     </View>
                   </View>
 
-                  <View style={styles.container_author}>
-                    <Picture card={true} picture={event.author.picture} />
-                    <View style={styles.data_author}>
-                      <Text
-                        style={[styles.text_default_color, styles.text_medium]}
-                      >
-                        {event.author.username}
-                      </Text>
-                      <Text
-                        style={[styles.text_gray_color, styles.text_medium]}
-                      >
-                        {event.author.name}
-                      </Text>
+                  <View style={styles.data_footer}>
+                    <View style={styles.container_author}>
+                      <Picture card={true} picture={event.author.picture} />
+                      <View style={styles.data_author}>
+                        <Text
+                          style={[
+                            styles.text_default_color,
+                            styles.text_medium,
+                          ]}
+                        >
+                          {event.author.username}
+                        </Text>
+                        <Text
+                          style={[styles.text_gray_color, styles.text_medium]}
+                        >
+                          {event.author.name}
+                        </Text>
+                      </View>
                     </View>
+
+                    <Button
+                      style={{ width: 160 }}
+                      svgSize={22}
+                      onPress={() => navigation.push('Map')}
+                      title="Ver no mapa"
+                      svg="map"
+                    />
                   </View>
                 </View>
 
@@ -298,14 +311,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                       style={{ width: 40 }}
                       onPress={() => console.log('handle emote')}
                       svg="smile"
-                    />
-
-                    <Button
-                      style={{ width: 160 }}
-                      svgSize={22}
-                      onPress={() => navigation.push('Map')}
-                      title="Ver no mapa"
-                      svg="map"
                     />
 
                     <Button
@@ -322,7 +327,21 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                         style={{ maxWidth: 200 }}
                         iconColor="#FFFFFF"
                         onPress={() =>
-                          navigation.push('ManageEvent', { event })
+                          navigation.push('EventInvite', { event })
+                        }
+                        title="Convidar"
+                      />
+                    )}
+
+                    {(event.participation_status === 'author' ||
+                      event.participation_status === 'mod_in') && (
+                      <Button
+                        type="dark_gold"
+                        icon="chevron-right"
+                        style={{ maxWidth: 200 }}
+                        iconColor="#FFFFFF"
+                        onPress={() =>
+                          navigation.push('EventManage', { event })
                         }
                         title="Gerenciar"
                       />

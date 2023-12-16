@@ -162,11 +162,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
   },
-  error: {
-    fontSize: 14,
-    textAlign: 'center',
-    color: 'red',
-  },
 });
 
 export default styles;
