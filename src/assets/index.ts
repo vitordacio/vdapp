@@ -34,6 +34,7 @@ import alert from './alert.svg';
 import lock from './lock.svg';
 import unlock from './unlock.svg';
 import chevron_right from './chevron_right.svg';
+import x from './x.svg';
 
 import ongoing from './Animation/ongoing.json';
 import loading from './Animation/loading.json';
@@ -77,4 +78,5 @@ export default {
   loading,
   loading_view,
   chevron_right,
+  x,
 };

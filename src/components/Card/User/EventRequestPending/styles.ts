@@ -26,12 +26,20 @@ export default StyleSheet.create({
   username: {
     color: `${colors.GRAY_DESCRIPTION}`,
   },
-  friendship: {
+  participation: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingHorizontal: 14,
+  },
+  participation_button: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 8,
   },
 });

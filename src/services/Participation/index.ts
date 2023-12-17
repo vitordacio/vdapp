@@ -1,18 +1,24 @@
 import api from '@config/api';
 import { IParticipation, IParticipationType } from '@interfaces/participation';
 import { AxiosResponse } from 'axios';
-import { IFindByEventAndUser, IInviteRequest } from './IParticipationService';
+import {
+  IEventResponse,
+  IFindByEventAndUser,
+  IFindRequests,
+  IInviteRequest,
+} from './IParticipationService';
 
 interface IParticipationService {
   requestByUser: (event_id: string) => Promise<IParticipation>;
-  responseByEvent: (participation_id: string) => Promise<IParticipation>;
+  responseByEvent: (data: IEventResponse) => Promise<IParticipation>;
   inviteRequest: (data: IInviteRequest) => Promise<IParticipation>;
   inviteResponse: (event_id: string) => Promise<IParticipation>;
   findParticipationTypes: () => Promise<IParticipationType[]>;
   findByEventAndUser: (
     data: IFindByEventAndUser,
   ) => Promise<IParticipation | undefined>;
-  findEventRequests: (event_id: string) => Promise<IParticipation[]>;
+  findRequestsPending: (data: IFindRequests) => Promise<IParticipation[]>;
+  findRequestsReviwed: (data: IFindRequests) => Promise<IParticipation[]>;
   findById: (participation_id: string) => Promise<IParticipation>;
   findByUser: () => Promise<IParticipation[]>;
   deleteParticipation: (participation_id: string) => Promise<void>;
@@ -25,11 +31,10 @@ const service: IParticipationService = {
     );
     return response.data;
   },
-  responseByEvent: async (
-    participation_id: string,
-  ): Promise<IParticipation> => {
+  responseByEvent: async (data: IEventResponse): Promise<IParticipation> => {
     const response: AxiosResponse<IParticipation> = await api.post(
-      `/participation/event/${participation_id}`,
+      `/participation/event`,
+      data,
     );
     return response.data;
   },
@@ -60,9 +65,19 @@ const service: IParticipationService = {
     );
     return response.data;
   },
-  findEventRequests: async (event_id: string): Promise<IParticipation[]> => {
+  findRequestsPending: async (
+    data: IFindRequests,
+  ): Promise<IParticipation[]> => {
     const response: AxiosResponse<IParticipation[]> = await api.get(
-      `/participation/requests/${event_id}`,
+      `/participation/requests/pending/${data.event_id}?page=${data.page || 1}`,
+    );
+    return response.data;
+  },
+  findRequestsReviwed: async (
+    data: IFindRequests,
+  ): Promise<IParticipation[]> => {
+    const response: AxiosResponse<IParticipation[]> = await api.get(
+      `/participation/requests/reviwed/${data.event_id}?page=${data.page || 1}`,
     );
     return response.data;
   },

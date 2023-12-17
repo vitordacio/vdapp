@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import useDebounce from '@hooks/useDebounce';
 import { IEvent } from '@interfaces/event';
+import { IParticipation } from '@interfaces/participation';
 
 interface IEventContextData {
   event: IEvent | null;
@@ -12,16 +13,30 @@ interface IEventContextData {
   setLoadingInviteSearch: React.Dispatch<React.SetStateAction<boolean>>;
   refreshingInviteSearch: boolean;
   setRefreshingInviteSearch: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface IProps {
-  children: React.ReactNode;
+  eventRequestsPending: IParticipation[];
+  setEventRequestsPending: React.Dispatch<
+    React.SetStateAction<IParticipation[]>
+  >;
+  eventRequestsReviwed: IParticipation[];
+  setEventRequestsReviwed: React.Dispatch<
+    React.SetStateAction<IParticipation[]>
+  >;
 }
 
 const EventContext = createContext<IEventContextData>({} as IEventContextData);
 
-export const EventProvider: React.FC<IProps> = ({ children }) => {
+export const EventProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [event, setEvent] = useState<IEvent | null>(null);
+
+  const [eventRequestsPending, setEventRequestsPending] = useState<
+    IParticipation[]
+  >([]);
+  const [eventRequestsReviwed, setEventRequestsReviwed] = useState<
+    IParticipation[]
+  >([]);
+
   const [searchInvite, setSearchInvite] = useState<string>('');
   const [loadingInviteSearch, setLoadingInviteSearch] =
     useState<boolean>(false);
@@ -42,6 +57,10 @@ export const EventProvider: React.FC<IProps> = ({ children }) => {
         setLoadingInviteSearch,
         refreshingInviteSearch,
         setRefreshingInviteSearch,
+        eventRequestsPending,
+        setEventRequestsPending,
+        eventRequestsReviwed,
+        setEventRequestsReviwed,
       }}
     >
       {children}

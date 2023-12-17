@@ -18,7 +18,6 @@ import useMessage from '@contexts/message';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Icon } from '@components/Icon';
 import { ParamListBase } from '@react-navigation/native';
-import { ViewPrivate } from './ViewPrivate';
 import styles from './styles';
 
 type ParticipationStatus = {
@@ -43,7 +42,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
-  const [showPrivate, setShowPrivate] = useState<boolean>(false);
   const [userIn, setUserIn] = useState<boolean>(false);
 
   const [participationLoader, setParticipationLoader] =
@@ -343,9 +341,15 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                           icon="chevron_right"
                           style={{ maxWidth: 200 }}
                           iconColor="#FFFFFF"
-                          onPress={() =>
-                            navigation.push('EventInvite', { event })
-                          }
+                          onPress={() => navigation.push('EventRequests')}
+                          title="Participações"
+                        />
+                        <Button
+                          type="dark_gold"
+                          icon="chevron_right"
+                          style={{ maxWidth: 200 }}
+                          iconColor="#FFFFFF"
+                          onPress={() => navigation.push('EventInvite')}
                           title="Convidar"
                         />
                         <Button
@@ -353,9 +357,7 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                           icon="chevron_right"
                           style={{ maxWidth: 200 }}
                           iconColor="#FFFFFF"
-                          onPress={() =>
-                            navigation.push('EventManage', { event })
-                          }
+                          onPress={() => navigation.push('EventManage')}
                           title="Gerenciar"
                         />
                       </>
@@ -417,9 +419,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
         )}
         <EventTopTabRoutes />
       </ScrollView>
-      {showPrivate && (
-        <ViewPrivate setConfirm={setShowPrivate} is_private={event.private} />
-      )}
     </AppView>
   );
 };

@@ -1,5 +1,4 @@
 import { AppView, View } from '@components/View';
-import { Text } from '@components/Text';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
@@ -13,20 +12,10 @@ type EventProps = NativeStackScreenProps<ParamListBase> & {
 };
 
 const EventManage: React.FC<EventProps> = ({ navigation }) => {
-  // const [canSeeContent, setCanSeeContent] = useState<boolean>();
-
-  // useEffect(() => {
-  // }, []);
-
   return (
-    <AppView
-    // style={{
-    //   padding: 0,
-    // }}
-    >
+    <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <Text style={{ color: 'red' }}>TESTE</Text>
           <Button
             title="Editar Evento"
             onPress={() => navigation.push('UpdateEvent')}

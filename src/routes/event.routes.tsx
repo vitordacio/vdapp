@@ -21,6 +21,8 @@ import UpdateEventTicketsFree from '@screens/App/Event/EventManage/Update/Update
 import UpdateEventTicketsValue from '@screens/App/Event/EventManage/Update/UpdateEventTicketsValue';
 import EventInvite from '@screens/App/Event/EventInvite';
 import EventInviteConfirm from '@screens/App/Event/EventInvite/EventInviteConfirm';
+import EventRequestsPending from '@screens/App/Event/EventRequests/Pending';
+import EventRequestsReviwed from '@screens/App/Event/EventRequests/Reviwed';
 
 const EventTopTab = createMaterialTopTabNavigator();
 
@@ -62,6 +64,35 @@ export const EventTopTabRoutes: React.FC = () => {
         }}
       />
     </EventTopTab.Navigator>
+  );
+};
+
+const EventRequestsTopTab = createMaterialTopTabNavigator();
+
+export const EventRequestsTopTabRoutes: React.FC = () => {
+  return (
+    <EventRequestsTopTab.Navigator
+      screenOptions={{
+        tabBarLabelStyle: { color: 'white' },
+        tabBarStyle: { backgroundColor: 'black' },
+        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
+      }}
+    >
+      <EventRequestsTopTab.Screen
+        name="EventRequestsPending"
+        component={EventRequestsPending}
+        options={{
+          tabBarLabel: 'Pendentes',
+        }}
+      />
+      <EventRequestsTopTab.Screen
+        name="EventRequestsReviwed"
+        component={EventRequestsReviwed}
+        options={{
+          tabBarLabel: 'Revisados',
+        }}
+      />
+    </EventRequestsTopTab.Navigator>
   );
 };
 
@@ -228,12 +259,17 @@ export const EventRoutes: React.FC<
       />
 
       <EventStackTab.Screen
+        name="EventRequests"
+        options={{ headerTitle: 'Solicitações' }}
+        component={EventRequestsTopTabRoutes}
+      />
+
+      <EventStackTab.Screen
         name="EventInvite"
         options={{ headerShown: false }}
         component={EventInviteRoutes}
       />
 
-      <EventStackTab.Screen name="EventRequests" component={Custom} />
       <EventStackTab.Screen name="EventInbox" component={Custom} />
       <EventStackTab.Screen name="EventLists" component={Custom} />
     </EventStackTab.Navigator>

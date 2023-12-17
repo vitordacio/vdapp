@@ -22,7 +22,7 @@ type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
   user: IUser;
 };
 
-const CardUser = ({ user, navigation }: CardProps) => {
+const CardUser: React.FC<CardProps> = ({ user, navigation }) => {
   const { user: self } = useAuth();
   const { throwError } = useMessage();
   const { username, name, picture, friendship_status } = user;
