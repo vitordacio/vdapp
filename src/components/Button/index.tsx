@@ -1,33 +1,27 @@
 import React from 'react';
-import { Feather } from '@expo/vector-icons';
 import { Pressable } from '@components/Pressable';
-import {
-  Text,
-  PressableProps,
-  GestureResponderEvent,
-  ImageBackground,
-  ImageSourcePropType,
-  ActivityIndicator,
-} from 'react-native';
-import assets from '@assets/index';
+import { Text, PressableProps, GestureResponderEvent } from 'react-native';
+import { Loading } from '@components/View/Loading';
+import { Icon } from '@components/Icon';
 import styles from './styles';
 
-const svgMapping: Record<string, ImageSourcePropType> = {
-  inbox: assets.inbox,
-  smile: assets.smile,
-  map: assets.map,
-};
+// const svgMapping: Record<string, ImageSourcePropType> = {
+//   inbox: assets.inbox,
+//   smile: assets.smile,
+//   map: assets.map,
+// };
 
 interface IButtonProps extends PressableProps {
   title?: string;
   type?: string;
-  icon?: React.ComponentProps<typeof Feather>['name'];
+  icon?: string;
   iconSize?: number;
-  svgSize?: number;
   iconColor?: string;
   loading?: boolean;
-  svg?: keyof typeof svgMapping;
   onPress?: (e: GestureResponderEvent) => void;
+  maxWidth?: number;
+  selected?: boolean;
+  disabled?: boolean;
 }
 
 export function Button({
@@ -37,9 +31,10 @@ export function Button({
   icon,
   iconSize,
   iconColor,
-  svgSize,
   loading,
-  svg,
+  maxWidth,
+  selected,
+  disabled,
   ...rest
 }: IButtonProps) {
   return (
@@ -49,7 +44,9 @@ export function Button({
       style={({ pressed }) => [
         styles.container,
         type && styles[`${type}_container`],
-        pressed && styles.pressed_container,
+        (pressed || selected) && styles.pressed_container,
+        disabled && { backgroundColor: '#808080' },
+        maxWidth && { maxWidth },
         rest.style,
       ]}
     >
@@ -67,22 +64,12 @@ export function Button({
                 {title}
               </Text>
             )}
-            {loading && <ActivityIndicator size="small" />}
+            {loading && <Loading />}
             {icon && (
-              <Feather
+              <Icon
                 name={icon}
                 size={iconSize || 24}
-                color={iconColor || 'black'}
-              />
-            )}
-            {svg && (
-              <ImageBackground
-                style={
-                  svgSize
-                    ? { width: svgSize, height: svgSize }
-                    : { width: 24, height: 24 }
-                }
-                source={svgMapping[svg]}
+                tintColor={iconColor || '#000'}
               />
             )}
           </>

@@ -8,14 +8,11 @@ const styles = StyleSheet.create({
     color: `${colors.TEXT_DEFAULT}`,
     marginBottom: 5,
   },
-  description: {
-    flex: 1,
-    fontSize: 16,
-    color: `${colors.GRAY_DESCRIPTION}`,
-    marginBottom: 8,
-  },
   color_blue: {
     color: `${colors.BLUE_BUTTON}`,
+  },
+  color_red: {
+    color: `${colors.RED}`,
   },
   user: {
     display: 'flex',
@@ -23,17 +20,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
+  content: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+  },
   options: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap',
     gap: 16,
-    marginVertical: 14,
+    marginBottom: 14,
   },
-  container_button: {
-    paddingVertical: 16,
+
+  submit: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 14,
+    // marginBottom: 16,
+  },
+  description: {
+    flex: 1,
+    fontSize: 16,
+    color: `${colors.GRAY_DESCRIPTION}`,
+    // marginBottom: 8,
   },
 });
 

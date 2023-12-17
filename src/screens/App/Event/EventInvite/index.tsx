@@ -4,7 +4,6 @@ import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, ScrollView } from 'react-native';
-import { IEvent } from '@interfaces/event';
 import { SearchInput } from '@components/Input/SearchInput';
 import useEvent from '@contexts/event';
 import { Loading } from '@components/View/Loading';
@@ -16,11 +15,9 @@ import styles from './styles';
 
 let loadMore = true;
 
-type EventProps = NativeStackScreenProps<ParamListBase> & {
-  paramEvent: IEvent;
-};
-
-const EventInvite: React.FC<EventProps> = ({ navigation }) => {
+const EventInvite: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
   const {
     searchInvite,
     setSearchInvite,

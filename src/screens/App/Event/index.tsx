@@ -3,18 +3,17 @@ import LottieView from 'lottie-react-native';
 import { AppView, View } from '@components/View';
 import { CoverPhoto } from '@components/CoverPhoto';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import assets from '@assets/index';
 import { formatTimeRange } from '@utils/formaters';
 import { Picture } from '@components/Picture';
 import { Button } from '@components/Button';
-import colors from '@styles/colors';
 import { participationService } from '@services/Participation';
-import Feather from 'react-native-vector-icons/Feather';
 import { EventTopTabRoutes } from '@routes/event.routes';
 import useEvent from '@contexts/event';
+import { Pressable } from '@components/Pressable';
 import useMessage from '@contexts/message';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Icon } from '@components/Icon';
@@ -39,7 +38,7 @@ type EventProps = NativeStackScreenProps<ParamListBase> & {
 };
 
 const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
-  const { throwError } = useMessage();
+  const { throwInfo, throwError } = useMessage();
   const { event, setEvent } = useEvent();
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -297,54 +296,69 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
 
                     <Button
                       style={{ width: 160 }}
-                      svgSize={22}
-                      onPress={() => navigation.push('Map')}
+                      onPress={
+                        event.address
+                          ? () =>
+                              navigation.push('Map', { address: event.address })
+                          : () =>
+                              throwInfo(
+                                'O evento não possui localização cadastrada',
+                              )
+                      }
                       title="Ver no mapa"
-                      svg="map"
+                      icon="map"
+                      iconSize={22}
+                      disabled={!event.address_id}
                     />
                   </View>
                 </View>
-
                 <View style={styles.container_participation}>
                   <View style={styles.container_buttons}>
                     <Button
                       style={{ width: 40 }}
-                      onPress={() => console.log('handle emote')}
-                      svg="smile"
+                      onPress={() => throwInfo('handle emote')}
+                      icon="smile"
                     />
 
-                    <Button
-                      style={{ width: 40 }}
-                      onPress={() => navigation.navigate('Inbox')}
-                      svg="inbox"
-                    />
-
-                    {(event.participation_status === 'author' ||
-                      event.participation_status === 'mod_in') && (
+                    {[
+                      'author',
+                      'user_in',
+                      'guest_in',
+                      'vip_in',
+                      'mod_in',
+                    ].includes(event.participation_status) && (
                       <Button
-                        type="dark_gold"
-                        icon="chevron-right"
-                        style={{ maxWidth: 200 }}
-                        iconColor="#FFFFFF"
-                        onPress={() =>
-                          navigation.push('EventInvite', { event })
-                        }
-                        title="Convidar"
+                        style={{ width: 40 }}
+                        onPress={() => navigation.navigate('Inbox')}
+                        icon="inbox"
                       />
                     )}
 
-                    {(event.participation_status === 'author' ||
-                      event.participation_status === 'mod_in') && (
-                      <Button
-                        type="dark_gold"
-                        icon="chevron-right"
-                        style={{ maxWidth: 200 }}
-                        iconColor="#FFFFFF"
-                        onPress={() =>
-                          navigation.push('EventManage', { event })
-                        }
-                        title="Gerenciar"
-                      />
+                    {['author', 'mod_in'].includes(
+                      event.participation_status,
+                    ) && (
+                      <>
+                        <Button
+                          type="dark_gold"
+                          icon="chevron_right"
+                          style={{ maxWidth: 200 }}
+                          iconColor="#FFFFFF"
+                          onPress={() =>
+                            navigation.push('EventInvite', { event })
+                          }
+                          title="Convidar"
+                        />
+                        <Button
+                          type="dark_gold"
+                          icon="chevron_right"
+                          style={{ maxWidth: 200 }}
+                          iconColor="#FFFFFF"
+                          onPress={() =>
+                            navigation.push('EventManage', { event })
+                          }
+                          title="Gerenciar"
+                        />
+                      </>
                     )}
                   </View>
 
@@ -387,13 +401,15 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                       : 'Você não está participando'}
                   </Text>
 
-                  <TouchableOpacity onPress={() => setShowPrivate(true)}>
-                    <Feather
-                      name={event.private ? 'lock' : 'unlock'}
-                      size={19}
-                      color={`${colors.TEXT_DEFAULT}`}
-                    />
-                  </TouchableOpacity>
+                  <Pressable
+                    onPress={() =>
+                      throwInfo(
+                        `O evento é ${event.private ? 'privado' : 'público'}.`,
+                      )
+                    }
+                  >
+                    <Icon name={event.private ? 'lock' : 'unlock'} size={19} />
+                  </Pressable>
                 </View>
               </View>
             )}

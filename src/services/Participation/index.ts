@@ -1,7 +1,7 @@
 import api from '@config/api';
 import { IParticipation, IParticipationType } from '@interfaces/participation';
 import { AxiosResponse } from 'axios';
-import { IInviteRequest } from './IParticipationService';
+import { IFindByEventAndUser, IInviteRequest } from './IParticipationService';
 
 interface IParticipationService {
   requestByUser: (event_id: string) => Promise<IParticipation>;
@@ -9,6 +9,9 @@ interface IParticipationService {
   inviteRequest: (data: IInviteRequest) => Promise<IParticipation>;
   inviteResponse: (event_id: string) => Promise<IParticipation>;
   findParticipationTypes: () => Promise<IParticipationType[]>;
+  findByEventAndUser: (
+    data: IFindByEventAndUser,
+  ) => Promise<IParticipation | undefined>;
   findEventRequests: (event_id: string) => Promise<IParticipation[]>;
   findById: (participation_id: string) => Promise<IParticipation>;
   findByUser: () => Promise<IParticipation[]>;
@@ -46,6 +49,14 @@ const service: IParticipationService = {
   findParticipationTypes: async (): Promise<IParticipationType[]> => {
     const response: AxiosResponse<IParticipationType[]> = await api.get(
       '/type/participation',
+    );
+    return response.data;
+  },
+  findByEventAndUser: async (
+    data: IFindByEventAndUser,
+  ): Promise<IParticipation | undefined> => {
+    const response: AxiosResponse<IParticipation | undefined> = await api.get(
+      `/participation/check/${data.event_id}/${data.user_id}`,
     );
     return response.data;
   },

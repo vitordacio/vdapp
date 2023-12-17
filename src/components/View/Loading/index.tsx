@@ -7,7 +7,10 @@ import styles from './styles';
 
 export const LoadingView = (props: ViewProps) => {
   return (
-    <View {...props} style={[styles.container, props.style]}>
+    <View
+      {...props}
+      style={[styles.container, styles.background_gray, props.style]}
+    >
       <LottieView
         style={styles.loading}
         source={assets.loading_view}
@@ -18,11 +21,11 @@ export const LoadingView = (props: ViewProps) => {
   );
 };
 
-export const Loading: React.FC<{ size: number } & ViewProps> = props => {
+export const Loading: React.FC<{ size?: number } & ViewProps> = props => {
   return (
     <View {...props} style={[styles.container, props.style]}>
       <LottieView
-        style={{ width: props.size, height: props.size }}
+        style={{ width: props.size || 24, height: props.size || 24 }}
         source={assets.loading}
         autoPlay
         loop

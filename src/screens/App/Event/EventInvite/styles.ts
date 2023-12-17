@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     color: `${colors.TEXT_DEFAULT}`,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   input: {
     paddingHorizontal: 8,

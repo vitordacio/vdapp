@@ -28,7 +28,6 @@ export const Icon: React.FC<IIconProps> = ({
       ]}
       source={assets[name]}
       resizeMode="contain"
-      // tintColor={tintColor || `${colors.TEXT_DEFAULT}`}
       tintColor={
         tintColor ||
         `${!description ? colors.TEXT_DEFAULT : colors.GRAY_DESCRIPTION}`

@@ -9,7 +9,6 @@ const commonStyles: {
 } = {
   container: {
     width: '100%',
-    // paddingHorizontal: 8,
     height: 40,
     flexDirection: 'row',
     gap: 8,
@@ -20,7 +19,6 @@ const commonStyles: {
   },
   title: { fontSize: 16, color: `${colors.BUTTON_TEXT}` },
   pressed_container: { opacity: 0.8 },
-  pressed_title: {},
 };
 
 export default StyleSheet.create({
@@ -44,14 +42,13 @@ export default StyleSheet.create({
     color: `${colors.WHITE}`,
   },
 
-  blue_container: { backgroundColor: `${colors.BLUE_BUTTON}`, maxWidth: 230 },
+  blue_container: { backgroundColor: `${colors.BLUE_BUTTON}` },
   blue_title: {
     color: `${colors.WHITE}`,
   },
 
   gray_container: {
     backgroundColor: `${colors.GRAY_INPUT_BACKGROUND}`,
-    maxWidth: 230,
   },
   gray_title: {
     color: `${colors.WHITE}`,

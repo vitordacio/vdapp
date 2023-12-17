@@ -16,10 +16,27 @@ export interface IParticipation {
   address: IAddress;
   user: IUser;
   reviwer: IUser;
+  type: IParticipationType;
+  participation_status: IParticipationStatus;
+  participation_name: IParticipationStatus;
 }
 
 export interface IParticipationType {
   id_participation_type: string;
-  type: 'user' | 'guest' | 'mod' | 'vip';
-  name: string;
+  name: 'user' | 'guest' | 'mod' | 'vip';
+
+  inviteButtonTitle?: 'Convidado' | 'Moderador' | 'VIP';
+  inviteDescription?: 'convidado' | 'moderador' | 'VIP';
 }
+
+export type IParticipationStatus =
+  | 'author'
+  | 'user_in'
+  | 'user_out'
+  | 'guest_in'
+  | 'guest_out'
+  | 'mod_in'
+  | 'mod_out'
+  | 'vip_in'
+  | 'vip_out'
+  | '';

@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
     gap: 8,
+    marginBottom: 16,
   },
   text_extra_large: {
     flex: 1,
