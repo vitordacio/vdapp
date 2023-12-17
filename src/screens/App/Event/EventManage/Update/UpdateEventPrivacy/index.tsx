@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text } from '@components/Text';
 import { View } from '@components/View';
 import { ActivityIndicator, Switch } from 'react-native';
-import useEvent from '@contexts/event';
 import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import styles from './styles';
 
-const UpdateEventPrivacy: React.FC<
-  NativeStackScreenProps<ParamListBase>
-> = () => {
-  const { event, setEvent } = useEvent();
+const UpdateEventPrivacy: React.FC<EventAndOnUpdateProps> = ({ route }) => {
+  const { event } = route.params;
   const { throwInfo, throwError } = useMessage();
 
   const [value, setValue] = useState(event.private);
@@ -34,7 +30,7 @@ const UpdateEventPrivacy: React.FC<
     }
 
     if (updatedEvent) {
-      setEvent(updatedEvent);
+      // setEvent(updatedEvent);
       throwInfo('Privacidade do evento atualizada com sucesso!');
     }
 

@@ -22,7 +22,6 @@ import {
   IUpdateTicketsValue,
 } from '@services/Event/IEventService';
 import useMessage from '@contexts/message';
-import useEvent from '@contexts/event';
 import { IEvent } from '@interfaces/event';
 import styles from './styles';
 
@@ -44,6 +43,8 @@ interface IViewConfirmProps
     | 'privacy';
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
   description: string;
+  event: IEvent;
+  onUpdateEvent: (data: IEvent) => void;
 }
 
 export const ViewConfirm: React.FC<IViewConfirmProps> = ({
@@ -52,9 +53,9 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   data,
   description,
   navigation,
+  event,
+  onUpdateEvent,
 }) => {
-  const { event, setEvent } = useEvent();
-
   const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
 
@@ -135,7 +136,7 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
     if (updatedEvent) {
       updatedEvent.status = event.status;
       updatedEvent.participation_status = event.participation_status;
-      setEvent(updatedEvent);
+      onUpdateEvent(updatedEvent);
       throwInfo(message);
     }
 

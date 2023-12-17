@@ -6,52 +6,24 @@ import { Picture } from '@components/Picture';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import useAuth from '@contexts/auth';
-import useMessage from '@contexts/message';
 import { Pressable } from '@components/Pressable';
 import { IParticipation } from '@interfaces/participation';
-import { participationService } from '@services/Participation';
-import useEvent from '@contexts/event';
+import { IEventResponse } from '@services/Participation/IParticipationService';
 import styles from './styles';
 
 type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
   participation: IParticipation;
+  onPress: (data: IEventResponse) => void;
 };
 
 const CardUserEventRequestPending: React.FC<CardProps> = ({
   participation,
   navigation,
+  onPress,
 }) => {
   const { user: self } = useAuth();
-  const {
-    eventRequestsPending,
-    setEventRequestsPending,
-    eventRequestsReviwed,
-    setEventRequestsReviwed,
-  } = useEvent();
-  const { throwInfo, throwError } = useMessage();
+
   const { username, name, picture } = participation.user;
-
-  const handleConfirm = async (confirm: boolean) => {
-    try {
-      await participationService.responseByEvent({
-        participation_id: participation.id_participation,
-        confirm,
-      });
-
-      setEventRequestsPending(
-        eventRequestsPending.filter(
-          pending =>
-            pending.id_participation !== participation.id_participation,
-        ),
-      );
-
-      participation.participation_status = 'user_in';
-      setEventRequestsReviwed([participation, ...eventRequestsReviwed]);
-      throwInfo(`Solicitação ${confirm ? 'aceita' : 'recusada'} com sucesso`);
-    } catch (error) {
-      throwError(error.response.data.message);
-    }
-  };
 
   return (
     <>
@@ -75,7 +47,12 @@ const CardUserEventRequestPending: React.FC<CardProps> = ({
               icon="check"
               iconSize={30}
               iconColor="#FFFFFF"
-              onPress={() => handleConfirm(true)}
+              onPress={() =>
+                onPress({
+                  participation_id: participation.id_participation,
+                  confirm: true,
+                })
+              }
               style={styles.participation_button}
             />
             <Button
@@ -83,7 +60,12 @@ const CardUserEventRequestPending: React.FC<CardProps> = ({
               icon="x"
               iconSize={30}
               iconColor="#FFFFFF"
-              onPress={() => handleConfirm(false)}
+              onPress={() =>
+                onPress({
+                  participation_id: participation.id_participation,
+                  confirm: false,
+                })
+              }
               style={styles.participation_button}
             />
           </View>

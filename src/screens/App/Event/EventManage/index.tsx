@@ -3,15 +3,12 @@ import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { IEvent } from '@interfaces/event';
 import { Button } from '@components/Button';
 import styles from './styles';
 
-type EventProps = NativeStackScreenProps<ParamListBase> & {
-  paramEvent: IEvent;
-};
-
-const EventManage: React.FC<EventProps> = ({ navigation }) => {
+const EventManage: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+  navigation,
+}) => {
   return (
     <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>

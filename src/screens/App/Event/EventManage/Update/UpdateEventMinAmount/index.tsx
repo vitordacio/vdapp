@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { Button } from '@components/Button';
-import { ParamListBase } from '@react-navigation/native';
 import { TextInput } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import useEvent from '@contexts/event';
 import { IUpdateMinAmount } from '@services/Event/IEventService';
 import colors from '@styles/colors';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from './styles';
 
-const UpdateEventMinAmount: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const UpdateEventMinAmount: React.FC<EventAndOnUpdateProps> = ({
   navigation,
+  route,
+  onUpdateEvent,
 }) => {
-  const { event } = useEvent();
-
+  const { event } = route.params;
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
@@ -99,6 +98,8 @@ const UpdateEventMinAmount: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           setConfirm={setConfirm}
           type="min_amount"
           description="Tem certeza que deseja mudar as informações do evento?"
+          event={event}
+          onUpdateEvent={onUpdateEvent}
         />
       )}
     </ViewUpdate>

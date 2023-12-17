@@ -4,11 +4,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import useEvent from '@contexts/event';
 import { IUpdatePerformer } from '@services/Event/IEventService';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
@@ -21,11 +19,12 @@ const schema = yup.object({
 
 type PerformerFormData = yup.InferType<typeof schema>;
 
-const UpdateEventPerformer: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const UpdateEventPerformer: React.FC<EventAndOnUpdateProps> = ({
   navigation,
+  route,
+  onUpdateEvent,
 }) => {
-  const { event } = useEvent();
-
+  const { event } = route.params;
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
@@ -72,6 +71,8 @@ const UpdateEventPerformer: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           setConfirm={setConfirm}
           type="performer"
           description="Tem certeza que deseja mudar as informações do artista?"
+          event={event}
+          onUpdateEvent={onUpdateEvent}
         />
       )}
     </ViewUpdate>

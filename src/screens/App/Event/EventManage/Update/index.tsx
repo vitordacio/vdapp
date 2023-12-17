@@ -1,20 +1,15 @@
 import { AppView, View } from '@components/View';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { EventProps } from '@routes/event.routes';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
-import useEvent from '@contexts/event';
 import styles from './styles';
 
-const UpdateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { event } = useEvent();
-
+const UpdateEvent: React.FC<EventProps> = ({ navigation, route }) => {
+  const { event } = route.params;
   const options = {
     name: {
       title: 'Nome',
@@ -110,11 +105,13 @@ const UpdateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
               <CardUpdateOptions
                 navigation={navigation}
                 options={[options.name, options.location, options.hours]}
+                event={event}
               />
 
               <CardUpdateOptions
                 navigation={navigation}
                 options={[options.address]}
+                event={event}
               />
 
               <CardUpdateOptions
@@ -124,6 +121,7 @@ const UpdateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                   options.drink_preferences,
                   options.min_amount,
                 ]}
+                event={event}
               />
 
               <CardUpdateOptions
@@ -134,11 +132,13 @@ const UpdateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                   options.ticket_value,
                   options.tickets_free,
                 ]}
+                event={event}
               />
 
               <CardUpdateOptions
                 navigation={navigation}
                 options={[options.privacy]}
+                event={event}
               />
             </View>
           </View>

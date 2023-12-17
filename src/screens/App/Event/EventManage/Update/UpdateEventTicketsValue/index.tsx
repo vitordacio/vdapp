@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { Button } from '@components/Button';
-import { ParamListBase } from '@react-navigation/native';
 import { TextInput } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import useEvent from '@contexts/event';
 import { IUpdateTicketsValue } from '@services/Event/IEventService';
 import colors from '@styles/colors';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from './styles';
 
-const UpdateEventTicketsValue: React.FC<
-  NativeStackScreenProps<ParamListBase>
-> = ({ navigation }) => {
-  const { event } = useEvent();
-
+const UpdateEventTicketsValue: React.FC<EventAndOnUpdateProps> = ({
+  navigation,
+  route,
+  onUpdateEvent,
+}) => {
+  const { event } = route.params;
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
@@ -104,6 +103,8 @@ const UpdateEventTicketsValue: React.FC<
           setConfirm={setConfirm}
           type="tickets_value"
           description="Tem certeza que deseja mudar as informações do evento?"
+          event={event}
+          onUpdateEvent={onUpdateEvent}
         />
       )}
     </ViewUpdate>

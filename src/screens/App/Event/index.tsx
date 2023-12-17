@@ -11,34 +11,24 @@ import { formatTimeRange } from '@utils/formaters';
 import { Picture } from '@components/Picture';
 import { Button } from '@components/Button';
 import { participationService } from '@services/Participation';
-import { EventTopTabRoutes } from '@routes/event.routes';
-import useEvent from '@contexts/event';
+import { EventProps, EventTopTabRoutes } from '@routes/event.routes';
 import { Pressable } from '@components/Pressable';
 import useMessage from '@contexts/message';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Icon } from '@components/Icon';
-import { ParamListBase } from '@react-navigation/native';
 import styles from './styles';
 
 type ParticipationStatus = {
   participation_status: IEvent['participation_status'];
   type: 'blue' | 'red' | 'green' | 'gray' | 'dark_gold';
-  icon:
-    | 'plus-circle'
-    | 'check-circle'
-    | 'x-circle'
-    | 'minus-circle'
-    | 'chevron-right';
+  icon: 'plus' | 'check' | 'x' | 'minus' | 'chevron';
+  title: string;
   buttonTitle: string;
 };
 
-type EventProps = NativeStackScreenProps<ParamListBase> & {
-  paramEvent: IEvent;
-};
+const Event: React.FC<EventProps> = ({ navigation, route }) => {
+  const { event } = route.params;
 
-const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
   const { throwInfo, throwError } = useMessage();
-  const { event, setEvent } = useEvent();
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
@@ -46,12 +36,13 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
 
   const [participationLoader, setParticipationLoader] =
     useState<boolean>(false);
-  const [participationTitle, setParticipationTitle] = useState('');
   const [participationStatus, setParticipationStatus] = useState(
     {} as ParticipationStatus,
   );
 
   const fetchData = async (event_id: string) => {
+    setShowLoader(true);
+
     let dataEvent: IEvent;
     let handleIn: boolean = false;
 
@@ -60,7 +51,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
     let icon: ParticipationStatus['icon'];
     let buttonTitle: string = '';
 
-    setShowLoader(true);
     try {
       dataEvent = await eventService.findById(event_id);
 
@@ -76,11 +66,11 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
 
       if (!participation_status) {
         type = 'blue';
-        icon = 'plus-circle';
+        icon = 'plus';
         buttonTitle = 'Solicitar entrada';
       } else if (participation_status === 'user_out') {
         type = 'gray';
-        icon = 'x-circle';
+        icon = 'x';
         buttonTitle = 'Cancelar solicitação';
       } else if (
         participation_status === 'guest_out' ||
@@ -88,11 +78,11 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
         participation_status === 'mod_out'
       ) {
         type = 'green';
-        icon = 'check-circle';
+        icon = 'check';
         buttonTitle = 'Entrar';
       } else {
         type = 'red';
-        icon = 'minus-circle';
+        icon = 'minus';
         buttonTitle = 'Sair do Evento';
         handleIn = true;
       }
@@ -102,18 +92,16 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
         type,
         icon,
         buttonTitle,
+        title,
       };
 
       setUserIn(handleIn);
-      setParticipationTitle(title);
+      // setParticipationTitle(title);
       setParticipationStatus(handleParticipationStatus);
     } catch (error) {
       throwError(error.response.data.message);
     }
     setShowLoader(false);
-    return dataEvent
-      ? setEvent(dataEvent)
-      : throwError('Ops! Algo deu errado, tente novamente mais tarde');
   };
 
   const handleParticipation = async () => {
@@ -135,14 +123,14 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
       }
 
       setParticipationLoader(false);
-      fetchData(paramEvent.id_event);
+      fetchData(event.id_event);
     } catch (error) {
       throwError(error.response.data.message);
     }
   };
 
   React.useLayoutEffect(() => {
-    const type = paramEvent.type.name;
+    const type = event.type.name;
 
     let title: string;
     if (type === 'auditorium') title = 'Apresentação';
@@ -163,10 +151,10 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
     navigation.setOptions({
       title,
     });
-  }, [paramEvent.type_id]);
+  }, [event.type_id]);
 
   useEffect(() => {
-    fetchData(paramEvent.id_event);
+    fetchData(event.id_event);
   }, []);
 
   return (
@@ -209,12 +197,6 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                   <View style={styles.container_event}>
                     <View style={styles.data_text}>
                       <Icon name={event.type.name} />
-                      {/* <Image
-                        style={styles.icon}
-                        source={assetMapping[event.type.name]}
-                        resizeMode="contain"
-                        tintColor="#fff"
-                      /> */}
                       <Text
                         style={[styles.text_default_color, styles.text_large]}
                       >
@@ -310,73 +292,74 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                     />
                   </View>
                 </View>
-                <View style={styles.container_participation}>
-                  <View style={styles.container_buttons}>
-                    <Button
-                      style={{ width: 40 }}
-                      onPress={() => throwInfo('handle emote')}
-                      icon="smile"
-                    />
 
-                    {[
-                      'author',
-                      'user_in',
-                      'guest_in',
-                      'vip_in',
-                      'mod_in',
-                    ].includes(event.participation_status) && (
+                {participationStatus && (
+                  <View style={styles.container_participation}>
+                    <View style={styles.container_buttons}>
                       <Button
                         style={{ width: 40 }}
-                        onPress={() => navigation.navigate('Inbox')}
-                        icon="inbox"
+                        onPress={() => throwInfo('handle emote')}
+                        icon="smile"
                       />
+
+                      {[
+                        'author',
+                        'user_in',
+                        'guest_in',
+                        'vip_in',
+                        'mod_in',
+                      ].includes(participationStatus.participation_status) && (
+                        <Button
+                          style={{ width: 40 }}
+                          onPress={() => navigation.navigate('Inbox')}
+                          icon="inbox"
+                        />
+                      )}
+
+                      {['author', 'mod_in'].includes(
+                        participationStatus.participation_status,
+                      ) && (
+                        <>
+                          <Button
+                            type="dark_gold"
+                            icon="chevron"
+                            style={{ maxWidth: 200 }}
+                            iconColor="#FFFFFF"
+                            onPress={() => navigation.push('EventRequests')}
+                            title="Solicitações"
+                          />
+                          <Button
+                            type="dark_gold"
+                            icon="chevron"
+                            style={{ maxWidth: 200 }}
+                            iconColor="#FFFFFF"
+                            onPress={() => navigation.push('EventInvite')}
+                            title="Convidar"
+                          />
+                          <Button
+                            type="dark_gold"
+                            icon="chevron"
+                            style={{ maxWidth: 200 }}
+                            iconColor="#FFFFFF"
+                            onPress={() => navigation.push('EventManage')}
+                            title="Gerenciar"
+                          />
+                        </>
+                      )}
+                    </View>
+
+                    {participationStatus.title && (
+                      <Text
+                        style={[
+                          styles.text_default_color,
+                          styles.text_extra_large,
+                        ]}
+                      >
+                        {participationStatus.title}
+                      </Text>
                     )}
 
-                    {['author', 'mod_in'].includes(
-                      event.participation_status,
-                    ) && (
-                      <>
-                        <Button
-                          type="dark_gold"
-                          icon="chevron_right"
-                          style={{ maxWidth: 200 }}
-                          iconColor="#FFFFFF"
-                          onPress={() => navigation.push('EventRequests')}
-                          title="Participações"
-                        />
-                        <Button
-                          type="dark_gold"
-                          icon="chevron_right"
-                          style={{ maxWidth: 200 }}
-                          iconColor="#FFFFFF"
-                          onPress={() => navigation.push('EventInvite')}
-                          title="Convidar"
-                        />
-                        <Button
-                          type="dark_gold"
-                          icon="chevron_right"
-                          style={{ maxWidth: 200 }}
-                          iconColor="#FFFFFF"
-                          onPress={() => navigation.push('EventManage')}
-                          title="Gerenciar"
-                        />
-                      </>
-                    )}
-                  </View>
-
-                  {participationTitle && (
-                    <Text
-                      style={[
-                        styles.text_default_color,
-                        styles.text_extra_large,
-                      ]}
-                    >
-                      {participationTitle}
-                    </Text>
-                  )}
-
-                  {participationStatus &&
-                    participationStatus.participation_status !== 'author' && (
+                    {participationStatus.participation_status !== 'author' && (
                       <Button
                         type={participationStatus.type}
                         icon={participationStatus.icon}
@@ -388,7 +371,8 @@ const Event: React.FC<EventProps> = ({ navigation, paramEvent }) => {
                         loading={participationLoader}
                       />
                     )}
-                </View>
+                  </View>
+                )}
 
                 <View style={styles.container_footer}>
                   <Text

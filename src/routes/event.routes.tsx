@@ -5,7 +5,7 @@ import {
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Event from '@screens/App/Event';
 import Custom from '@screens/Custom';
-import { ParamListBase } from '@react-navigation/native';
+import { ParamListBase, useRoute } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
 import EventManage from '@screens/App/Event/EventManage';
 import UpdateEvent from '@screens/App/Event/EventManage/Update';
@@ -23,6 +23,14 @@ import EventInvite from '@screens/App/Event/EventInvite';
 import EventInviteConfirm from '@screens/App/Event/EventInvite/EventInviteConfirm';
 import EventRequestsPending from '@screens/App/Event/EventRequests/Pending';
 import EventRequestsReviwed from '@screens/App/Event/EventRequests/Reviwed';
+
+export type EventProps = NativeStackScreenProps<ParamListBase> & {
+  route: { params: { event: IEvent } };
+};
+
+export type EventAndOnUpdateProps = EventProps & {
+  onUpdateEvent: (data: IEvent) => void;
+};
 
 const EventTopTab = createMaterialTopTabNavigator();
 
@@ -69,7 +77,9 @@ export const EventTopTabRoutes: React.FC = () => {
 
 const EventRequestsTopTab = createMaterialTopTabNavigator();
 
-export const EventRequestsTopTabRoutes: React.FC = () => {
+export const EventRequestsTopTabRoutes: React.FC<{ event: IEvent }> = ({
+  event,
+}) => {
   return (
     <EventRequestsTopTab.Navigator
       screenOptions={{
@@ -80,25 +90,31 @@ export const EventRequestsTopTabRoutes: React.FC = () => {
     >
       <EventRequestsTopTab.Screen
         name="EventRequestsPending"
-        component={EventRequestsPending}
         options={{
           tabBarLabel: 'Pendentes',
         }}
-      />
+      >
+        {props => <EventRequestsPending {...props} event={event} />}
+      </EventRequestsTopTab.Screen>
+
       <EventRequestsTopTab.Screen
         name="EventRequestsReviwed"
-        component={EventRequestsReviwed}
         options={{
           tabBarLabel: 'Revisados',
         }}
-      />
+      >
+        {props => <EventRequestsReviwed {...props} event={event} />}
+      </EventRequestsTopTab.Screen>
     </EventRequestsTopTab.Navigator>
   );
 };
 
 const UpdateEventStackTab = createNativeStackNavigator();
 
-export const UpdateEventRoutes = () => {
+export const UpdateEventRoutes: React.FC<EventAndOnUpdateProps> = ({
+  route,
+  onUpdateEvent,
+}) => {
   return (
     <UpdateEventStackTab.Navigator
       screenOptions={{
@@ -113,52 +129,111 @@ export const UpdateEventRoutes = () => {
         headerTitleAlign: 'center',
       }}
     >
-      <UpdateEventStackTab.Screen
-        name="UpdateEventScreen"
-        component={UpdateEvent}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventName"
-        component={UpdateEventName}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventLocation"
-        component={UpdateEventLocation}
-      />
+      <UpdateEventStackTab.Screen name="UpdateEventScreen">
+        {props => <UpdateEvent {...props} route={route} />}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventName">
+        {props => (
+          <UpdateEventName
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventLocation">
+        {props => (
+          <UpdateEventLocation
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventPrivacy">
+        {props => (
+          <UpdateEventPrivacy
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventAdditional">
+        {props => (
+          <UpdateEventAdditional
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventDrinkPreferences">
+        {props => (
+          <UpdateEventDrinkPreferences
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventMinAmount">
+        {props => (
+          <UpdateEventMinAmount
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventPerformer">
+        {props => (
+          <UpdateEventPerformer
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventClubName">
+        {props => (
+          <UpdateEventClubName
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventTicketsValue">
+        {props => (
+          <UpdateEventTicketsValue
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventTicketsFree">
+        {props => (
+          <UpdateEventTicketsFree
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </UpdateEventStackTab.Screen>
 
       <UpdateEventStackTab.Screen name="UpdateEventHours" component={Custom} />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventPrivacy"
-        component={UpdateEventPrivacy}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventAdditional"
-        component={UpdateEventAdditional}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventDrinkPreferences"
-        component={UpdateEventDrinkPreferences}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventMinAmount"
-        component={UpdateEventMinAmount}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventPerformer"
-        component={UpdateEventPerformer}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventClubName"
-        component={UpdateEventClubName}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventTicketsValue"
-        component={UpdateEventTicketsValue}
-      />
-      <UpdateEventStackTab.Screen
-        name="UpdateEventTicketsFree"
-        component={UpdateEventTicketsFree}
-      />
       <UpdateEventStackTab.Screen
         name="UpdateEventAddress"
         component={Custom}
@@ -169,7 +244,10 @@ export const UpdateEventRoutes = () => {
 
 const EventManageStackTab = createNativeStackNavigator();
 
-export const EventManageRoutes = () => {
+export const EventManageRoutes: React.FC<EventAndOnUpdateProps> = ({
+  route,
+  onUpdateEvent,
+}) => {
   return (
     <EventManageStackTab.Navigator
       screenOptions={{
@@ -184,15 +262,22 @@ export const EventManageRoutes = () => {
         headerTitleAlign: 'center',
       }}
     >
-      <EventManageStackTab.Screen
-        name="EventManageScreen"
-        component={EventManage}
-      />
+      <EventManageStackTab.Screen name="EventManageScreen">
+        {props => <EventManage {...props} />}
+      </EventManageStackTab.Screen>
+
       <EventManageStackTab.Screen
         name="UpdateEvent"
-        component={UpdateEventRoutes}
         options={{ headerShown: false }}
-      />
+      >
+        {props => (
+          <UpdateEventRoutes
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </EventManageStackTab.Screen>
 
       <EventManageStackTab.Screen name="DeleteEvent" component={Custom} />
     </EventManageStackTab.Navigator>
@@ -230,11 +315,14 @@ export const EventInviteRoutes = () => {
 
 const EventStackTab = createNativeStackNavigator();
 
-export const EventRoutes: React.FC<
-  NativeStackScreenProps<ParamListBase> & {
-    route: { params: { event: IEvent } };
-  }
-> = ({ route }) => {
+export const EventRoutes: React.FC<EventProps> = ({ navigation, route }) => {
+  const onUpdateEvent = (data: IEvent) => {
+    navigation.setParams({
+      ...route.params,
+      event: data,
+    });
+  };
+
   return (
     <EventStackTab.Navigator
       screenOptions={{
@@ -249,20 +337,24 @@ export const EventRoutes: React.FC<
       }}
     >
       <EventStackTab.Screen name="EventScreen">
-        {props => <Event {...props} paramEvent={route.params.event} />}
+        {props => <Event {...props} navigation={navigation} route={route} />}
       </EventStackTab.Screen>
 
-      <EventStackTab.Screen
-        name="EventManage"
-        options={{ headerShown: false }}
-        component={EventManageRoutes}
-      />
+      <EventStackTab.Screen name="EventManage" options={{ headerShown: false }}>
+        {props => (
+          <EventManageRoutes
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </EventStackTab.Screen>
 
-      <EventStackTab.Screen
-        name="EventRequests"
-        options={{ headerTitle: 'Solicitações' }}
-        component={EventRequestsTopTabRoutes}
-      />
+      <EventStackTab.Screen name="EventRequests">
+        {props => (
+          <EventRequestsTopTabRoutes {...props} event={route.params.event} />
+        )}
+      </EventStackTab.Screen>
 
       <EventStackTab.Screen
         name="EventInvite"

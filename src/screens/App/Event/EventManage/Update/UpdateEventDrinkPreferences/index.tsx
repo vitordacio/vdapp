@@ -4,11 +4,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import useEvent from '@contexts/event';
 import { IUpdateDrinkPreferences } from '@services/Event/IEventService';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
@@ -21,11 +19,12 @@ const schema = yup.object({
 
 type DrinkPreferencesFormData = yup.InferType<typeof schema>;
 
-const UpdateEventDrinkPreferences: React.FC<
-  NativeStackScreenProps<ParamListBase>
-> = ({ navigation }) => {
-  const { event } = useEvent();
-
+const UpdateEventDrinkPreferences: React.FC<EventAndOnUpdateProps> = ({
+  navigation,
+  route,
+  onUpdateEvent,
+}) => {
+  const { event } = route.params;
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
@@ -73,6 +72,8 @@ const UpdateEventDrinkPreferences: React.FC<
           setConfirm={setConfirm}
           type="drink_preferences"
           description="Tem certeza que deseja mudar a preferência de bebidas do evento?"
+          event={event}
+          onUpdateEvent={onUpdateEvent}
         />
       )}
     </ViewUpdate>

@@ -16,10 +16,12 @@ export default StyleSheet.create({
     borderWidth: 1,
   },
   green_border: {
-    borderColor: `${colors.GREEN}`,
+    // borderColor: `${colors.GREEN}`,
+    borderColor: 'green',
   },
   red_border: {
-    borderColor: `${colors.RED}`,
+    // borderColor: `${colors.RED}`,
+    borderColor: 'red',
   },
   container_info: {
     display: 'flex',
@@ -28,10 +30,20 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  info: {
-    width: '100%',
+  type: {
     fontSize: 15,
     color: `${colors.TEXT_DEFAULT}`,
+  },
+  reviwer: {
+    fontSize: 14,
+    color: `${colors.GRAY_DESCRIPTION}`,
+  },
+  status: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
   },
   user: {
     height: 45,

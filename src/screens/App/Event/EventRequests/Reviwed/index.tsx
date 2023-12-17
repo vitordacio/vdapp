@@ -10,17 +10,17 @@ import useMessage from '@contexts/message';
 import { participationService } from '@services/Participation';
 import { IParticipation } from '@interfaces/participation';
 import CardUserEventRequestRevivew from '@components/Card/User/EventRequestReviwed';
+import { IEvent } from '@interfaces/event';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventRequestsReviwed: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+const EventRequestsReviwed: React.FC<
+  { event: IEvent } & NativeStackScreenProps<ParamListBase>
+> = ({ navigation, event }) => {
+  const { eventRequestsReviwed, setEventRequestsReviwed } = useEvent();
   const { throwError } = useMessage();
-  const { event } = useEvent();
 
-  const [data, setData] = useState<IParticipation[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState(false);
 
@@ -39,7 +39,7 @@ const EventRequestsReviwed: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         loadMore = false;
       }
 
-      setData(participations);
+      setEventRequestsReviwed(participations);
       setShowLoader(false);
     } catch (error) {
       throwError(error.response.data.message);
@@ -60,7 +60,7 @@ const EventRequestsReviwed: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         loadMore = false;
       }
 
-      setData(prev => [...prev, ...participations]);
+      setEventRequestsReviwed(prev => [...prev, ...participations]);
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
@@ -77,7 +77,7 @@ const EventRequestsReviwed: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         />
       );
     },
-    [data],
+    [eventRequestsReviwed],
   );
 
   const keyExtractor = useCallback(
@@ -87,7 +87,7 @@ const EventRequestsReviwed: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ height: 14 }} />;
-  }, [data]);
+  }, [eventRequestsReviwed]);
 
   const onEndReached = () => {
     if (loadMore) {
@@ -109,7 +109,7 @@ const EventRequestsReviwed: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         <Text style={styles.title}>Solicitações revisadas</Text>
 
         <FlatList
-          data={data}
+          data={eventRequestsReviwed}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           ItemSeparatorComponent={itemSeparatorComponent}

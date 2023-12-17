@@ -4,11 +4,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import useEvent from '@contexts/event';
 import { IUpdateTicketsFree } from '@services/Event/IEventService';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
@@ -22,11 +20,12 @@ const schema = yup.object({
 
 type TicketsFreeFormData = yup.InferType<typeof schema>;
 
-const UpdateEventTicketsFree: React.FC<
-  NativeStackScreenProps<ParamListBase>
-> = ({ navigation }) => {
-  const { event } = useEvent();
-
+const UpdateEventTicketsFree: React.FC<EventAndOnUpdateProps> = ({
+  navigation,
+  route,
+  onUpdateEvent,
+}) => {
+  const { event } = route.params;
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
 
@@ -74,6 +73,8 @@ const UpdateEventTicketsFree: React.FC<
           setConfirm={setConfirm}
           type="tickets_free"
           description="Tem certeza que deseja mudar a quantidade de entrada grátis?"
+          event={event}
+          onUpdateEvent={onUpdateEvent}
         />
       )}
     </ViewUpdate>

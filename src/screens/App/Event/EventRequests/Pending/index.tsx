@@ -10,19 +10,59 @@ import useMessage from '@contexts/message';
 import { participationService } from '@services/Participation';
 import { IParticipation } from '@interfaces/participation';
 import CardUserEventRequestPending from '@components/Card/User/EventRequestPending';
+import { IEventResponse } from '@services/Participation/IParticipationService';
+import useAuth from '@contexts/auth';
+import { IEvent } from '@interfaces/event';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventRequestsPending: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { throwError } = useMessage();
-  const { event } = useEvent();
+const EventRequestsPending: React.FC<
+  { event: IEvent } & NativeStackScreenProps<ParamListBase>
+> = ({ navigation, event }) => {
+  const { user } = useAuth();
+  const {
+    eventRequestsPending,
+    setEventRequestsPending,
+    eventRequestsReviwed,
+    setEventRequestsReviwed,
+  } = useEvent();
 
-  const [data, setData] = useState<IParticipation[] | []>([]);
+  const { throwInfo, throwError } = useMessage();
+
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState(false);
+
+  const handleConfirm = async (data: IEventResponse) => {
+    try {
+      await participationService.responseByEvent(data);
+
+      const participation = eventRequestsPending.find(
+        pending => pending.id_participation === data.participation_id,
+      );
+
+      if (participation) {
+        setEventRequestsPending(
+          eventRequestsPending.filter(
+            pending => pending.id_participation !== data.participation_id,
+          ),
+        );
+
+        participation.confirmed_by_event = data.confirm;
+        participation.reviwer = user;
+        participation.in =
+          participation.confirmed_by_event && participation.confirmed_by_user;
+        if (participation.in) participation.participation_status = 'user_in';
+
+        setEventRequestsReviwed([participation, ...eventRequestsReviwed]);
+        throwInfo(
+          `Solicitação ${data.confirm ? 'aceita' : 'recusada'} com sucesso`,
+        );
+      }
+    } catch (error) {
+      throwError(error.response.data.message);
+    }
+  };
 
   const fetchData = async () => {
     setShowLoader(true);
@@ -39,7 +79,7 @@ const EventRequestsPending: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         loadMore = false;
       }
 
-      setData(participations);
+      setEventRequestsPending(participations);
       setShowLoader(false);
     } catch (error) {
       throwError(error.response.data.message);
@@ -60,7 +100,7 @@ const EventRequestsPending: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         loadMore = false;
       }
 
-      setData(prev => [...prev, ...participations]);
+      setEventRequestsPending(prev => [...prev, ...participations]);
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
@@ -74,10 +114,11 @@ const EventRequestsPending: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         <CardUserEventRequestPending
           participation={item}
           navigation={navigation}
+          onPress={handleConfirm}
         />
       );
     },
-    [data],
+    [eventRequestsPending],
   );
 
   const keyExtractor = useCallback(
@@ -87,7 +128,7 @@ const EventRequestsPending: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ height: 14 }} />;
-  }, [data]);
+  }, [eventRequestsPending]);
 
   const onEndReached = () => {
     if (loadMore) {
@@ -109,7 +150,7 @@ const EventRequestsPending: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         <Text style={styles.title}>Solicitações pendentes</Text>
 
         <FlatList
-          data={data}
+          data={eventRequestsPending}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           ItemSeparatorComponent={itemSeparatorComponent}

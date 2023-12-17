@@ -20,25 +20,23 @@ const CardUserEventRequestRevivew: React.FC<CardProps> = ({
 }) => {
   const { user: self } = useAuth();
 
-  const [info, setInfo] = useState<string>();
+  const [type, setType] = useState<string>();
   const { username, name, picture } = participation.user;
 
   useEffect(() => {
     let text: string;
-
-    const { participation_status, reviwer } = participation;
+    const { participation_status } = participation;
 
     if (!participation_status) return;
-    if (participation_status === 'user_in')
-      text = `Participação revisada por @${reviwer.username}`;
+    if (participation_status === 'user_in') text = 'Participante';
     if (['guest_in', 'guest_out'].includes(participation_status))
-      text = `Convidado revisado por @${reviwer.username}`;
+      text = 'Convidado';
     if (['vip_in', 'vip_out'].includes(participation_status))
-      text = `Convidado VIP revisado por @${reviwer.username}`;
+      text = 'Convidado VIP';
     if (['mod_in', 'mod_out'].includes(participation_status))
-      text = `Moderador revisado por @${reviwer.username}`;
+      text = 'Moderador';
 
-    setInfo(text);
+    setType(text);
   }, []);
 
   return (
@@ -58,11 +56,16 @@ const CardUserEventRequestRevivew: React.FC<CardProps> = ({
           }
         >
           <View style={styles.container_info}>
-            <Text style={styles.info}>{info || ''}</Text>
-            <Icon
-              name={participation.confirmed_by_event ? 'check' : 'x'}
-              tintColor={participation.confirmed_by_event ? 'green' : 'red'}
-            />
+            <Text style={styles.type}>{type || ''}</Text>
+            <View style={styles.status}>
+              <Text style={styles.reviwer}>
+                {`@${participation.reviwer.username}` || ''}
+              </Text>
+              <Icon
+                name={participation.confirmed_by_event ? 'check' : 'x'}
+                tintColor={participation.confirmed_by_event ? 'green' : 'red'}
+              />
+            </View>
           </View>
           <View style={styles.user}>
             <Picture card={true} picture={picture} />

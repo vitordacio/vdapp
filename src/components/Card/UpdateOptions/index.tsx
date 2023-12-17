@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { Pressable } from '@components/Pressable';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
+import { IEvent } from '@interfaces/event';
 import styles from './styles';
 
 export interface ICardUpdateOption {
@@ -17,11 +18,15 @@ export interface ICardUpdateOption {
 interface IConfirmUpdateProps
   extends Partial<NativeStackScreenProps<ParamListBase>> {
   options: ICardUpdateOption[];
+  event: IEvent;
 }
 
 export const CardUpdateOptions: React.FC<IConfirmUpdateProps> = ({
   options,
   navigation,
+  route,
+  event,
+  onUpdateEvent,
 }) => {
   return (
     <View style={styles.container}>
