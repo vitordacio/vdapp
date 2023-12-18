@@ -1,35 +1,41 @@
 import { AppView, View } from '@components/View';
 import { Text } from '@components/Text';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, ScrollView } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
-import useEvent from '@contexts/event';
 import { Loading } from '@components/View/Loading';
 import useMessage from '@contexts/message';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
 import CardUserInfo from '@components/Card/User/Info';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
+import useDebounce from '@hooks/useDebounce';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventInvite: React.FC<NativeStackScreenProps<ParamListBase>> = ({
+const EventInvite: React.FC<EventAndOnUpdateProps> = ({
+  route,
   navigation,
 }) => {
-  const {
-    searchInvite,
-    setSearchInvite,
-    debouncedSearchInvite,
-    refreshingInviteSearch,
-    setRefreshingInviteSearch,
-  } = useEvent();
+  const [searchInvite, setSearchInvite] = useState<string>('');
+
+  const [refreshingInviteSearch, setRefreshingInviteSearch] =
+    useState<boolean>(false);
+
+  const debouncedSearchInvite = useDebounce(searchInvite, 500);
+
   const { throwError } = useMessage();
 
   const [data, setData] = useState<IUser[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState(false);
+
+  const handleSelectUser = (user: IUser) => {
+    route.params.user = user;
+
+    navigation.push('EventInviteConfirm');
+  };
 
   const fetchData = async () => {
     setShowLoader(true);
@@ -80,10 +86,7 @@ const EventInvite: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const renderItem = useCallback(
     ({ item }) => {
       return (
-        <CardUserInfo
-          user={item}
-          onPress={() => navigation.push('EventInviteConfirm', { user: item })}
-        />
+        <CardUserInfo user={item} onPress={() => handleSelectUser(item)} />
       );
     },
     [data],

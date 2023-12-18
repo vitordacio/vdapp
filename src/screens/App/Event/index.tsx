@@ -280,6 +280,26 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                       </View>
                     </View>
 
+                    {[
+                      'author',
+                      'user_in',
+                      'guest_in',
+                      'vip_in',
+                      'mod_in',
+                    ].includes(participationStatus.participation_status) && (
+                      <Button
+                        style={{ width: 40 }}
+                        onPress={() => navigation.navigate('Inbox')}
+                        icon="inbox"
+                      />
+                    )}
+
+                    <Button
+                      style={{ width: 40 }}
+                      onPress={() => throwInfo('handle emote')}
+                      icon="smile"
+                    />
+
                     <Button
                       style={{ width: 160 }}
                       onPress={
@@ -297,31 +317,30 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                       disabled={!event.address_id}
                     />
                   </View>
+
+                  <View style={styles.container_counts}>
+                    <View style={styles.data_counts}>
+                      <Icon name="smile" size={24} />
+                      <Text
+                        style={[styles.text_default_color, styles.text_large]}
+                      >
+                        {event.emojis_count || 0}
+                      </Text>
+                    </View>
+                    <View style={styles.data_counts}>
+                      <Icon name="users" size={24} />
+                      <Text
+                        style={[styles.text_default_color, styles.text_large]}
+                      >
+                        {event.participating_count || 0}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
 
                 {participationStatus && (
                   <View style={styles.container_participation}>
-                    <View style={styles.container_buttons}>
-                      <Button
-                        style={{ width: 40 }}
-                        onPress={() => throwInfo('handle emote')}
-                        icon="smile"
-                      />
-
-                      {[
-                        'author',
-                        'user_in',
-                        'guest_in',
-                        'vip_in',
-                        'mod_in',
-                      ].includes(participationStatus.participation_status) && (
-                        <Button
-                          style={{ width: 40 }}
-                          onPress={() => navigation.navigate('Inbox')}
-                          icon="inbox"
-                        />
-                      )}
-
+                    <View style={styles.container_adm}>
                       {['author', 'mod_in'].includes(
                         participationStatus.participation_status,
                       ) && (
@@ -329,7 +348,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                           <Button
                             type="dark_gold"
                             icon="chevron"
-                            style={{ maxWidth: 200 }}
+                            maxWidth={200}
                             iconColor="#FFFFFF"
                             onPress={() => navigation.push('EventRequests')}
                             title="Solicitações"
@@ -337,7 +356,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                           <Button
                             type="dark_gold"
                             icon="chevron"
-                            style={{ maxWidth: 200 }}
+                            maxWidth={200}
                             iconColor="#FFFFFF"
                             onPress={() => navigation.push('EventInvite')}
                             title="Convidar"
@@ -345,7 +364,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                           <Button
                             type="dark_gold"
                             icon="chevron"
-                            style={{ maxWidth: 200 }}
+                            maxWidth={200}
                             iconColor="#FFFFFF"
                             onPress={() => navigation.push('EventManage')}
                             title="Gerenciar"

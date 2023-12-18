@@ -44,7 +44,7 @@ export function Button({
       style={({ pressed }) => [
         styles.container,
         type && styles[`${type}_container`],
-        (pressed || selected) && styles.pressed_container,
+        pressed && styles.pressed_container,
         disabled && { backgroundColor: '#808080' },
         maxWidth && { maxWidth },
         rest.style,
@@ -59,6 +59,7 @@ export function Button({
                   styles.title,
                   type && styles[`${type}_title`],
                   pressed && styles.pressed_title,
+                  selected && styles.selected,
                 ]}
               >
                 {title}

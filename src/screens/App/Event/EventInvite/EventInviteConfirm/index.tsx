@@ -1,34 +1,21 @@
 import { AppView, View } from '@components/View';
 import { Text } from '@components/Text';
 import React, { useEffect, useState } from 'react';
-import { ParamListBase } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { IUser } from '@interfaces/user';
 import CardUserInfo from '@components/Card/User/Info';
 import { Button } from '@components/Button';
 import { LineX } from '@components/Line';
-import { IEvent } from '@interfaces/event';
-import useEvent from '@contexts/event';
 import useMessage from '@contexts/message';
 import { participationService } from '@services/Participation';
 import { Loading } from '@components/View/Loading';
 import { IParticipation, IParticipationType } from '@interfaces/participation';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import styles from './styles';
 
-type EventInviteConfirmProps = NativeStackScreenProps<ParamListBase> & {
-  route: {
-    params: {
-      event: IEvent;
-      user: IUser;
-    };
-  };
-};
+const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
+  const { user, event } = route.params;
 
-const EventInviteConfirm: React.FC<EventInviteConfirmProps> = ({ route }) => {
-  const { user } = route.params;
-  const { event } = useEvent();
-  const { throwInfo, throwError, handleEntering } = useMessage();
+  const { throwInfo, throwError } = useMessage();
 
   const [inviteTypes, setInviteTypes] = useState<IParticipationType[]>();
   const [participation, setParticipation] = useState<IParticipation>();
@@ -42,7 +29,7 @@ const EventInviteConfirm: React.FC<EventInviteConfirmProps> = ({ route }) => {
     useState<IParticipationType>();
 
   const handleInvite = async (submit: 'invite' | 'accept' | 'promote') => {
-    let info;
+    let info: string;
     setLoading(true);
     try {
       await participationService.inviteRequest({
@@ -116,17 +103,18 @@ const EventInviteConfirm: React.FC<EventInviteConfirmProps> = ({ route }) => {
   };
 
   const fetchContent = async () => {
-    let status;
+    let userParticipation: IParticipation;
+    console.log(user);
     try {
-      status = await participationService.findByEventAndUser({
+      userParticipation = await participationService.findByEventAndUser({
         event_id: event.id_event,
         user_id: user.id_user,
       });
     } catch (error) {
       throwError(error.response.data.message);
     }
-
-    setParticipation(status);
+    console.log(userParticipation);
+    setParticipation(userParticipation);
     setLoadingContent(false);
   };
 
@@ -134,7 +122,8 @@ const EventInviteConfirm: React.FC<EventInviteConfirmProps> = ({ route }) => {
     if (!inviteTypes) fetchInviteTypes();
 
     fetchContent();
-  }, [handleEntering]);
+  }, []);
+  // }, [handleEntering]);
 
   return (
     <AppView>

@@ -14,7 +14,7 @@ const Welcome: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   return (
     <ImageBackground style={styles.container} source={welcome}>
       <Text style={styles.text_welcome}>Bem-vindo ao</Text>
-      <Text style={styles.text_app_name}>DALE</Text>
+      <Text style={styles.text_app_name}>BORA</Text>
       <View style={styles.buttons}>
         <Button title="Entrar" onPress={() => navigation.navigate('Login')} />
         <Button

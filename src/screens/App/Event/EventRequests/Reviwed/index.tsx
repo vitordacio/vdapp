@@ -1,7 +1,5 @@
 import { AppView, View } from '@components/View';
 import { Text } from '@components/Text';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, ScrollView } from 'react-native';
 import useEvent from '@contexts/event';
@@ -10,14 +8,16 @@ import useMessage from '@contexts/message';
 import { participationService } from '@services/Participation';
 import { IParticipation } from '@interfaces/participation';
 import CardUserEventRequestRevivew from '@components/Card/User/EventRequestReviwed';
-import { IEvent } from '@interfaces/event';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventRequestsReviwed: React.FC<
-  { event: IEvent } & NativeStackScreenProps<ParamListBase>
-> = ({ navigation, event }) => {
+const EventRequestsReviwed: React.FC<EventAndOnUpdateProps> = ({
+  route,
+  navigation,
+}) => {
+  const { event } = route.params;
   const { eventRequestsReviwed, setEventRequestsReviwed } = useEvent();
   const { throwError } = useMessage();
 

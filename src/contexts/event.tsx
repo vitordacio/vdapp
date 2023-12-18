@@ -1,15 +1,15 @@
 import React, { createContext, useContext, useState } from 'react';
-import useDebounce from '@hooks/useDebounce';
+
 import { IParticipation } from '@interfaces/participation';
 
 interface IEventContextData {
-  searchInvite: string;
-  debouncedSearchInvite: string;
-  setSearchInvite: React.Dispatch<React.SetStateAction<string>>;
-  loadingInviteSearch: boolean;
-  setLoadingInviteSearch: React.Dispatch<React.SetStateAction<boolean>>;
-  refreshingInviteSearch: boolean;
-  setRefreshingInviteSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  // searchInvite: string;
+  // debouncedSearchInvite: string;
+  // setSearchInvite: React.Dispatch<React.SetStateAction<string>>;
+  // loadingInviteSearch: boolean;
+  // setLoadingInviteSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  // refreshingInviteSearch: boolean;
+  // setRefreshingInviteSearch: React.Dispatch<React.SetStateAction<boolean>>;
   eventRequestsPending: IParticipation[];
   setEventRequestsPending: React.Dispatch<
     React.SetStateAction<IParticipation[]>
@@ -32,24 +32,24 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({
     IParticipation[]
   >([]);
 
-  const [searchInvite, setSearchInvite] = useState<string>('');
-  const [loadingInviteSearch, setLoadingInviteSearch] =
-    useState<boolean>(false);
-  const [refreshingInviteSearch, setRefreshingInviteSearch] =
-    useState<boolean>(false);
+  // const [searchInvite, setSearchInvite] = useState<string>('');
+  // const [loadingInviteSearch, setLoadingInviteSearch] =
+  //   useState<boolean>(false);
+  // const [refreshingInviteSearch, setRefreshingInviteSearch] =
+  //   useState<boolean>(false);
 
-  const debouncedSearchInvite = useDebounce(searchInvite, 500);
+  // const debouncedSearchInvite = useDebounce(searchInvite, 500);
 
   return (
     <EventContext.Provider
       value={{
-        searchInvite,
-        debouncedSearchInvite,
-        setSearchInvite,
-        loadingInviteSearch,
-        setLoadingInviteSearch,
-        refreshingInviteSearch,
-        setRefreshingInviteSearch,
+        // searchInvite,
+        // debouncedSearchInvite,
+        // setSearchInvite,
+        // loadingInviteSearch,
+        // setLoadingInviteSearch,
+        // refreshingInviteSearch,
+        // setRefreshingInviteSearch,
         eventRequestsPending,
         setEventRequestsPending,
         eventRequestsReviwed,

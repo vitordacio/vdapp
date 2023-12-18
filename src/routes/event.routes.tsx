@@ -24,9 +24,10 @@ import EventInviteConfirm from '@screens/App/Event/EventInvite/EventInviteConfir
 import EventRequestsPending from '@screens/App/Event/EventRequests/Pending';
 import EventRequestsReviwed from '@screens/App/Event/EventRequests/Reviwed';
 import { formatEventName } from '@utils/formaters';
+import { IUser } from '@interfaces/user';
 
 export type EventProps = NativeStackScreenProps<ParamListBase> & {
-  route: { params: { event: IEvent } };
+  route: { params: { event: IEvent; user?: IUser } };
 };
 
 export type EventAndOnUpdateProps = EventProps & {
@@ -78,8 +79,9 @@ export const EventTopTabRoutes: React.FC = () => {
 
 const EventRequestsTopTab = createMaterialTopTabNavigator();
 
-export const EventRequestsTopTabRoutes: React.FC<{ event: IEvent }> = ({
-  event,
+export const EventRequestsTopTabRoutes: React.FC<EventAndOnUpdateProps> = ({
+  route,
+  onUpdateEvent,
 }) => {
   return (
     <EventRequestsTopTab.Navigator
@@ -95,7 +97,13 @@ export const EventRequestsTopTabRoutes: React.FC<{ event: IEvent }> = ({
           tabBarLabel: 'Pendentes',
         }}
       >
-        {props => <EventRequestsPending {...props} event={event} />}
+        {props => (
+          <EventRequestsPending
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
       </EventRequestsTopTab.Screen>
 
       <EventRequestsTopTab.Screen
@@ -104,9 +112,54 @@ export const EventRequestsTopTabRoutes: React.FC<{ event: IEvent }> = ({
           tabBarLabel: 'Revisados',
         }}
       >
-        {props => <EventRequestsReviwed {...props} event={event} />}
+        {props => (
+          <EventRequestsReviwed
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
       </EventRequestsTopTab.Screen>
     </EventRequestsTopTab.Navigator>
+  );
+};
+
+const EventInviteStackTab = createNativeStackNavigator();
+
+export const EventInviteRoutes: React.FC<EventAndOnUpdateProps> = ({
+  route,
+  onUpdateEvent,
+}) => {
+  return (
+    <EventInviteStackTab.Navigator
+      screenOptions={{
+        headerTitle: 'Convidar',
+        headerStyle: {
+          backgroundColor: 'black',
+        },
+        headerTitleStyle: {
+          color: 'white',
+        },
+        headerTintColor: 'white',
+        headerTitleAlign: 'center',
+      }}
+    >
+      <EventInviteStackTab.Screen name="EventInviteScreen">
+        {props => (
+          <EventInvite {...props} route={route} onUpdateEvent={onUpdateEvent} />
+        )}
+      </EventInviteStackTab.Screen>
+
+      <EventInviteStackTab.Screen name="EventInviteConfirm">
+        {props => (
+          <EventInviteConfirm
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </EventInviteStackTab.Screen>
+    </EventInviteStackTab.Navigator>
   );
 };
 
@@ -285,35 +338,6 @@ export const EventManageRoutes: React.FC<EventAndOnUpdateProps> = ({
   );
 };
 
-const EventInviteStackTab = createNativeStackNavigator();
-
-export const EventInviteRoutes = () => {
-  return (
-    <EventInviteStackTab.Navigator
-      screenOptions={{
-        headerTitle: 'Convidar',
-        headerStyle: {
-          backgroundColor: 'black',
-        },
-        headerTitleStyle: {
-          color: 'white',
-        },
-        headerTintColor: 'white',
-        headerTitleAlign: 'center',
-      }}
-    >
-      <EventInviteStackTab.Screen
-        name="EventInviteScreen"
-        component={EventInvite}
-      />
-      <EventInviteStackTab.Screen
-        name="EventInviteConfirm"
-        component={EventInviteConfirm}
-      />
-    </EventInviteStackTab.Navigator>
-  );
-};
-
 const EventStackTab = createNativeStackNavigator();
 
 export const EventRoutes: React.FC<EventProps> = ({ navigation, route }) => {
@@ -356,15 +380,29 @@ export const EventRoutes: React.FC<EventProps> = ({ navigation, route }) => {
 
       <EventStackTab.Screen name="EventRequests">
         {props => (
-          <EventRequestsTopTabRoutes {...props} event={route.params.event} />
+          <EventRequestsTopTabRoutes
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
         )}
       </EventStackTab.Screen>
 
-      <EventStackTab.Screen
+      <EventStackTab.Screen name="EventInvite" options={{ headerShown: false }}>
+        {props => (
+          <EventInviteRoutes
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
+        )}
+      </EventStackTab.Screen>
+
+      {/* <EventStackTab.Screen
         name="EventInvite"
         options={{ headerShown: false }}
         component={EventInviteRoutes}
-      />
+      /> */}
 
       <EventStackTab.Screen name="EventInbox" component={Custom} />
       <EventStackTab.Screen name="EventLists" component={Custom} />

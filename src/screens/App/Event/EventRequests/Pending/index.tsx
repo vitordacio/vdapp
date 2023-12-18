@@ -1,7 +1,5 @@
 import { AppView, View } from '@components/View';
 import { Text } from '@components/Text';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, ScrollView } from 'react-native';
 import useEvent from '@contexts/event';
@@ -12,14 +10,16 @@ import { IParticipation } from '@interfaces/participation';
 import CardUserEventRequestPending from '@components/Card/User/EventRequestPending';
 import { IEventResponse } from '@services/Participation/IParticipationService';
 import useAuth from '@contexts/auth';
-import { IEvent } from '@interfaces/event';
+import { EventAndOnUpdateProps } from '@routes/event.routes';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventRequestsPending: React.FC<
-  { event: IEvent } & NativeStackScreenProps<ParamListBase>
-> = ({ navigation, event }) => {
+const EventRequestsPending: React.FC<EventAndOnUpdateProps> = ({
+  route,
+  navigation,
+}) => {
+  const { event } = route.params;
   const { user } = useAuth();
   const {
     eventRequestsPending,

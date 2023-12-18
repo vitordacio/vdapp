@@ -6,6 +6,7 @@ const commonStyles: {
   title: TextStyle;
   pressed_container?: ViewStyle;
   pressed_title?: ViewStyle;
+  selected: TextStyle;
 } = {
   container: {
     width: '100%',
@@ -19,6 +20,7 @@ const commonStyles: {
   },
   title: { fontSize: 16, color: `${colors.BUTTON_TEXT}` },
   pressed_container: { opacity: 0.8 },
+  selected: { color: `${colors.GOLD}` },
 };
 
 export default StyleSheet.create({

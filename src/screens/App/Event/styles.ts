@@ -22,9 +22,8 @@ const styles = StyleSheet.create({
     position: 'relative',
     paddingHorizontal: 8,
     width: '100%',
-    gap: 10,
     paddingTop: 20,
-    paddingBottom: 8,
+    // paddingBottom: 8,
   },
   status: {
     position: 'absolute',
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     top: 0,
-    right: 0,
+    right: 5,
     height: 20,
   },
   status_message: {
@@ -53,6 +52,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     gap: 8,
+    marginBottom: 10,
+    paddingHorizontal: 6,
   },
   data_text: {
     flex: 1,
@@ -67,6 +68,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    gap: 4,
+    paddingHorizontal: 6,
+    paddingBottom: 5,
 
     borderColor: `${colors.GRAY_DESCRIPTION}`,
     borderBottomWidth: 1,
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: 8,
+    // paddingVertical: 8,
     width: '100%',
   },
   data_author: {
@@ -84,41 +88,22 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  container_actions: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
 
-    paddingVertical: 8,
-  },
   container_counts: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
-    marginBottom: 22,
-  },
-  counts: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-  },
-  counts_description: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
+    justifyContent: 'flex-end',
+    gap: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
   },
-  line_y: {
-    width: 1,
-    height: '100%',
-    backgroundColor: '#fff',
-    marginHorizontal: 16,
+  data_counts: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   container_participation: {
     width: '100%',
@@ -127,15 +112,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 16,
-
     paddingVertical: 8,
   },
-  container_buttons: {
+  container_adm: {
+    width: '100%',
+    maxWidth: 615,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    flexWrap: 'wrap',
     gap: 5,
   },
   container_footer: {
