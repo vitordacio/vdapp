@@ -5,6 +5,7 @@ import { View } from '@components/View';
 import { IUpdateMinAmount } from '@services/Event/IEventService';
 import colors from '@styles/colors';
 import { EventAndOnUpdateProps } from '@routes/event.routes';
+import useMessage from '@contexts/message';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from './styles';
@@ -14,6 +15,7 @@ const UpdateEventMinAmount: React.FC<EventAndOnUpdateProps> = ({
   route,
   onUpdateEvent,
 }) => {
+  const { throwError } = useMessage();
   const { event } = route.params;
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});
@@ -23,11 +25,19 @@ const UpdateEventMinAmount: React.FC<EventAndOnUpdateProps> = ({
   const [isMinAmountFilled, setIsMinAmountFilled] = useState(false);
 
   const handleMinAmount = async () => {
-    setForm({
-      event_id: event.id_event,
-      min_amount: !moneyValue.includes('NaN') ? moneyValue : undefined,
-    } as IUpdateMinAmount);
-    setConfirm(true);
+    const value = moneyValue.split(/(?:\s| )+/)[1].replace(',', '.');
+
+    const isValid = value && !Number.isNaN(Number(value));
+
+    if (isValid) {
+      setForm({
+        event_id: event.id_event,
+        min_amount: moneyValue,
+      } as IUpdateMinAmount);
+      setConfirm(true);
+    } else {
+      throwError('Informe um número válido');
+    }
   };
 
   const formatMoney = (value: string) => {
@@ -35,11 +45,15 @@ const UpdateEventMinAmount: React.FC<EventAndOnUpdateProps> = ({
 
     const floatValue = parseFloat(numericValue) / 100;
 
-    const formattedValue = floatValue.toLocaleString('pt-BR', {
+    let formattedValue = floatValue.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
       minimumFractionDigits: 2,
     });
+
+    if (formattedValue.includes('NaN')) {
+      formattedValue = formattedValue.replace('NaN', '');
+    }
 
     return formattedValue;
   };

@@ -5,7 +5,7 @@ import {
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Event from '@screens/App/Event';
 import Custom from '@screens/Custom';
-import { ParamListBase, useRoute } from '@react-navigation/native';
+import { ParamListBase } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
 import EventManage from '@screens/App/Event/EventManage';
 import UpdateEvent from '@screens/App/Event/EventManage/Update';
@@ -23,6 +23,7 @@ import EventInvite from '@screens/App/Event/EventInvite';
 import EventInviteConfirm from '@screens/App/Event/EventInvite/EventInviteConfirm';
 import EventRequestsPending from '@screens/App/Event/EventRequests/Pending';
 import EventRequestsReviwed from '@screens/App/Event/EventRequests/Reviwed';
+import { formatEventName } from '@utils/formaters';
 
 export type EventProps = NativeStackScreenProps<ParamListBase> & {
   route: { params: { event: IEvent } };
@@ -336,7 +337,10 @@ export const EventRoutes: React.FC<EventProps> = ({ navigation, route }) => {
         headerTitleAlign: 'center',
       }}
     >
-      <EventStackTab.Screen name="EventScreen">
+      <EventStackTab.Screen
+        name="EventScreen"
+        options={{ headerTitle: formatEventName(route.params.event) }}
+      >
         {props => <Event {...props} navigation={navigation} route={route} />}
       </EventStackTab.Screen>
 

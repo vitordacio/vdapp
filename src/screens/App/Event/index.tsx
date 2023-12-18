@@ -3,7 +3,7 @@ import LottieView from 'lottie-react-native';
 import { AppView, View } from '@components/View';
 import { CoverPhoto } from '@components/CoverPhoto';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import assets from '@assets/index';
@@ -15,10 +15,13 @@ import { EventProps, EventTopTabRoutes } from '@routes/event.routes';
 import { Pressable } from '@components/Pressable';
 import useMessage from '@contexts/message';
 import { Icon } from '@components/Icon';
+import { LoadingView } from '@components/View/Loading';
 import styles from './styles';
 
 type ParticipationStatus = {
+  participation_id?: string;
   participation_status: IEvent['participation_status'];
+  userIn: boolean;
   type: 'blue' | 'red' | 'green' | 'gray' | 'dark_gold';
   icon: 'plus' | 'check' | 'x' | 'minus' | 'chevron';
   title: string;
@@ -27,12 +30,9 @@ type ParticipationStatus = {
 
 const Event: React.FC<EventProps> = ({ navigation, route }) => {
   const { event } = route.params;
-
   const { throwInfo, throwError } = useMessage();
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
-
-  const [userIn, setUserIn] = useState<boolean>(false);
 
   const [participationLoader, setParticipationLoader] =
     useState<boolean>(false);
@@ -44,8 +44,8 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
     setShowLoader(true);
 
     let dataEvent: IEvent;
-    let handleIn: boolean = false;
 
+    let userIn: boolean = false;
     let title: string = '';
     let type: ParticipationStatus['type'];
     let icon: ParticipationStatus['icon'];
@@ -54,7 +54,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
     try {
       dataEvent = await eventService.findById(event_id);
 
-      const { participation_status } = dataEvent;
+      const { participation_status, participation_id } = dataEvent;
 
       if (participation_status === 'author') title = 'Você é o dono!';
       if (participation_status.startsWith('guest'))
@@ -84,19 +84,19 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
         type = 'red';
         icon = 'minus';
         buttonTitle = 'Sair do Evento';
-        handleIn = true;
+        userIn = true;
       }
 
       const handleParticipationStatus: ParticipationStatus = {
+        participation_id,
         participation_status,
+        userIn,
         type,
         icon,
         buttonTitle,
         title,
       };
 
-      setUserIn(handleIn);
-      // setParticipationTitle(title);
       setParticipationStatus(handleParticipationStatus);
     } catch (error) {
       throwError(error.response.data.message);
@@ -108,20 +108,27 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
     setParticipationLoader(true);
 
     try {
+      let message = '';
       const { participation_status } = participationStatus;
 
       if (!participation_status) {
         await participationService.requestByUser(event.id_event);
+        message = 'Solicitação enviada com sucesso';
       } else if (
         participation_status === 'guest_out' ||
         participation_status === 'vip_out' ||
         participation_status === 'mod_out'
       ) {
         await participationService.inviteResponse(event.id_event);
+        message = 'Convite aceito com sucesso';
       } else {
-        await participationService.deleteParticipation(event.participation_id);
+        await participationService.deleteParticipation(
+          participationStatus.participation_id,
+        );
+        message = 'Solicitação cancelada com sucesso';
       }
 
+      throwInfo(message);
       setParticipationLoader(false);
       fetchData(event.id_event);
     } catch (error) {
@@ -129,29 +136,28 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
     }
   };
 
-  React.useLayoutEffect(() => {
-    const type = event.type.name;
+  // React.useLayoutEffect(() => {
+  //   const type = event.type.name;
+  //   let title: string;
+  //   if (type === 'auditorium') title = 'Apresentação';
+  //   if (type === 'beach') title = 'Praia';
+  //   if (type === 'birthday') title = 'Aniversário';
+  //   if (type === 'boat') title = 'Barco';
+  //   if (type === 'culinary') title = 'Culinária';
+  //   if (type === 'exercise') title = 'Exercício Físico';
+  //   if (type === 'fishing') title = 'Pesca';
+  //   if (type === 'games') title = 'Jogos';
+  //   if (type === 'meeting') title = 'Reunião';
+  //   if (type === 'moon') title = 'Lual';
+  //   if (type === 'nature') title = 'Natureza';
+  //   if (type === 'party') title = 'Festa';
+  //   if (type === 'pool') title = 'Piscina';
+  //   if (type === 'table') title = 'Tomar Uma';
 
-    let title: string;
-    if (type === 'auditorium') title = 'Apresentação';
-    if (type === 'beach') title = 'Praia';
-    if (type === 'birthday') title = 'Aniversário';
-    if (type === 'boat') title = 'Barco';
-    if (type === 'culinary') title = 'Culinária';
-    if (type === 'exercise') title = 'Exercício Físico';
-    if (type === 'fishing') title = 'Pesca';
-    if (type === 'games') title = 'Jogos';
-    if (type === 'meeting') title = 'Reunião';
-    if (type === 'moon') title = 'Lual';
-    if (type === 'nature') title = 'Natureza';
-    if (type === 'party') title = 'Festa';
-    if (type === 'pool') title = 'Piscina';
-    if (type === 'table') title = 'Tomar Uma';
-
-    navigation.setOptions({
-      title,
-    });
-  }, [event.type_id]);
+  //   navigation.setOptions({
+  //     title,
+  //   });
+  // }, [event.type_id]);
 
   useEffect(() => {
     fetchData(event.id_event);
@@ -165,7 +171,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         {showLoader ? (
-          <ActivityIndicator size="large" />
+          <LoadingView />
         ) : (
           <>
             {event && (
@@ -200,7 +206,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                       <Text
                         style={[styles.text_default_color, styles.text_large]}
                       >
-                        {event.name}
+                        {event.name || '--'}
                       </Text>
                     </View>
                     <View style={styles.data_text}>
@@ -209,7 +215,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                       <Text
                         style={[styles.text_default_color, styles.text_medium]}
                       >
-                        {event.location}
+                        {event.location || '--'}
                       </Text>
                     </View>
                     <View style={styles.data_text}>
@@ -222,7 +228,7 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                           new Date(event.start_time),
                           new Date(event.finish_time),
                           event.author.locale,
-                        )}
+                        ) || '--'}
                       </Text>
                     </View>
                     <View style={styles.data_text}>
@@ -264,12 +270,12 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                             styles.text_medium,
                           ]}
                         >
-                          {event.author.username}
+                          {event.author.username || ''}
                         </Text>
                         <Text
                           style={[styles.text_gray_color, styles.text_medium]}
                         >
-                          {event.author.name}
+                          {event.author.name || ''}
                         </Text>
                       </View>
                     </View>
@@ -375,17 +381,19 @@ const Event: React.FC<EventProps> = ({ navigation, route }) => {
                 )}
 
                 <View style={styles.container_footer}>
-                  <Text
-                    style={[
-                      styles.text_gray_color,
-                      styles.text_medium,
-                      { textAlign: 'right' },
-                    ]}
-                  >
-                    {userIn
-                      ? 'Você está participando'
-                      : 'Você não está participando'}
-                  </Text>
+                  {participationStatus && (
+                    <Text
+                      style={[
+                        styles.text_gray_color,
+                        styles.text_medium,
+                        { textAlign: 'right' },
+                      ]}
+                    >
+                      {participationStatus.userIn
+                        ? 'Você está participando'
+                        : 'Você não está participando'}
+                    </Text>
+                  )}
 
                   <Pressable
                     onPress={() =>

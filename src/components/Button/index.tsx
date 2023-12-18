@@ -65,7 +65,7 @@ export function Button({
               </Text>
             )}
             {loading && <Loading />}
-            {icon && (
+            {icon && !loading && (
               <Icon
                 name={icon}
                 size={iconSize || 24}

@@ -45,7 +45,7 @@ export interface IUpdateHours {
 
 export interface IUpdatePrivacy {
   event_id: string;
-  private: boolean;
+  is_private: boolean;
 }
 
 export interface IUpdateAdditional {

@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Text } from '@components/Text';
 import { View } from '@components/View';
-import { ActivityIndicator, Switch } from 'react-native';
+import { Switch } from 'react-native';
 import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
+import { Loading } from '@components/View/Loading';
 import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import styles from './styles';
 
-const UpdateEventPrivacy: React.FC<EventAndOnUpdateProps> = ({ route }) => {
+const UpdateEventPrivacy: React.FC<EventAndOnUpdateProps> = ({
+  route,
+  onUpdateEvent,
+}) => {
   const { event } = route.params;
   const { throwInfo, throwError } = useMessage();
 
@@ -23,14 +27,16 @@ const UpdateEventPrivacy: React.FC<EventAndOnUpdateProps> = ({ route }) => {
     try {
       updatedEvent = await eventService.updatePrivacy({
         event_id: event.id_event,
-        private: !value,
+        is_private: !value,
       });
     } catch (error) {
       throwError(error.response.data.message);
     }
 
     if (updatedEvent) {
-      // setEvent(updatedEvent);
+      updatedEvent.status = event.status;
+      updatedEvent.participation_status = event.participation_status;
+      onUpdateEvent(updatedEvent);
       throwInfo('Privacidade do evento atualizada com sucesso!');
     }
 
@@ -49,7 +55,7 @@ const UpdateEventPrivacy: React.FC<EventAndOnUpdateProps> = ({ route }) => {
           {!loading ? (
             <Switch onValueChange={handlePrivate} value={value} />
           ) : (
-            <ActivityIndicator size="small" />
+            <Loading />
           )}
         </View>
       </View>
