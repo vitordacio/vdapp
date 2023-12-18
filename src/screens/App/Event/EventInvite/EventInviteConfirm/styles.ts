@@ -38,21 +38,35 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 14,
   },
-
   submit: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 14,
-    // marginBottom: 16,
+    gap: 8,
+    // gap: 14,
+    // marginBottom: 14,
   },
-  description: {
+  text: {
     flex: 1,
     fontSize: 16,
+  },
+  description: {
     color: `${colors.GRAY_DESCRIPTION}`,
-    // marginBottom: 8,
+  },
+  mod_view: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 15,
+    marginBottom: 8,
+  },
+  mod: {
+    flex: 1,
+    fontSize: 12,
+    color: `${colors.GOLD}`,
   },
 });
 

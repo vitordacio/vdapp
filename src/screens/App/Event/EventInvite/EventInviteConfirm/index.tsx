@@ -32,7 +32,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
     let info: string;
     setLoading(true);
     try {
-      await participationService.inviteRequest({
+      const newParticipation = await participationService.inviteRequest({
         event_id: event.id_event,
         type_id: selectedInviteType.id_participation_type,
         user_id: user.id_user,
@@ -44,6 +44,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
       if (submit === 'promote') info = `${user.name} promovido com sucesso!`;
 
       throwInfo(info);
+      setParticipation(newParticipation);
     } catch (error) {
       throwError(error.response.data.message);
     }
@@ -58,6 +59,11 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
         participation.id_participation,
       );
 
+      const newParticipation = participation;
+
+      newParticipation.id_participation = '';
+      newParticipation.participation_status = '';
+      setParticipation(newParticipation);
       throwInfo(`O convite foi cancelado com sucesso!`);
     } catch (error) {
       throwError(error.response.data.message);
@@ -104,7 +110,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
 
   const fetchContent = async () => {
     let userParticipation: IParticipation;
-    console.log(user);
+
     try {
       userParticipation = await participationService.findByEventAndUser({
         event_id: event.id_event,
@@ -113,7 +119,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
     } catch (error) {
       throwError(error.response.data.message);
     }
-    console.log(userParticipation);
+
     setParticipation(userParticipation);
     setLoadingContent(false);
   };
@@ -129,7 +135,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
     <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Tipo de convite</Text>
-        <Text style={styles.description}>
+        <Text style={[styles.text, styles.description]}>
           Escolha como será a participação do usuário no evento
         </Text>
         <View style={styles.user}>
@@ -162,7 +168,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
 
           {!loadingContent && !participation.participation_status && (
             <View style={styles.submit}>
-              <Text style={styles.description}>
+              <Text style={[styles.text, styles.description]}>
                 Pressione o botão abaixo para confirmar o convite de{' '}
                 <Text style={styles.color_blue}>{user.name}</Text> como{' '}
                 <Text style={styles.color_blue}>
@@ -170,6 +176,14 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
                 </Text>
                 !
               </Text>
+              <View style={styles.mod_view}>
+                {selectedInviteType.name === 'mod' && (
+                  <Text style={styles.mod}>
+                    * Moderador recebe todos os privilégios de administração,
+                    exceto a exclusão do evento
+                  </Text>
+                )}
+              </View>
               <Button
                 type="blue"
                 onPress={() => handleInvite('invite')}
@@ -184,7 +198,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
               participation.participation_status,
             ) && (
               <View style={styles.submit}>
-                <Text style={styles.description}>
+                <Text style={[styles.text, styles.description]}>
                   <Text style={styles.color_blue}>{user.name}</Text> possui um
                   convite pendente como{' '}
                   <Text style={styles.color_blue}>
@@ -192,7 +206,7 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
                   </Text>
                   !
                 </Text>
-                <Text style={styles.description}>
+                <Text style={[styles.text, styles.description]}>
                   Pressione o botão abaixo para{' '}
                   <Text style={styles.color_red}>cancelar</Text> o convite!
                 </Text>
@@ -208,11 +222,11 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
           {!loadingContent &&
             participation.participation_status === 'user_out' && (
               <View style={styles.submit}>
-                <Text style={styles.description}>
+                <Text style={[styles.text, styles.description]}>
                   <Text style={styles.color_blue}>{user.name}</Text> possui um
                   solicitação pendente!
                 </Text>
-                <Text style={styles.description}>
+                <Text style={[styles.text, styles.description]}>
                   Pressione o botão abaixo para{' '}
                   <Text style={styles.color_blue}>aceitar</Text> e{' '}
                   <Text style={styles.color_blue}>promover</Text> para{' '}
@@ -221,6 +235,14 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
                   </Text>
                   !
                 </Text>
+                <View style={styles.mod_view}>
+                  {selectedInviteType.name === 'mod' && (
+                    <Text style={styles.mod}>
+                      * Moderador recebe todos os privilégios de administração,
+                      exceto a exclusão do evento
+                    </Text>
+                  )}
+                </View>
                 <Button
                   type="blue"
                   onPress={() => handleInvite('accept')}
@@ -235,11 +257,11 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
               participation.participation_status,
             ) && (
               <View style={styles.submit}>
-                <Text style={styles.description}>
+                <Text style={[styles.text, styles.description]}>
                   <Text style={styles.color_blue}>{user.name}</Text> já está
                   participando do evento
                 </Text>
-                <Text style={styles.description}>
+                <Text style={[styles.text, styles.description]}>
                   Pressione o botão abaixo para{' '}
                   <Text style={styles.color_blue}>promover</Text> o usuário para{' '}
                   <Text style={styles.color_blue}>
@@ -247,12 +269,31 @@ const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
                   </Text>
                   !
                 </Text>
+                <View style={styles.mod_view}>
+                  {selectedInviteType.name === 'mod' && (
+                    <Text style={styles.mod}>
+                      * Moderador recebe todos os privilégios de administração,
+                      exceto a exclusão do evento
+                    </Text>
+                  )}
+                </View>
                 <Button
                   type="blue"
-                  onPress={() => handleInvite('promote')}
+                  onPress={() =>
+                    participation.type.id_participation_type ===
+                    selectedInviteType.id_participation_type
+                      ? throwInfo(
+                          `${user.name} já é um ${selectedInviteType.inviteDescription}`,
+                        )
+                      : handleInvite('promote')
+                  }
                   title="Promover"
                   loading={loading}
                   maxWidth={250}
+                  disabled={
+                    participation.type.id_participation_type ===
+                    selectedInviteType.id_participation_type
+                  }
                 />
               </View>
             )}
