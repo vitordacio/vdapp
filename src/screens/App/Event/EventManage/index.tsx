@@ -2,7 +2,9 @@ import { AppView, View } from '@components/View';
 import { EventProps } from '@routes/Event/event.routes';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { Button } from '@components/Button';
+import { Text } from '@components/Text';
+import { Icon } from '@components/Icon';
+import { Pressable } from '@components/Pressable';
 import styles from './styles';
 
 const EventManage: React.FC<EventProps> = ({ navigation }) => {
@@ -10,10 +12,33 @@ const EventManage: React.FC<EventProps> = ({ navigation }) => {
     <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <Button
-            title="Editar Evento"
-            onPress={() => navigation.push('UpdateEvent')}
-          />
+          <View style={styles.main}>
+            <Pressable
+              style={styles.card}
+              onPress={() => navigation.push('UpdateEvent')}
+            >
+              <Text style={[styles.text, styles.text_default]}>
+                Editar Evento
+              </Text>
+              <Icon name="chevron" />
+            </Pressable>
+            <Pressable
+              style={styles.card}
+              onPress={() => navigation.push('FinishEvent')}
+            >
+              <Text style={[styles.text, styles.text_default]}>
+                Finalizar Evento
+              </Text>
+              <Icon name="chevron" />
+            </Pressable>
+            <Pressable
+              style={styles.card}
+              onPress={() => navigation.push('DeleteEvent')}
+            >
+              <Text style={[styles.text, styles.text_red]}>Excluir Evento</Text>
+              <Icon name="chevron" tintColor="#E63C3D" />
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
     </AppView>

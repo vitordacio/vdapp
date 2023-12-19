@@ -23,6 +23,7 @@ import {
 } from '@services/Event/IEventService';
 import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
+import { EventProps } from '@routes/Event/event.routes';
 import styles from './styles';
 
 interface IViewConfirmProps
@@ -47,15 +48,8 @@ interface IViewConfirmProps
   onUpdateEvent: (data: IEvent) => void;
 }
 
-export const ViewConfirm: React.FC<IViewConfirmProps> = ({
-  setConfirm,
-  type,
-  data,
-  description,
-  navigation,
-  event,
-  onUpdateEvent,
-}) => {
+export const UpdateEventConfirm: React.FC<EventProps> = props => {
+  console.log(props);
   const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
 

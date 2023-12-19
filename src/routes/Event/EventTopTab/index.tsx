@@ -1,11 +1,10 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Custom from '@screens/Custom';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
-import { EventProps } from '../event.routes';
 
 const EventTopTab = createMaterialTopTabNavigator();
 
-export const EventTopTabRoutes: React.FC<EventProps> = () => {
+export const EventTopTabRoutes: React.FC = () => {
   return (
     <EventTopTab.Navigator screenOptions={() => screenOptionsTopDefault({})}>
       <EventTopTab.Screen

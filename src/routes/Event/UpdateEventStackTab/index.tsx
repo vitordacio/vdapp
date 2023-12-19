@@ -12,6 +12,7 @@ import UpdateEventTicketsFree from '@screens/App/Event/EventManage/Update/Update
 import UpdateEventTicketsValue from '@screens/App/Event/EventManage/Update/UpdateEventTicketsValue';
 import Custom from '@screens/Custom';
 import { screenOptionsDefault } from '@styles/screenOptions';
+import { UpdateEventConfirm } from '@screens/App/Event/EventManage/Update/UpdateEventConfirm';
 import { EventProps } from '../event.routes';
 
 const UpdateEventStackTab = createNativeStackNavigator();
@@ -27,6 +28,16 @@ export const UpdateEventRoutes: React.FC<EventProps> = ({
       <UpdateEventStackTab.Screen name="UpdateEventScreen">
         {props => (
           <UpdateEvent {...props} route={route} onUpdateEvent={onUpdateEvent} />
+        )}
+      </UpdateEventStackTab.Screen>
+
+      <UpdateEventStackTab.Screen name="UpdateEventConfirm">
+        {props => (
+          <UpdateEventConfirm
+            {...props}
+            route={route}
+            onUpdateEvent={onUpdateEvent}
+          />
         )}
       </UpdateEventStackTab.Screen>
 
