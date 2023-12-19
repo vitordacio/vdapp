@@ -7,17 +7,14 @@ import { Loading } from '@components/View/Loading';
 import useMessage from '@contexts/message';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
+import { EventProps } from '@routes/Event/event.routes';
 import CardUserInfo from '@components/Card/User/Info';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
 import useDebounce from '@hooks/useDebounce';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventInvite: React.FC<EventAndOnUpdateProps> = ({
-  route,
-  navigation,
-}) => {
+const EventInvite: React.FC<EventProps> = ({ route, navigation }) => {
   const [searchInvite, setSearchInvite] = useState<string>('');
 
   const [refreshingInviteSearch, setRefreshingInviteSearch] =

@@ -6,7 +6,7 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { IUpdateLocation } from '@services/Event/IEventService';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
+import { EventProps } from '@routes/Event/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
@@ -21,7 +21,7 @@ const schema = yup.object({
 
 type LocationFormData = yup.InferType<typeof schema>;
 
-const UpdateEventLocation: React.FC<EventAndOnUpdateProps> = ({
+const UpdateEventLocation: React.FC<EventProps> = ({
   navigation,
   route,
   onUpdateEvent,

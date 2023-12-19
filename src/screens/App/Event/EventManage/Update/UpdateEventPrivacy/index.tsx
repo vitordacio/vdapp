@@ -6,14 +6,11 @@ import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import { Loading } from '@components/View/Loading';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
+import { EventProps } from '@routes/Event/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import styles from './styles';
 
-const UpdateEventPrivacy: React.FC<EventAndOnUpdateProps> = ({
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventPrivacy: React.FC<EventProps> = ({ route, onUpdateEvent }) => {
   const { event } = route.params;
   const { throwInfo, throwError } = useMessage();
 

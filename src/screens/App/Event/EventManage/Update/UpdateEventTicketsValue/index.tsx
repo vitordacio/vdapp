@@ -4,12 +4,12 @@ import { TextInput } from 'react-native';
 import { View } from '@components/View';
 import { IUpdateTicketsValue } from '@services/Event/IEventService';
 import colors from '@styles/colors';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
+import { EventProps } from '@routes/Event/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from './styles';
 
-const UpdateEventTicketsValue: React.FC<EventAndOnUpdateProps> = ({
+const UpdateEventTicketsValue: React.FC<EventProps> = ({
   navigation,
   route,
   onUpdateEvent,

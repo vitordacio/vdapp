@@ -4,13 +4,13 @@ import { TextInput } from 'react-native';
 import { View } from '@components/View';
 import { IUpdateMinAmount } from '@services/Event/IEventService';
 import colors from '@styles/colors';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
+import { EventProps } from '@routes/Event/event.routes';
 import useMessage from '@contexts/message';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from './styles';
 
-const UpdateEventMinAmount: React.FC<EventAndOnUpdateProps> = ({
+const UpdateEventMinAmount: React.FC<EventProps> = ({
   navigation,
   route,
   onUpdateEvent,

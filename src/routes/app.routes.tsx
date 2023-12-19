@@ -11,10 +11,9 @@ import Notifications from '@screens/App/Notifications';
 import Home from '@screens/App/Home';
 import User from '@screens/App/User';
 import { UpdateUserRoutes } from './user.routes';
-import { EventRoutes } from './event.routes';
 import SearchRoutes from './search.routes';
 import CreateEventRoutes from './createEvent.routes';
-// import HomeRoutes from './home.routes';
+import { EventRoutes } from './Event/event.routes';
 
 const BottomTab = createBottomTabNavigator();
 

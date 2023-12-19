@@ -5,8 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
+import { EventProps } from '@routes/Event/event.routes';
 import { IUpdateAdditional } from '@services/Event/IEventService';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
@@ -19,7 +19,7 @@ const schema = yup.object({
 
 type AdditionalFormData = yup.InferType<typeof schema>;
 
-const UpdateEventAdditional: React.FC<EventAndOnUpdateProps> = ({
+const UpdateEventAdditional: React.FC<EventProps> = ({
   navigation,
   route,
   onUpdateEvent,

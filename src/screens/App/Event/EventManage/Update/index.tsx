@@ -1,11 +1,11 @@
 import { AppView, View } from '@components/View';
-import { EventProps } from '@routes/event.routes';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
+import { EventProps } from '@routes/Event/event.routes';
 import styles from './styles';
 
 const UpdateEvent: React.FC<EventProps> = ({ navigation, route }) => {

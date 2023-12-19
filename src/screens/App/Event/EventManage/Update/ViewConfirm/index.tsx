@@ -56,6 +56,7 @@ export const ViewConfirm: React.FC<IViewConfirmProps> = ({
   event,
   onUpdateEvent,
 }) => {
+  console.log(navigation);
   const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
 

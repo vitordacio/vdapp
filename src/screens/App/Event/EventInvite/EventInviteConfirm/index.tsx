@@ -9,10 +9,10 @@ import useMessage from '@contexts/message';
 import { participationService } from '@services/Participation';
 import { Loading } from '@components/View/Loading';
 import { IParticipation, IParticipationType } from '@interfaces/participation';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
+import { EventProps } from '@routes/Event/event.routes';
 import styles from './styles';
 
-const EventInviteConfirm: React.FC<EventAndOnUpdateProps> = ({ route }) => {
+const EventInviteConfirm: React.FC<EventProps> = ({ route }) => {
   const { user, event } = route.params;
 
   const { throwInfo, throwError } = useMessage();

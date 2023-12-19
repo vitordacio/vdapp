@@ -9,16 +9,13 @@ import { participationService } from '@services/Participation';
 import { IParticipation } from '@interfaces/participation';
 import CardUserEventRequestPending from '@components/Card/User/EventRequestPending';
 import { IEventResponse } from '@services/Participation/IParticipationService';
+import { EventProps } from '@routes/Event/event.routes';
 import useAuth from '@contexts/auth';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventRequestsPending: React.FC<EventAndOnUpdateProps> = ({
-  route,
-  navigation,
-}) => {
+const EventRequestsPending: React.FC<EventProps> = ({ route, navigation }) => {
   const { event } = route.params;
   const { user } = useAuth();
   const {

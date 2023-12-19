@@ -8,15 +8,12 @@ import useMessage from '@contexts/message';
 import { participationService } from '@services/Participation';
 import { IParticipation } from '@interfaces/participation';
 import CardUserEventRequestRevivew from '@components/Card/User/EventRequestReviwed';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
+import { EventProps } from '@routes/Event/event.routes';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventRequestsReviwed: React.FC<EventAndOnUpdateProps> = ({
-  route,
-  navigation,
-}) => {
+const EventRequestsReviwed: React.FC<EventProps> = ({ route, navigation }) => {
   const { event } = route.params;
   const { eventRequestsReviwed, setEventRequestsReviwed } = useEvent();
   const { throwError } = useMessage();

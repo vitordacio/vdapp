@@ -6,7 +6,7 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { IUpdateTicketsFree } from '@services/Event/IEventService';
-import { EventAndOnUpdateProps } from '@routes/event.routes';
+import { EventProps } from '@routes/Event/event.routes';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
 import styles from '../styles';
@@ -20,7 +20,7 @@ const schema = yup.object({
 
 type TicketsFreeFormData = yup.InferType<typeof schema>;
 
-const UpdateEventTicketsFree: React.FC<EventAndOnUpdateProps> = ({
+const UpdateEventTicketsFree: React.FC<EventProps> = ({
   navigation,
   route,
   onUpdateEvent,

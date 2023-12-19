@@ -11,11 +11,12 @@ import { formatTimeRange } from '@utils/formaters';
 import { Picture } from '@components/Picture';
 import { Button } from '@components/Button';
 import { participationService } from '@services/Participation';
-import { EventProps, EventTopTabRoutes } from '@routes/event.routes';
 import { Pressable } from '@components/Pressable';
 import useMessage from '@contexts/message';
 import { Icon } from '@components/Icon';
 import { LoadingView } from '@components/View/Loading';
+import { EventProps } from '@routes/Event/event.routes';
+import { EventTopTabRoutes } from '@routes/Event/EventTopTab';
 import styles from './styles';
 
 type ParticipationStatus = {
