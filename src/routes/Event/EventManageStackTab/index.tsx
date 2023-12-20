@@ -52,8 +52,6 @@ export const EventManageRoutes: React.FC<EventProps> = ({
           <DeleteEvent {...props} route={route} onUpdateEvent={onUpdateEvent} />
         )}
       </EventManageStackTab.Screen>
-
-      {/* <EventManageStackTab.Screen name="DeleteEvent" component={Custom} /> */}
     </EventManageStackTab.Navigator>
   );
 };

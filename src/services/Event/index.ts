@@ -38,6 +38,7 @@ interface IEventService {
   updateTicketsValue: (data: IUpdateTicketsValue) => Promise<IEvent>;
   updateTicketsFree: (data: IUpdateTicketsFree) => Promise<IEvent>;
   updateAddress: (data: IUpdateAddress) => Promise<IEvent>;
+  deleteEvent: (data: string) => Promise<void>;
 }
 
 const service: IEventService = {
@@ -145,6 +146,10 @@ const service: IEventService = {
       '/event/address',
       data,
     );
+    return response.data;
+  },
+  deleteEvent: async (data: string): Promise<void> => {
+    const response: AxiosResponse<void> = await api.delete(`/event/${data}`);
     return response.data;
   },
 };
