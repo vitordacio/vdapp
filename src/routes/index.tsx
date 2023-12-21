@@ -6,13 +6,17 @@ import AppRoutes from './app.routes';
 import AuthRoutes from './auth.routes';
 
 const Routes: React.FC = () => {
-  const { signed, loading } = useAuth();
+  const { signed, loading, user } = useAuth();
 
   if (loading) {
     return <LoadingView />;
   }
 
-  return <RoutesView>{signed ? <AppRoutes /> : <AuthRoutes />}</RoutesView>;
+  return (
+    <RoutesView>
+      {signed ? <AppRoutes user={user} /> : <AuthRoutes />}
+    </RoutesView>
+  );
 };
 
 export default Routes;

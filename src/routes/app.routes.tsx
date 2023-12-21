@@ -1,38 +1,47 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '@styles/colors';
 import EmojisReceived from '@screens/App/Emojis';
 import Friends from '@screens/App/Friends';
 import Custom from '@screens/Custom';
 import Inbox from '@screens/App/Inbox';
-import Profile from '@screens/App/Profile';
+import { IUser } from '@interfaces/user';
+import { ParamListBase } from '@react-navigation/native';
 import Notifications from '@screens/App/Notifications';
 import Home from '@screens/App/Home';
-import User from '@screens/App/User';
-import { UpdateUserRoutes } from './user.routes';
 import SearchRoutes from './search.routes';
 import CreateEventRoutes from './createEvent.routes';
 import { EventRoutes } from './Event/event.routes';
+import { UserRoutes } from './User/user.routes';
+import { ProfileRoutes } from './Profile/profile.routes';
+
+export type AppProps = NativeStackScreenProps<ParamListBase> & {
+  route: { params: { user: IUser; onUpdateUser: (data: IUser) => void } };
+};
 
 const BottomTab = createBottomTabNavigator();
 
-const BottomTabRoutes: React.FC = () => {
+const BottomTabRoutes: React.FC<AppProps> = ({ route }) => {
+  const { user, onUpdateUser } = route.params;
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
-      screenOptions={({ route }) => ({
+      screenOptions={({ route: current }) => ({
         tabBarIcon: ({ color, focused, size }) => {
           let iconName: string;
-          if (route.name === 'Home') {
+          if (current.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Search') {
+          } else if (current.name === 'Search') {
             iconName = focused ? 'search' : 'search-outline';
-          } else if (route.name === 'CreateEvent') {
+          } else if (current.name === 'CreateEvent') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
-          } else if (route.name === 'Notifications') {
+          } else if (current.name === 'Notifications') {
             iconName = focused ? 'notifications' : 'notifications-outline';
-          } else if (route.name === 'User') {
+          } else if (current.name === 'User') {
             iconName = focused ? 'person' : 'person-outline';
           }
 
@@ -59,7 +68,6 @@ const BottomTabRoutes: React.FC = () => {
         name="Home"
         component={Home}
         options={{
-          // tabBarLabel: 'Início',
           headerTitle: 'Eventos',
         }}
       />
@@ -68,7 +76,6 @@ const BottomTabRoutes: React.FC = () => {
         name="Search"
         component={SearchRoutes}
         options={{
-          // tabBarLabel: 'Explorar',
           headerTitle: 'Explorar',
         }}
       />
@@ -77,7 +84,6 @@ const BottomTabRoutes: React.FC = () => {
         name="CreateEvent"
         component={CreateEventRoutes}
         options={{
-          // tabBarLabel: 'Criar Evento',
           headerShown: false,
         }}
       />
@@ -86,19 +92,15 @@ const BottomTabRoutes: React.FC = () => {
         name="Notifications"
         component={Notifications}
         options={{
-          // tabBarLabel: 'Notificações',
           headerTitle: 'Notificações',
         }}
       />
 
       <BottomTab.Screen
         name="User"
-        component={User}
-        options={
-          {
-            // tabBarLabel: 'Perfil',
-          }
-        }
+        component={UserRoutes}
+        initialParams={{ user, onUpdateUser }}
+        options={{ headerShown: false }}
       />
     </BottomTab.Navigator>
   );
@@ -106,7 +108,18 @@ const BottomTabRoutes: React.FC = () => {
 
 const App = createNativeStackNavigator();
 
-const AppRoutes: React.FC = () => {
+const AppRoutes: React.FC<
+  NativeStackScreenProps<ParamListBase> & {
+    user: IUser;
+  }
+> = ({ navigation, route, user }) => {
+  const onUpdateUser = (data: IUser) => {
+    navigation.setParams({
+      ...route.params,
+      user: data,
+    });
+  };
+
   return (
     <App.Navigator
       screenOptions={{
@@ -120,40 +133,45 @@ const AppRoutes: React.FC = () => {
         headerTitleAlign: 'center',
       }}
     >
+      {/* <App.Screen name="BottomTabRoutes" options={{ headerShown: false }}>
+        {props => (
+          <BottomTabRoutes
+            {...props}
+            route={route}
+            onUpdateUser={onUpdateUser}
+          />
+        )}
+      </App.Screen> */}
       <App.Screen
         name="BottomTabRoutes"
         component={BottomTabRoutes}
+        initialParams={{ user, onUpdateUser }}
         options={{ headerShown: false }}
       />
+
       <App.Screen
         name="Event"
         component={EventRoutes}
         options={{ headerShown: false }}
       />
-      <App.Screen name="Profile" component={Profile} />
+
+      <App.Screen
+        name="Profile"
+        component={ProfileRoutes}
+        options={{ headerShown: false }}
+      />
+      {/*
+      <App.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      /> */}
+
       <App.Screen name="Inbox" component={Inbox} />
       <App.Screen name="Map" component={Custom} />
-      <App.Screen
-        name="Friends"
-        component={Friends}
-        options={{
-          headerTitle: 'Amigos',
-        }}
-      />
-      <App.Screen
-        name="EmojisReceived"
-        component={EmojisReceived}
-        options={{
-          headerTitle: 'Emotes Recebidos',
-        }}
-      />
-      <App.Screen
-        name="UpdateUser"
-        component={UpdateUserRoutes}
-        options={{
-          headerShown: false,
-        }}
-      />
+
+      <App.Screen name="Friends" component={Friends} />
+      <App.Screen name="EmojisReceived" component={EmojisReceived} />
     </App.Navigator>
   );
 };

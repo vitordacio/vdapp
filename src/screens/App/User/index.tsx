@@ -1,10 +1,7 @@
 import React from 'react';
-import useAuth from '@contexts/auth';
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Picture } from '@components/Picture';
 import { CoverPhoto } from '@components/CoverPhoto';
 import { Socials } from '@components/Socials';
@@ -13,18 +10,11 @@ import { LineY } from '@components/Line';
 import { ScrollView } from 'react-native';
 import { Icon } from '@components/Icon';
 import { UserTopTabRoutes } from '@routes/user.routes';
+import { AppProps } from '@routes/app.routes';
 import styles from './styles';
 
-const User: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      title: user.name,
-    });
-  }, [navigation, user.name]);
+const User: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user } = route.params;
 
   return (
     <AppView
