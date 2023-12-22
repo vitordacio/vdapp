@@ -5,7 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { Pressable } from '@components/Pressable';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
-import { IEvent } from '@interfaces/event';
+import { Icon } from '@components/Icon';
 import styles from './styles';
 
 export interface ICardUpdateOption {
@@ -15,18 +15,13 @@ export interface ICardUpdateOption {
   description?: string;
 }
 
-interface IConfirmUpdateProps
-  extends Partial<NativeStackScreenProps<ParamListBase>> {
+type IUpdateOptionProps = Partial<NativeStackScreenProps<ParamListBase>> & {
   options: ICardUpdateOption[];
-  event: IEvent;
-}
+};
 
-export const CardUpdateOptions: React.FC<IConfirmUpdateProps> = ({
+export const CardUpdateOptions: React.FC<IUpdateOptionProps> = ({
   options,
   navigation,
-  route,
-  event,
-  onUpdateEvent,
 }) => {
   return (
     <View style={styles.container}>
@@ -44,7 +39,8 @@ export const CardUpdateOptions: React.FC<IConfirmUpdateProps> = ({
             )}
 
             <View style={styles.icon}>
-              <Feather name={option.icon || 'edit'} size={19} color="white" />
+              <Icon name={option.icon || 'edit'} size={19} />
+              {/* <Feather name={option.icon || 'edit'} size={19} color="white" /> */}
             </View>
           </Pressable>
         ))}

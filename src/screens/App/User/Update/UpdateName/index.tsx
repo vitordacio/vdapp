@@ -4,9 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import useAuth from '@contexts/auth';
+import { AppProps } from '@routes/app.routes';
 import { View } from '@components/View';
 import { ViewUpdate } from '../ViewUpdate';
 import { ViewConfirm } from '../ViewConfirm';
@@ -22,10 +20,9 @@ const schema = yup.object({
 
 type NameFormData = yup.InferType<typeof schema>;
 
-const UpdateName: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
+const UpdateName: React.FC<AppProps> = ({ navigation, route }) => {
+  // const { user } = useAuth();
+  const { user } = route.params;
 
   const [confirm, setConfirm] = useState(false);
   const [form, setForm] = useState({});

@@ -1,10 +1,11 @@
-import { IUser } from '@interfaces/user';
+import { IUser, UserControl } from '@interfaces/user';
 
 export interface IFriendship {
   id_friendship: string;
-  sender_id: string;
+  author_id: string;
   receiver_id: string;
   confirmed: boolean;
-  sender?: IUser;
-  receiver?: IUser;
+  author: IUser;
+  receiver: IUser;
+  control: UserControl;
 }

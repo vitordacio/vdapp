@@ -88,7 +88,7 @@ const Event: React.FC<EventProps> = ({ navigation, route, onUpdateEvent }) => {
           )
         ) {
           updatedEvent.participating_count -= 1;
-          message = 'Voce saiu do evento com sucesso';
+          message = 'Você saiu do evento com sucesso';
         } else {
           message = 'Solicitação cancelada com sucesso';
         }
@@ -105,7 +105,6 @@ const Event: React.FC<EventProps> = ({ navigation, route, onUpdateEvent }) => {
       if (updatedEvent !== event) onUpdateEvent(updatedEvent);
       throwInfo(message);
       setParticipationLoader(false);
-      // fetchData(event.id_event);
     } catch (error) {
       throwError(error.response.data.message);
     }
@@ -124,7 +123,6 @@ const Event: React.FC<EventProps> = ({ navigation, route, onUpdateEvent }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {eventExists ? (
           <>
-            {' '}
             {showLoader ? (
               <LoadingView />
             ) : (

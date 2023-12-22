@@ -9,12 +9,15 @@ import { Counts } from '@components/Counts';
 import { LineY } from '@components/Line';
 import { ScrollView } from 'react-native';
 import { Icon } from '@components/Icon';
-import { UserTopTabRoutes } from '@routes/user.routes';
+import { UserTopTabRoutes } from '@routes/User/UserTopTab';
 import { AppProps } from '@routes/app.routes';
+import { Pressable } from '@components/Pressable';
+import useMessage from '@contexts/message';
 import styles from './styles';
 
 const User: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
+  const { throwInfo } = useMessage();
 
   return (
     <AppView
@@ -53,7 +56,7 @@ const User: React.FC<AppProps> = ({ navigation, route }) => {
                 <Button
                   style={{ width: 40 }}
                   onPress={() => navigation.push('Inbox')}
-                  svg="inbox"
+                  icon="inbox"
                 />
               </View>
               {user.location && (
@@ -64,10 +67,18 @@ const User: React.FC<AppProps> = ({ navigation, route }) => {
               )}
               {user.bio && <Text style={styles.text}>{user.bio}</Text>}
               <View style={styles.private}>
-                <Icon name={user.private ? 'lock' : 'unlock'} size={19} />
+                <Pressable
+                  onPress={() =>
+                    throwInfo(
+                      `Esse perfil é ${user.private ? 'privado' : 'público'}.`,
+                    )
+                  }
+                >
+                  <Icon name={user.private ? 'lock' : 'unlock'} size={19} />
+                </Pressable>
               </View>
             </View>
-            <View style={{ minHeight: 500 }}>
+            <View style={{ minHeight: 800 }}>
               <UserTopTabRoutes user={user} />
             </View>
           </>

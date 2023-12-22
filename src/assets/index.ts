@@ -37,6 +37,13 @@ import chevron from './chevron.svg';
 import x from './x.svg';
 import minus from './minus.svg';
 import plus from './plus.svg';
+import user from './user.svg';
+import user_plus from './user_plus.svg';
+import user_minus from './user_minus.svg';
+import user_check from './user_check.svg';
+import user_x from './user_x.svg';
+import edit from './edit.svg';
+import camera from './camera.svg';
 
 import ongoing from './Animation/ongoing.json';
 import loading from './Animation/loading.json';
@@ -83,4 +90,11 @@ export default {
   x,
   minus,
   plus,
+  user,
+  user_plus,
+  user_minus,
+  user_check,
+  user_x,
+  edit,
+  camera,
 };

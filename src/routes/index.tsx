@@ -2,8 +2,12 @@ import React from 'react';
 import useAuth from '@contexts/auth';
 import { LoadingView } from '@components/View/Loading';
 import RoutesView from '@components/View/Routes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import AppRoutes from './app.routes';
 import AuthRoutes from './auth.routes';
+
+const Stack = createNativeStackNavigator();
 
 const Routes: React.FC = () => {
   const { signed, loading, user } = useAuth();
@@ -14,7 +18,23 @@ const Routes: React.FC = () => {
 
   return (
     <RoutesView>
-      {signed ? <AppRoutes user={user} /> : <AuthRoutes />}
+      {/* {signed ? <AppRoutes user={user} /> : <AuthRoutes />} */}
+      <Stack.Navigator>
+        {signed ? (
+          <Stack.Screen
+            name="AppRoutes"
+            component={AppRoutes}
+            initialParams={{ user }}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="AuthRoutes"
+            component={AuthRoutes}
+            options={{ headerShown: false }}
+          />
+        )}
+      </Stack.Navigator>
     </RoutesView>
   );
 };

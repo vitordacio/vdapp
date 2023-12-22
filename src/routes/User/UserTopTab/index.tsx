@@ -1,3 +1,4 @@
+import { IUser } from '@interfaces/user';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import UserAchievements from '@screens/App/User/Top/UserAchievements';
 import UserEmojisSent from '@screens/App/User/Top/UserEmojisSent';
@@ -7,17 +8,26 @@ import { screenOptionsTopDefault } from '@styles/screenOptions';
 
 const UserTopTab = createMaterialTopTabNavigator();
 
-export const UserTopTabRoutes: React.FC<UserProps> = ({ route }) => {
+export const UserTopTabRoutes: React.FC<{ user: IUser }> = ({ user }) => {
   return (
     <UserTopTab.Navigator screenOptions={() => screenOptionsTopDefault({})}>
-      <UserTopTab.Screen
+      {/* <UserTopTab.Screen
         name="UserEvents"
         options={{
           tabBarLabel: 'Eventos',
         }}
       >
         {props => <UserEvents {...props} route={route} />}
-      </UserTopTab.Screen>
+      </UserTopTab.Screen> */}
+
+      <UserTopTab.Screen
+        name="UserEvents"
+        initialParams={{ user }}
+        component={UserEvents}
+        options={{
+          tabBarLabel: 'Eventos',
+        }}
+      />
 
       <UserTopTab.Screen
         name="UserParticipations"
@@ -41,21 +51,5 @@ export const UserTopTabRoutes: React.FC<UserProps> = ({ route }) => {
         }}
       />
     </UserTopTab.Navigator>
-  );
-};
-
-export const UserTopTabRoutes: React.FC<
-  Partial<NativeStackScreenProps<ParamListBase>> & {
-    user: IUser;
-  }
-> = ({ user }) => {
-  return (
-    <UserTopTab.Navigator
-      screenOptions={{
-        tabBarLabelStyle: { color: 'white' },
-        tabBarStyle: { backgroundColor: 'black' },
-        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
-      }}
-    ></UserTopTab.Navigator>
   );
 };

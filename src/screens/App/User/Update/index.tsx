@@ -1,24 +1,19 @@
-import { Feather } from '@expo/vector-icons';
 import { Text } from '@components/Text';
 import { Picture } from '@components/Picture';
 import { CoverPhoto } from '@components/CoverPhoto';
 import { AppView, View } from '@components/View';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
-import colors from '@styles/colors';
-import useAuth from '@contexts/auth';
+import { AppProps } from '@routes/app.routes';
+import { Icon } from '@components/Icon';
 import styles from './styles';
 
-const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
+const UpdateUser: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user } = route.params;
 
   const options = {
     name: {
@@ -90,11 +85,7 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           >
             <Picture picture={user.picture} />
             <View style={styles.camera}>
-              <Feather
-                name="camera"
-                size={17}
-                color={`${colors.TEXT_DEFAULT}`}
-              />
+              <Icon name="camera" size={17} />
             </View>
           </TouchableOpacity>
           <View style={styles.edit_username}>
@@ -102,7 +93,7 @@ const UpdateUser: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             <TouchableOpacity
               onPress={() => navigation.navigate('UpdateUsername')}
             >
-              <Feather name="edit" size={21} color={`${colors.TEXT_DEFAULT}`} />
+              <Icon name="edit" size={21} />
             </TouchableOpacity>
           </View>
           <View style={styles.options}>

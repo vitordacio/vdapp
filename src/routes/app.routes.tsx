@@ -110,15 +110,17 @@ const App = createNativeStackNavigator();
 
 const AppRoutes: React.FC<
   NativeStackScreenProps<ParamListBase> & {
-    user: IUser;
+    route: { params: { user: IUser } };
   }
-> = ({ navigation, route, user }) => {
+> = ({ navigation, route }) => {
   const onUpdateUser = (data: IUser) => {
     navigation.setParams({
       ...route.params,
       user: data,
     });
   };
+
+  const { user } = route.params;
 
   return (
     <App.Navigator
@@ -133,15 +135,6 @@ const AppRoutes: React.FC<
         headerTitleAlign: 'center',
       }}
     >
-      {/* <App.Screen name="BottomTabRoutes" options={{ headerShown: false }}>
-        {props => (
-          <BottomTabRoutes
-            {...props}
-            route={route}
-            onUpdateUser={onUpdateUser}
-          />
-        )}
-      </App.Screen> */}
       <App.Screen
         name="BottomTabRoutes"
         component={BottomTabRoutes}
@@ -159,13 +152,8 @@ const AppRoutes: React.FC<
         name="Profile"
         component={ProfileRoutes}
         options={{ headerShown: false }}
+        initialParams={{ onUpdateUser }}
       />
-      {/*
-      <App.Screen
-        name="Profile"
-        component={Profile}
-        options={{ headerShown: false }}
-      /> */}
 
       <App.Screen name="Inbox" component={Inbox} />
       <App.Screen name="Map" component={Custom} />

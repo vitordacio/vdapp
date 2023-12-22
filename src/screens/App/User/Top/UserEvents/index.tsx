@@ -1,21 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ParamListBase } from '@react-navigation/native';
 import { ActivityIndicator, FlatList, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
-import { IUser } from '@interfaces/user';
 import useMessage from '@contexts/message';
 import CardEvent from '@components/Card/Event';
+import { AppProps } from '@routes/app.routes';
 import styles from '../styles';
 
 let loadMore = true;
 
-type UserEventsProps = NativeStackScreenProps<ParamListBase> & {
-  user: IUser;
-};
-
-const UserEvents: React.FC<UserEventsProps> = ({ navigation, user }) => {
+const UserEvents: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user } = route.params;
   const { throwError } = useMessage();
 
   // const [showContent, setShowContent] = useState<boolean>(false);
