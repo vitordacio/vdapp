@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     gap: 5,
     marginBottom: 21,
   },
-  location: {
+  container_text: {
     justifyContent: 'center',
     flexDirection: 'row',
     gap: 8,

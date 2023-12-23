@@ -2,13 +2,12 @@ import * as yup from 'yup';
 import { Button } from '@components/Button';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
+import { IUpdatePassword } from '@services/User/IUserService';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -26,16 +25,16 @@ const schema = yup.object({
 
 type PasswordFormData = yup.InferType<typeof schema>;
 
-const UpdatePassword: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
-
+const UpdatePassword: React.FC<AppProps> = ({ navigation, route }) => {
   const handlePassword = async (data: PasswordFormData) => {
     const { password, new_password } = data;
-    setForm({ password, new_password });
-    setConfirm(true);
+    route.params.confirm = {
+      name: 'Senha',
+      description: 'Tem certeza que deseja mudar a sua senha?',
+      type: 'password',
+      data: { password, new_password } as IUpdatePassword,
+    };
+    navigation.push('UpdateUserConfirm');
   };
 
   const {
@@ -91,21 +90,8 @@ const UpdatePassword: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         />
       </>
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handlePassword)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handlePassword)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="password"
-          description="Tem certeza que deseja mudar a sua senha?"
-        />
-      )}
     </ViewUpdate>
   );
 };

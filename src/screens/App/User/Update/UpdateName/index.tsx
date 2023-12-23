@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { AppProps } from '@routes/app.routes';
+import { IUpdateName } from '@services/User/IUserService';
 import { View } from '@components/View';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -21,15 +21,16 @@ const schema = yup.object({
 type NameFormData = yup.InferType<typeof schema>;
 
 const UpdateName: React.FC<AppProps> = ({ navigation, route }) => {
-  // const { user } = useAuth();
   const { user } = route.params;
 
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
-
   const handleName = async (data: NameFormData) => {
-    setForm(data);
-    setConfirm(true);
+    route.params.confirm = {
+      name: 'Nome',
+      description: 'Tem certeza que deseja mudar o seu nome?',
+      type: 'name',
+      data: data as IUpdateName,
+    };
+    navigation.push('UpdateUserConfirm');
   };
 
   const {
@@ -54,17 +55,8 @@ const UpdateName: React.FC<AppProps> = ({ navigation, route }) => {
         maxLength={30}
       />
       <View style={styles.confirm_button_wrapper}>
-        <Button onPress={handleSubmit(handleName)} title="Salvar" type="blue" />
+        <Button onPress={handleSubmit(handleName)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="name"
-          description="Tem certeza que deseja mudar o seu nome?"
-        />
-      )}
     </ViewUpdate>
   );
 };

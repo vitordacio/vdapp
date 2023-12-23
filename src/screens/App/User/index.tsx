@@ -60,12 +60,17 @@ const User: React.FC<AppProps> = ({ navigation, route }) => {
                 />
               </View>
               {user.location && (
-                <View style={styles.location}>
-                  <Icon name="location" style={{ height: 19, width: 11.83 }} />
+                <View style={styles.container_text}>
+                  <Icon name="location" />
                   <Text style={styles.text}>{user.location}</Text>
                 </View>
               )}
-              {user.bio && <Text style={styles.text}>{user.bio}</Text>}
+              {user.bio && (
+                <View style={styles.container_text}>
+                  <Icon name="attach" />
+                  <Text style={styles.text}>{user.bio}</Text>
+                </View>
+              )}
               <View style={styles.private}>
                 <Pressable
                   onPress={() =>

@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import useAuth from '@contexts/auth';
 import { Text } from '@components/Text';
 import { userService } from '@services/User';
 import { View } from '@components/View';
 import { IUser } from '@interfaces/user';
 import { ActivityIndicator, Switch } from 'react-native';
-import { ViewUpdate } from '../ViewUpdate';
+import { AppProps } from '@routes/app.routes';
+import useMessage from '@contexts/message';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';
 
-const UpdatePrivacy: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
-  const { user, setUser } = useAuth();
+const UpdatePrivacy: React.FC<AppProps> = ({ route }) => {
+  const { user, onUpdateUser } = route.params;
+  const { throwError } = useMessage();
+
   const [value, setValue] = useState(user.private);
   const [loading, setLoading] = useState(false);
-  const [responseError, setResponseError] = useState('');
 
   const handlePrivate = async () => {
     setLoading(true);
@@ -25,9 +25,10 @@ const UpdatePrivacy: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
         private: !value,
       });
     } catch (error) {
-      setResponseError(error.message);
+      throwError(error.response.data.message);
     }
-    setUser(updatedUser);
+
+    if (updatedUser) onUpdateUser(updatedUser);
     setValue(prev => !prev);
     setLoading(false);
   };
@@ -58,7 +59,6 @@ const UpdatePrivacy: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
       <Text style={styles.user_private}>
         {value ? 'Seu perfil está privado' : 'Seu perfil está público'}
       </Text>
-      <Text style={styles.error}>{responseError}</Text>
 
       <Text style={[styles.details, { marginBottom: 14 }]}>
         Quando sua conta é pública, seu perfil e publicações podem ser vistos

@@ -3,13 +3,14 @@ import { Picture } from '@components/Picture';
 import { CoverPhoto } from '@components/CoverPhoto';
 import { AppView, View } from '@components/View';
 import React from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
 import { AppProps } from '@routes/app.routes';
 import { Icon } from '@components/Icon';
+import { Pressable } from '@components/Pressable';
 import styles from './styles';
 
 const UpdateUser: React.FC<AppProps> = ({ navigation, route }) => {
@@ -18,32 +19,32 @@ const UpdateUser: React.FC<AppProps> = ({ navigation, route }) => {
   const options = {
     name: {
       title: 'Nome',
-      redirect: 'UpdateName',
+      redirect: 'UpdateUserName',
       description: `${user.name}`,
     },
     bio: {
       title: 'Biografia',
-      redirect: 'UpdateBio',
+      redirect: 'UpdateUserBio',
       description: `${user.bio || 'Adicione uma biografia'}`,
     },
     location: {
       title: 'Localização',
-      redirect: 'UpdateLocation',
+      redirect: 'UpdateUserLocation',
       description: `${user.location || 'Adicione uma localização'}`,
     },
     gender: {
       title: 'Gênero',
-      redirect: 'UpdateGender',
+      redirect: 'UpdateUserGender',
       icon: 'arrow-right',
     },
     socials: {
       title: 'Ligação a redes sociais',
-      redirect: 'UpdateSocial',
+      redirect: 'UpdateUserSocial',
       icon: 'plus',
     },
     privacy: {
       title: 'Privacidade',
-      redirect: 'UpdatePrivacy',
+      redirect: 'UpdateUserPrivacy',
       icon: 'arrow-right',
       description: `${
         user.private ? 'Seu perfil é privado' : 'Seu perfil é público'
@@ -51,11 +52,11 @@ const UpdateUser: React.FC<AppProps> = ({ navigation, route }) => {
     },
     email: {
       title: 'E-mail',
-      redirect: 'UpdateEmail',
+      redirect: 'UpdateUserEmail',
     },
     password: {
       title: 'Senha',
-      redirect: 'UpdatePassword',
+      redirect: 'UpdateUserPassword',
     },
   } as {
     name: ICardUpdateOption;
@@ -79,22 +80,19 @@ const UpdateUser: React.FC<AppProps> = ({ navigation, route }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <CoverPhoto cover_photo={user.cover_photo} />
-          <TouchableOpacity
-            style={styles.picture_container}
-            onPress={handlePicture}
-          >
+          <Pressable style={styles.picture_container} onPress={handlePicture}>
             <Picture picture={user.picture} />
             <View style={styles.camera}>
               <Icon name="camera" size={17} />
             </View>
-          </TouchableOpacity>
+          </Pressable>
           <View style={styles.edit_username}>
             <Text style={styles.username}>@{user.username}</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('UpdateUsername')}
+            <Pressable
+              onPress={() => navigation.navigate('UpdateUserUsername')}
             >
               <Icon name="edit" size={21} />
-            </TouchableOpacity>
+            </Pressable>
           </View>
           <View style={styles.options}>
             <CardUpdateOptions

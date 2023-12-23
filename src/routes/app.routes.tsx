@@ -13,6 +13,8 @@ import { IUser } from '@interfaces/user';
 import { ParamListBase } from '@react-navigation/native';
 import Notifications from '@screens/App/Notifications';
 import Home from '@screens/App/Home';
+import { UpdateUserConfirm } from '@screens/App/User/Update/UpdateUserConfirm';
+import { screenOptionsDefault } from '@styles/screenOptions';
 import SearchRoutes from './search.routes';
 import CreateEventRoutes from './createEvent.routes';
 import { EventRoutes } from './Event/event.routes';
@@ -20,13 +22,18 @@ import { UserRoutes } from './User/user.routes';
 import { ProfileRoutes } from './Profile/profile.routes';
 
 export type AppProps = NativeStackScreenProps<ParamListBase> & {
-  route: { params: { user: IUser; onUpdateUser: (data: IUser) => void } };
+  route: {
+    params: {
+      user: IUser;
+      onUpdateUser?: (data: IUser) => void;
+      confirm?: UpdateUserConfirm;
+    };
+  };
 };
 
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabRoutes: React.FC<AppProps> = ({ route }) => {
-  const { user, onUpdateUser } = route.params;
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -96,52 +103,32 @@ const BottomTabRoutes: React.FC<AppProps> = ({ route }) => {
         }}
       />
 
-      <BottomTab.Screen
-        name="User"
-        component={UserRoutes}
-        initialParams={{ user, onUpdateUser }}
-        options={{ headerShown: false }}
-      />
+      <BottomTab.Screen name="User" options={{ headerShown: false }}>
+        {props => <UserRoutes {...props} route={route} />}
+      </BottomTab.Screen>
     </BottomTab.Navigator>
   );
 };
 
 const App = createNativeStackNavigator();
 
-const AppRoutes: React.FC<
-  NativeStackScreenProps<ParamListBase> & {
-    route: { params: { user: IUser } };
-  }
-> = ({ navigation, route }) => {
+const AppRoutes: React.FC<AppProps> = ({ navigation, route }) => {
   const onUpdateUser = (data: IUser) => {
     navigation.setParams({
       ...route.params,
       user: data,
     });
   };
-
-  const { user } = route.params;
+  route.params.onUpdateUser = onUpdateUser;
 
   return (
     <App.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: 'black',
-        },
-        headerTitleStyle: {
-          color: 'white',
-        },
-        headerTintColor: 'white',
-        headerTitleAlign: 'center',
-      }}
+      screenOptions={() => screenOptionsDefault({})}
+      initialRouteName="BottomTabRoutes"
     >
-      <App.Screen
-        name="BottomTabRoutes"
-        component={BottomTabRoutes}
-        initialParams={{ user, onUpdateUser }}
-        options={{ headerShown: false }}
-      />
-
+      <App.Screen name="BottomTabRoutes" options={{ headerShown: false }}>
+        {props => <BottomTabRoutes {...props} route={route} />}
+      </App.Screen>
       <App.Screen
         name="Event"
         component={EventRoutes}

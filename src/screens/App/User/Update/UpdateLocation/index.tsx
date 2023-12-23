@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import useAuth from '@contexts/auth';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { ViewUpdate } from '@components/View/ViewUpdate';
+import { AppProps } from '@routes/app.routes';
+import { IUpdateLocation } from '@services/User/IUserService';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -18,16 +16,17 @@ const schema = yup.object({
 
 type LocationFormData = yup.InferType<typeof schema>;
 
-const UpdateLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
+const UpdateLocation: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user } = route.params;
 
   const handleLocation = async (data: LocationFormData) => {
-    setForm(data);
-    setConfirm(true);
+    route.params.confirm = {
+      name: 'Localização',
+      description: 'Tem certeza que deseja mudar a sua localização?',
+      type: 'location',
+      data: data as IUpdateLocation,
+    };
+    navigation.push('UpdateUserConfirm');
   };
 
   const {
@@ -53,21 +52,8 @@ const UpdateLocation: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         maxLength={30}
       />
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handleLocation)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handleLocation)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="location"
-          description="Tem certeza que deseja mudar a sua localização?"
-        />
-      )}
     </ViewUpdate>
   );
 };

@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import useAuth from '@contexts/auth';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { userService } from '@services/User';
 import { View } from '@components/View';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { IUpdateUsername } from '@services/User/IUserService';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -23,13 +21,8 @@ const schema = yup.object({
 
 type UsernameFormData = yup.InferType<typeof schema>;
 
-const UpdateUsername: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
-
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
+const UpdateUsername: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user } = route.params;
 
   const handleValid = async (username: string): Promise<boolean> => {
     if (username.length < 4 || username.length > 16) return false;
@@ -48,8 +41,14 @@ const UpdateUsername: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const handleUsername = async (data: UsernameFormData) => {
     const valid = await handleValid(data.username);
     if (!valid) return;
-    setForm(data);
-    setConfirm(true);
+
+    route.params.confirm = {
+      name: 'Nome de Usuário',
+      description: 'Tem certeza que deseja mudar o seu nome de usuário?',
+      type: 'username',
+      data: data as IUpdateUsername,
+    };
+    navigation.push('UpdateUserConfirm');
   };
 
   const {
@@ -79,21 +78,8 @@ const UpdateUsername: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         />
       </>
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handleUsername)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handleUsername)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="username"
-          description="Tem certeza que deseja mudar o seu nome de usuário?"
-        />
-      )}
     </ViewUpdate>
   );
 };

@@ -20,7 +20,6 @@ export type ITextInputProps = TextInputProps & {
   lengthMax?: number;
   nullMargin?: boolean;
   setShowValue?: React.Dispatch<React.SetStateAction<string>>;
-  defaultValue?: string;
   width?: number;
 };
 
@@ -33,12 +32,11 @@ export const TextInput = ({
   lengthMax,
   nullMargin,
   setShowValue,
-  defaultValue,
   width,
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [isFilled, setIsFilled] = useState(!!defaultValue);
+  const [isFilled, setIsFilled] = useState(!!value);
   const [isSecurity, setIsSecurity] = useState(rest.secureTextEntry);
   const [isValid, setIsValid] = useState(false);
   const [lengthCount, setLengthCount] = useState(0);
@@ -97,7 +95,7 @@ export const TextInput = ({
           multiline={!!lengthMax}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          defaultValue={defaultValue}
+          defaultValue={value}
           onChangeText={async e => {
             onChange(e);
             setIsFilled(!!e);
@@ -152,12 +150,14 @@ type IControlledTextInputProps = ITextInputProps & {
   control: Control<FieldValues>;
   name: string;
   error?: FieldError;
+  defaultValue?: string;
 };
 
 export function ControlledTextInput({
   control,
   name,
   error,
+  defaultValue,
   ...rest
 }: IControlledTextInputProps) {
   return (
@@ -165,6 +165,7 @@ export function ControlledTextInput({
       <Controller
         name={name}
         control={control}
+        defaultValue={defaultValue || ''}
         render={({ field: { onChange, value } }) => (
           <TextInput onChange={onChange} value={value} {...rest} />
         )}

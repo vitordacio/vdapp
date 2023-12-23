@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import useAuth from '@contexts/auth';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from '@components/View';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { IUpdateEmail } from '@services/User/IUserService';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -18,10 +16,8 @@ const schema = yup.object({
 
 type EmailFormData = yup.InferType<typeof schema>;
 
-const UpdateEmail: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
+const UpdateEmail: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user } = route.params;
 
   const splitedEmail = user.email.split('@');
   const email =
@@ -29,12 +25,14 @@ const UpdateEmail: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     '@' +
     `${splitedEmail[1]}`;
 
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
-
   const handleEmail = async (data: EmailFormData) => {
-    setForm(data);
-    setConfirm(true);
+    route.params.confirm = {
+      name: 'E-mail',
+      description: 'Tem certeza que deseja mudar o seu email?',
+      type: 'email',
+      data: data as IUpdateEmail,
+    };
+    navigation.push('UpdateUserConfirm');
   };
 
   const {
@@ -60,21 +58,8 @@ const UpdateEmail: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         />
       </>
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handleEmail)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handleEmail)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="email"
-          description="Tem certeza que deseja mudar a sua localização?"
-        />
-      )}
     </ViewUpdate>
   );
 };

@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
-
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import useAuth from '@contexts/auth';
 import { Text } from '@components/Text';
 import { RadioInput } from '@components/Input/RadioInput';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
 import { TextInput } from '@components/Input/TextInput';
 import { View, TouchableOpacity } from 'react-native';
-import { ViewUpdate } from '../ViewUpdate';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import generalstyle from '../styles';
 import styles from './styles';
 
-const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
-  const { user, setUser } = useAuth();
+const UpdateGender: React.FC<AppProps> = ({ route }) => {
+  const { user, onUpdateUser } = route.params;
 
   const [currentValue, setCurrentValue] = useState<IUser['gender']>(
     user.gender || ('' as IUser['gender']),
@@ -24,7 +21,6 @@ const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
 
   const handleGender = async (gender: IUser['gender']) => {
     let updatedUser: IUser;
-    // if (gender && gender !== 'male' && gender !== 'female') setInputValue(null);
     try {
       updatedUser = await userService.updateGender({
         gender: gender || '',
@@ -32,15 +28,9 @@ const UpdateGender: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
     } catch (error) {
       setResponseError(error.message);
     }
-    setUser(updatedUser);
+    if (updatedUser) onUpdateUser(updatedUser);
     setCurrentValue(gender);
   };
-
-  // const handleInputText = (e: string) => {
-  //   setCurrentValue(e as IUser['gender']);
-
-  //   handleGender(e as IUser['gender']);
-  // };
 
   return (
     <ViewUpdate

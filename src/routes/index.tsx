@@ -18,7 +18,6 @@ const Routes: React.FC = () => {
 
   return (
     <RoutesView>
-      {/* {signed ? <AppRoutes user={user} /> : <AuthRoutes />} */}
       <Stack.Navigator>
         {signed ? (
           <Stack.Screen

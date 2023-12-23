@@ -20,17 +20,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  error: {
-    color: `${colors.RED}`,
-    textAlign: 'center',
-    height: 17,
-    width: '100%',
-    marginBottom: 37,
-  },
   user_private: {
     color: `${colors.TEXT_DEFAULT}`,
     textAlign: 'left',
     fontSize: 14,
+    marginBottom: 37,
   },
   details: {
     color: `${colors.GRAY_DESCRIPTION}`,
