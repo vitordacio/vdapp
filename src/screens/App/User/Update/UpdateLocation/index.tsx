@@ -20,7 +20,7 @@ const UpdateLocation: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
 
   const handleLocation = async (data: LocationFormData) => {
-    route.params.confirm = {
+    route.params.updateUserConfirm = {
       name: 'Localização',
       description: 'Tem certeza que deseja mudar a sua localização?',
       type: 'location',

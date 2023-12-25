@@ -1,5 +1,5 @@
 import { IUser } from '@interfaces/user';
-import { IEvent } from './event';
+import { EventControl, IEvent } from './event';
 import { IAddress } from './address';
 
 export interface IParticipation {
@@ -17,8 +17,7 @@ export interface IParticipation {
   user: IUser;
   reviwer: IUser;
   type: IParticipationType;
-  participation_status: IParticipationStatus;
-  participation_name: IParticipationStatus;
+  control: EventControl;
 }
 
 export interface IParticipationType {
@@ -28,15 +27,3 @@ export interface IParticipationType {
   inviteButtonTitle?: 'Convidado' | 'Moderador' | 'VIP';
   inviteDescription?: 'convidado' | 'moderador' | 'VIP';
 }
-
-export type IParticipationStatus =
-  | 'author'
-  | 'user_in'
-  | 'user_out'
-  | 'guest_in'
-  | 'guest_out'
-  | 'mod_in'
-  | 'mod_out'
-  | 'vip_in'
-  | 'vip_out'
-  | '';

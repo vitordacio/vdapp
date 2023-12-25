@@ -1,20 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ParamListBase } from '@react-navigation/native';
 import { FlatList, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useSearch from '@contexts/search';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import CardEvent from '@components/Card/Event';
 import useMessage from '@contexts/message';
 import { Loading } from '@components/View/Loading';
+import { AppProps } from '@routes/app.routes';
 import styles from '../styles';
 
 let loadMore = true;
 
-const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+const SearchEvent: React.FC<AppProps> = ({ navigation, route }) => {
   const { search, debouncedSearch, refreshing, setRefreshing } = useSearch();
 
   const { throwError } = useMessage();
@@ -71,7 +68,7 @@ const SearchEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardEvent navigation={navigation} event={item} />;
+      return <CardEvent navigation={navigation} route={route} event={item} />;
     },
     [data],
   );

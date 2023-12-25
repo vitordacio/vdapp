@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import { Text } from '@components/Text';
-import { View } from '@components/View';
-import { Feather } from '@expo/vector-icons';
 import { Button } from '@components/Button';
-import { Pressable } from '@components/Pressable';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ParamListBase } from '@react-navigation/native';
 import { eventService } from '@services/Event';
 import {
   IUpdateName,
@@ -23,12 +17,25 @@ import {
 } from '@services/Event/IEventService';
 import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
-import { EventProps } from '@routes/Event/event.routes';
-import styles from './styles';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 
-interface IViewConfirmProps
-  extends Partial<NativeStackScreenProps<ParamListBase>> {
-  data: object | string;
+export type UpdatEventConfirmProps = {
+  name: string;
+  description: string;
+  data:
+    | IUpdateName
+    | IUpdateLocation
+    | IUpdateHours
+    | IUpdateAddress
+    | IUpdateAdditional
+    | IUpdateDrinkPreferences
+    | IUpdateMinAmount
+    | IUpdatePerformer
+    | IUpdateClubName
+    | IUpdateTicketsValue
+    | IUpdateTicketsFree
+    | IUpdatePrivacy;
   type:
     | 'name'
     | 'location'
@@ -42,19 +49,20 @@ interface IViewConfirmProps
     | 'tickets_value'
     | 'tickets_free'
     | 'privacy';
-  setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
-  description: string;
-  event: IEvent;
-  onUpdateEvent: (data: IEvent) => void;
-}
+};
 
-export const UpdateEventConfirm: React.FC<EventProps> = props => {
-  console.log(props);
+export const UpdateEventConfirm: React.FC<AppProps> = ({
+  navigation,
+  route,
+}) => {
+  const { onUpdateEvent, updateEventConfirm } = route.params;
+
   const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleConfirm = async () => {
     setLoading(true);
+    const { type, data } = updateEventConfirm;
     let updatedEvent: IEvent;
     let message: string;
 
@@ -128,31 +136,25 @@ export const UpdateEventConfirm: React.FC<EventProps> = props => {
     }
 
     if (updatedEvent) {
-      updatedEvent.status = event.status;
-      updatedEvent.participation_status = event.participation_status;
       onUpdateEvent(updatedEvent);
       throwInfo(message);
     }
 
-    return navigation.goBack();
+    route.params.updateEventConfirm = null;
+    return navigation.navigate('UpdateEventScreen');
   };
 
   return (
-    <Pressable style={styles.container} onPress={() => setConfirm(false)}>
-      <View style={styles.content}>
-        <View style={styles.close_content}>
-          <Pressable onPress={() => setConfirm(false)}>
-            <Feather name="x" size={30} color="black" />
-          </Pressable>
-        </View>
-        <Text style={styles.description}>{description}</Text>
-        <Button
-          type="dark"
-          title="Confirmar"
-          onPress={handleSubmit}
-          loading={loading}
-        />
-      </View>
-    </Pressable>
+    <ViewUpdate
+      name={updateEventConfirm.name}
+      description={updateEventConfirm.description}
+    >
+      <Button
+        loading={loading}
+        onPress={handleConfirm}
+        title="Confirmar"
+        type="blue"
+      />
+    </ViewUpdate>
   );
 };

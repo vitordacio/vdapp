@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,9 +6,8 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { IUpdateTicketsFree } from '@services/Event/IEventService';
-import { EventProps } from '@routes/Event/event.routes';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -20,21 +19,21 @@ const schema = yup.object({
 
 type TicketsFreeFormData = yup.InferType<typeof schema>;
 
-const UpdateEventTicketsFree: React.FC<EventProps> = ({
-  navigation,
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventTicketsFree: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
-  const handleTicketsFree = async (data: TicketsFreeFormData) => {
-    setForm({
-      event_id: event.id_event,
-      tickets_free: data.tickets_free.toString(),
-    } as IUpdateTicketsFree);
-    setConfirm(true);
+  const handleTicketsFree = async ({ tickets_free }: TicketsFreeFormData) => {
+    route.params.updateEventConfirm = {
+      name: 'Entradas grátis',
+      description:
+        'Tem certeza que deseja mudar a quantidade de entrada grátis?',
+      type: 'tickets_free',
+      data: {
+        event_id: event.id_event,
+        tickets_free: tickets_free.toString(),
+      } as IUpdateTicketsFree,
+    };
+    navigation.push('UpdateEventConfirm');
   };
 
   const {
@@ -60,23 +59,8 @@ const UpdateEventTicketsFree: React.FC<EventProps> = ({
         keyboardType="numeric"
       />
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handleTicketsFree)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handleTicketsFree)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="tickets_free"
-          description="Tem certeza que deseja mudar a quantidade de entrada grátis?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,9 +6,8 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { IUpdateLocation } from '@services/Event/IEventService';
-import { EventProps } from '@routes/Event/event.routes';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -21,21 +20,20 @@ const schema = yup.object({
 
 type LocationFormData = yup.InferType<typeof schema>;
 
-const UpdateEventLocation: React.FC<EventProps> = ({
-  navigation,
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventLocation: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
-  const handleLocation = async (data: LocationFormData) => {
-    setForm({
-      event_id: event.id_event,
-      location: data.location,
-    } as IUpdateLocation);
-    setConfirm(true);
+  const handleLocation = async ({ location }: LocationFormData) => {
+    route.params.updateEventConfirm = {
+      name: 'Local do evento',
+      description: 'Tem certeza que deseja mudar o local do evento?',
+      type: 'location',
+      data: {
+        event_id: event.id_event,
+        location,
+      } as IUpdateLocation,
+    };
+    navigation.push('UpdateEventConfirm');
   };
 
   const {
@@ -61,23 +59,8 @@ const UpdateEventLocation: React.FC<EventProps> = ({
         maxLength={80}
       />
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handleLocation)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handleLocation)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="location"
-          description="Tem certeza que deseja mudar o local do evento?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

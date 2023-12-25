@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,9 +6,8 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { IUpdateDrinkPreferences } from '@services/Event/IEventService';
-import { EventProps } from '@routes/Event/event.routes';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -19,21 +18,26 @@ const schema = yup.object({
 
 type DrinkPreferencesFormData = yup.InferType<typeof schema>;
 
-const UpdateEventDrinkPreferences: React.FC<EventProps> = ({
+const UpdateEventDrinkPreferences: React.FC<AppProps> = ({
   navigation,
   route,
-  onUpdateEvent,
 }) => {
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
-  const handleDrinkPreferences = async (data: DrinkPreferencesFormData) => {
-    setForm({
-      event_id: event.id_event,
-      drink_preferences: data.drink_preferences,
-    } as IUpdateDrinkPreferences);
-    setConfirm(true);
+  const handleDrinkPreferences = async ({
+    drink_preferences,
+  }: DrinkPreferencesFormData) => {
+    route.params.updateEventConfirm = {
+      name: 'Preferência de bebidas',
+      description:
+        'Tem certeza que deseja mudar a preferência de bebidas do evento?',
+      type: 'drink_preferences',
+      data: {
+        event_id: event.id_event,
+        drink_preferences,
+      } as IUpdateDrinkPreferences,
+    };
+    navigation.push('UpdateEventConfirm');
   };
 
   const {
@@ -61,21 +65,9 @@ const UpdateEventDrinkPreferences: React.FC<EventProps> = ({
       <View style={styles.confirm_button_wrapper}>
         <Button
           onPress={handleSubmit(handleDrinkPreferences)}
-          title="Salvar"
-          type="blue"
+          title="Continuar"
         />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="drink_preferences"
-          description="Tem certeza que deseja mudar a preferência de bebidas do evento?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

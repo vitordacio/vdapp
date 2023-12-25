@@ -28,7 +28,7 @@ type PasswordFormData = yup.InferType<typeof schema>;
 const UpdatePassword: React.FC<AppProps> = ({ navigation, route }) => {
   const handlePassword = async (data: PasswordFormData) => {
     const { password, new_password } = data;
-    route.params.confirm = {
+    route.params.updateUserConfirm = {
       name: 'Senha',
       description: 'Tem certeza que deseja mudar a sua senha?',
       type: 'password',

@@ -15,15 +15,15 @@ import { Pressable } from '@components/Pressable';
 import useMessage from '@contexts/message';
 import { Icon } from '@components/Icon';
 import { LoadingView } from '@components/View/Loading';
-import { EventProps } from '@routes/Event/event.routes';
+import { AppProps } from '@routes/app.routes';
 import { EventTopTabRoutes } from '@routes/Event/EventTopTab';
 import { IParticipation } from '@interfaces/participation';
 import styles from './styles';
 import { ParticipationStatus, eventParticipationHandler } from './handlers';
 import NotFoundEvent from './NotFoundEvent';
 
-const Event: React.FC<EventProps> = ({ navigation, route, onUpdateEvent }) => {
-  const { event } = route.params;
+const Event: React.FC<AppProps> = ({ navigation, route }) => {
+  const { event, onUpdateEvent } = route.params;
   const { throwInfo, throwError } = useMessage();
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -42,10 +42,9 @@ const Event: React.FC<EventProps> = ({ navigation, route, onUpdateEvent }) => {
     try {
       dataEvent = await eventService.findById(event_id);
 
-      const handleParticipationStatus = eventParticipationHandler({
-        participation_status: dataEvent.participation_status,
-        participation_id: dataEvent.participation_id,
-      });
+      const handleParticipationStatus = eventParticipationHandler(
+        dataEvent.control,
+      );
 
       setParticipationStatus(handleParticipationStatus);
     } catch (error) {
@@ -96,10 +95,19 @@ const Event: React.FC<EventProps> = ({ navigation, route, onUpdateEvent }) => {
         status.participation_id = '';
       }
 
-      status = eventParticipationHandler({
-        participation_status: dataParticipation?.participation_status || '',
-        participation_id: dataParticipation?.id_participation || '',
-      });
+      status.participation_status = dataParticipation
+        ? dataParticipation.control.participation_status
+        : '';
+      status.can_see_content = dataParticipation
+        ? dataParticipation.control.can_see_content
+        : !event.type.free_access || !event.private;
+
+      status = eventParticipationHandler(status);
+
+      // status = eventParticipationHandler({
+      //   participation_status: dataParticipation?.participation_status || '',
+      //   participation_id: dataParticipation?.id_participation || '',
+      // });
 
       setParticipationStatus(status);
       if (updatedEvent !== event) onUpdateEvent(updatedEvent);
@@ -138,7 +146,7 @@ const Event: React.FC<EventProps> = ({ navigation, route, onUpdateEvent }) => {
                       )}
                     </View>
                     <View style={styles.container_data}>
-                      {event.status === 'ongoing' && (
+                      {participationStatus.status === 'ongoing' && (
                         <>
                           <View style={styles.status}>
                             <Text style={styles.status_message}>

@@ -15,7 +15,7 @@ import { AppProps } from '@routes/app.routes';
 import useMessage from '@contexts/message';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 
-export type UpdateUserConfirm = {
+export type UpdateUserConfirmProps = {
   name: string;
   description: string;
   data:
@@ -42,14 +42,14 @@ export const UpdateUserConfirm: React.FC<AppProps> = ({
   navigation,
   route,
 }) => {
-  const { onUpdateUser, confirm } = route.params;
+  const { onUpdateUser, updateUserConfirm } = route.params;
 
   const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async () => {
     setLoading(true);
-    const { type, data } = confirm;
+    const { type, data } = updateUserConfirm;
     let updatedUser: IUser;
     let message: string;
 
@@ -90,14 +90,20 @@ export const UpdateUserConfirm: React.FC<AppProps> = ({
       throwError(error.response.data.message);
     }
 
-    if (updatedUser) onUpdateUser(updatedUser);
-    throwInfo(message);
+    if (updatedUser) {
+      onUpdateUser(updatedUser);
+      throwInfo(message);
+    }
 
+    route.params.updateUserConfirm = null;
     return navigation.navigate('UpdateUserScreen');
   };
 
   return (
-    <ViewUpdate name={confirm.name} description={confirm.description}>
+    <ViewUpdate
+      name={updateUserConfirm.name}
+      description={updateUserConfirm.description}
+    >
       <Button
         loading={loading}
         onPress={handleConfirm}

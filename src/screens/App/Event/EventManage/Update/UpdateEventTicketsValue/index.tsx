@@ -4,30 +4,28 @@ import { TextInput } from 'react-native';
 import { View } from '@components/View';
 import { IUpdateTicketsValue } from '@services/Event/IEventService';
 import colors from '@styles/colors';
-import { EventProps } from '@routes/Event/event.routes';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';
 
-const UpdateEventTicketsValue: React.FC<EventProps> = ({
-  navigation,
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventTicketsValue: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
   const [moneyValue, setMoneyValue] = useState('');
   const [isTicketValueFocused, setIsTicketValueFocused] = useState(false);
   const [isTicketValueFilled, setIsTicketValueFilled] = useState(false);
 
   const handleTicketValue = async () => {
-    setForm({
-      event_id: event.id_event,
-      tickets_value: !moneyValue.includes('NaN') ? moneyValue : undefined,
-    } as IUpdateTicketsValue);
-    setConfirm(true);
+    route.params.updateEventConfirm = {
+      name: 'Valor de entrada',
+      description: 'Tem certeza que deseja mudar o valor de entrada do evento?',
+      type: 'tickets_value',
+      data: {
+        event_id: event.id_event,
+        tickets_value: !moneyValue.includes('NaN') ? moneyValue : undefined,
+      } as IUpdateTicketsValue,
+    };
+    navigation.push('UpdateEventConfirm');
   };
 
   const formatMoney = (value: string) => {
@@ -59,8 +57,8 @@ const UpdateEventTicketsValue: React.FC<EventProps> = ({
 
   return (
     <ViewUpdate
-      name="Valor mínimo recomendado"
-      description="Você pode alterar o valor mínimo recomendado a qualquer momento."
+      name="Valor de entrada"
+      description="Você pode alterar o valor de entrada a qualquer momento."
     >
       <View style={styles.container_min_amount}>
         <TextInput
@@ -89,24 +87,8 @@ const UpdateEventTicketsValue: React.FC<EventProps> = ({
       </View>
 
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={() => handleTicketValue()}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={() => handleTicketValue()} title="Continuar" />
       </View>
-
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="tickets_value"
-          description="Tem certeza que deseja mudar as informações do evento?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

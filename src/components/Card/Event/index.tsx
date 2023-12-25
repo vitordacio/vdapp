@@ -4,24 +4,26 @@ import { View } from '@components/View';
 import { Text } from '@components/Text';
 import assets from '@assets/index';
 import { Image } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ParamListBase } from '@react-navigation/native';
 import { IEvent } from '@interfaces/event';
 import { formatTimeRange } from '@utils/formaters';
 import { LineX } from '@components/Line';
 import { Pressable } from '@components/Pressable';
-import useAuth from '@contexts/auth';
 import { Icon } from '@components/Icon';
 import { Picture } from '@components/Picture';
+import { AppProps } from '@routes/app.routes';
 import styles from './styles';
 
-type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
-  event: IEvent;
-  hideAuthor?: boolean;
-};
+// type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
+//   event: IEvent;
+//   hideAuthor?: boolean;
+// };
 
-const CardEvent = ({ event, navigation, hideAuthor }: CardProps) => {
-  const { user } = useAuth();
+const CardEvent: React.FC<
+  AppProps & { event: IEvent; hideAuthor?: boolean }
+> = ({ event, navigation, route, hideAuthor }) => {
+  const { user } = route.params;
+  // const CardEvent = ({ event, navigation, hideAuthor }: CardProps) => {
+  // const { user } = useAuth();
   const {
     type,
     cover_photo,
@@ -44,12 +46,18 @@ const CardEvent = ({ event, navigation, hideAuthor }: CardProps) => {
     user.locale,
   );
 
+  const onPress = () => {
+    route.params.event = event;
+    return navigation.push('Event');
+  };
+
   return (
     <>
       {event && (
         <Pressable
           style={styles.container}
-          onPress={() => navigation.push('Event', { event })}
+          onPress={onPress}
+          // onPress={() => navigation.push('Event', { event })}
         >
           {cover_photo && (
             <Image

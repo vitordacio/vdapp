@@ -9,8 +9,9 @@ import {
 import { SearchInput } from '@components/Input/SearchInput';
 import { SearchTopRoutes } from '@routes/search.routes';
 import useSearch from '@contexts/search';
+import { AppProps } from '@routes/app.routes';
 
-const Search: React.FC = () => {
+const Search: React.FC<AppProps> = ({ navigation, route }) => {
   const { search, setSearch, setRefreshing } = useSearch();
 
   return (
@@ -23,7 +24,7 @@ const Search: React.FC = () => {
             value={search}
           />
 
-          <SearchTopRoutes />
+          <SearchTopRoutes navigation={navigation} route={route} />
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </AppView>

@@ -1,15 +1,16 @@
 import { AppView, View } from '@components/View';
 import React from 'react';
 import { ScrollView } from 'react-native';
+import { AppProps } from '@routes/app.routes';
 import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
-import { EventProps } from '@routes/Event/event.routes';
 import styles from './styles';
 
-const UpdateEvent: React.FC<EventProps> = ({ navigation, route }) => {
+const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
+
   const options = {
     name: {
       title: 'Nome',
@@ -105,13 +106,11 @@ const UpdateEvent: React.FC<EventProps> = ({ navigation, route }) => {
               <CardUpdateOptions
                 navigation={navigation}
                 options={[options.name, options.location, options.hours]}
-                event={event}
               />
 
               <CardUpdateOptions
                 navigation={navigation}
                 options={[options.address]}
-                event={event}
               />
 
               <CardUpdateOptions
@@ -121,7 +120,6 @@ const UpdateEvent: React.FC<EventProps> = ({ navigation, route }) => {
                   options.drink_preferences,
                   options.min_amount,
                 ]}
-                event={event}
               />
 
               <CardUpdateOptions
@@ -132,13 +130,11 @@ const UpdateEvent: React.FC<EventProps> = ({ navigation, route }) => {
                   options.ticket_value,
                   options.tickets_free,
                 ]}
-                event={event}
               />
 
               <CardUpdateOptions
                 navigation={navigation}
                 options={[options.privacy]}
-                event={event}
               />
             </View>
           </View>

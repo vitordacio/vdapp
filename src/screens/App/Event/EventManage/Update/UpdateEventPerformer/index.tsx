@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,9 +6,8 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { IUpdatePerformer } from '@services/Event/IEventService';
-import { EventProps } from '@routes/Event/event.routes';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -19,21 +18,20 @@ const schema = yup.object({
 
 type PerformerFormData = yup.InferType<typeof schema>;
 
-const UpdateEventPerformer: React.FC<EventProps> = ({
-  navigation,
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventPerformer: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
-  const handlePerformer = async (data: PerformerFormData) => {
-    setForm({
-      event_id: event.id_event,
-      performer: data.performer,
-    } as IUpdatePerformer);
-    setConfirm(true);
+  const handlePerformer = async ({ performer }: PerformerFormData) => {
+    route.params.updateEventConfirm = {
+      name: 'Artista',
+      description: 'Tem certeza que deseja mudar o artista do evento?',
+      type: 'performer',
+      data: {
+        event_id: event.id_event,
+        performer,
+      } as IUpdatePerformer,
+    };
+    navigation.push('UpdateEventConfirm');
   };
 
   const {
@@ -58,23 +56,8 @@ const UpdateEventPerformer: React.FC<EventProps> = ({
         maxLength={80}
       />
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handlePerformer)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handlePerformer)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="performer"
-          description="Tem certeza que deseja mudar as informações do artista?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

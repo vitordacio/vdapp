@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,9 +6,8 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { IUpdateClubName } from '@services/Event/IEventService';
-import { EventProps } from '@routes/Event/event.routes';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -19,21 +18,17 @@ const schema = yup.object({
 
 type ClubNameFormData = yup.InferType<typeof schema>;
 
-const UpdateEventClubName: React.FC<EventProps> = ({
-  navigation,
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventClubName: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
-  const handleClubName = async (data: ClubNameFormData) => {
-    setForm({
-      event_id: event.id_event,
-      club_name: data.club_name,
-    } as IUpdateClubName);
-    setConfirm(true);
+  const handleClubName = async ({ club_name }: ClubNameFormData) => {
+    route.params.updateEventConfirm = {
+      name: 'Nome do clube',
+      description: 'Tem certeza que deseja mudar o nome do clube?',
+      type: 'club_name',
+      data: { event_id: event.id_event, club_name } as IUpdateClubName,
+    };
+    navigation.push('UpdateEventConfirm');
   };
 
   const {
@@ -58,23 +53,8 @@ const UpdateEventClubName: React.FC<EventProps> = ({
         maxLength={80}
       />
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handleClubName)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handleClubName)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="club_name"
-          description="Tem certeza que deseja mudar o nome do clube?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

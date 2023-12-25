@@ -42,7 +42,7 @@ const UpdateUsername: React.FC<AppProps> = ({ navigation, route }) => {
     const valid = await handleValid(data.username);
     if (!valid) return;
 
-    route.params.confirm = {
+    route.params.updateUserConfirm = {
       name: 'Nome de Usuário',
       description: 'Tem certeza que deseja mudar o seu nome de usuário?',
       type: 'username',

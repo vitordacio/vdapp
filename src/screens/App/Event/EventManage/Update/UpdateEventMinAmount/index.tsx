@@ -4,21 +4,14 @@ import { TextInput } from 'react-native';
 import { View } from '@components/View';
 import { IUpdateMinAmount } from '@services/Event/IEventService';
 import colors from '@styles/colors';
-import { EventProps } from '@routes/Event/event.routes';
 import useMessage from '@contexts/message';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';
 
-const UpdateEventMinAmount: React.FC<EventProps> = ({
-  navigation,
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventMinAmount: React.FC<AppProps> = ({ navigation, route }) => {
   const { throwError } = useMessage();
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
   const [moneyValue, setMoneyValue] = useState('');
   const [isMinAmountFocused, setIsMinAmountFocused] = useState(false);
@@ -30,11 +23,17 @@ const UpdateEventMinAmount: React.FC<EventProps> = ({
     const isValid = value && !Number.isNaN(Number(value));
 
     if (isValid) {
-      setForm({
-        event_id: event.id_event,
-        min_amount: moneyValue,
-      } as IUpdateMinAmount);
-      setConfirm(true);
+      route.params.updateEventConfirm = {
+        name: 'Valor mínimo recomendado',
+        description:
+          'Tem certeza que deseja mudar o valor mínimo recomendado do evento?',
+        type: 'min_amount',
+        data: {
+          event_id: event.id_event,
+          min_amount: value,
+        } as IUpdateMinAmount,
+      };
+      navigation.push('UpdateEventConfirm');
     } else {
       throwError('Informe um número válido');
     }
@@ -102,20 +101,8 @@ const UpdateEventMinAmount: React.FC<EventProps> = ({
       </View>
 
       <View style={styles.confirm_button_wrapper}>
-        <Button onPress={() => handleMinAmount()} title="Salvar" type="blue" />
+        <Button onPress={() => handleMinAmount()} title="Continuar" />
       </View>
-
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="min_amount"
-          description="Tem certeza que deseja mudar as informações do evento?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

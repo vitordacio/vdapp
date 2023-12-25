@@ -13,8 +13,10 @@ import { IUser } from '@interfaces/user';
 import { ParamListBase } from '@react-navigation/native';
 import Notifications from '@screens/App/Notifications';
 import Home from '@screens/App/Home';
-import { UpdateUserConfirm } from '@screens/App/User/Update/UpdateUserConfirm';
+import { UpdateUserConfirmProps } from '@screens/App/User/Update/UpdateUserConfirm';
 import { screenOptionsDefault } from '@styles/screenOptions';
+import { UpdatEventConfirmProps } from '@screens/App/Event/EventManage/Update/UpdateEventConfirm';
+import { IEvent } from '@interfaces/event';
 import SearchRoutes from './search.routes';
 import CreateEventRoutes from './createEvent.routes';
 import { EventRoutes } from './Event/event.routes';
@@ -26,7 +28,12 @@ export type AppProps = NativeStackScreenProps<ParamListBase> & {
     params: {
       user: IUser;
       onUpdateUser?: (data: IUser) => void;
-      confirm?: UpdateUserConfirm;
+      updateUserConfirm?: UpdateUserConfirmProps;
+      profile?: IUser;
+      onUpdateProfile?: (data: IUser) => void;
+      event?: IEvent;
+      onUpdateEvent?: (data: IEvent) => void;
+      updateEventConfirm?: UpdatEventConfirmProps;
     };
   };
 };
@@ -71,21 +78,13 @@ const BottomTabRoutes: React.FC<AppProps> = ({ route }) => {
         headerTitleAlign: 'center',
       })}
     >
-      <BottomTab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          headerTitle: 'Eventos',
-        }}
-      />
+      <BottomTab.Screen name="Home" options={{ headerTitle: 'Eventos' }}>
+        {props => <Home {...props} route={route} />}
+      </BottomTab.Screen>
 
-      <BottomTab.Screen
-        name="Search"
-        component={SearchRoutes}
-        options={{
-          headerTitle: 'Explorar',
-        }}
-      />
+      <BottomTab.Screen name="Search" options={{ headerTitle: 'Explorar' }}>
+        {props => <SearchRoutes {...props} route={route} />}
+      </BottomTab.Screen>
 
       <BottomTab.Screen
         name="CreateEvent"
@@ -116,10 +115,19 @@ const AppRoutes: React.FC<AppProps> = ({ navigation, route }) => {
   const onUpdateUser = (data: IUser) => {
     navigation.setParams({
       ...route.params,
-      user: data,
+      user: { ...route.params.user, ...data },
     });
   };
   route.params.onUpdateUser = onUpdateUser;
+
+  const onUpdateEvent = (data: IEvent) => {
+    navigation.setParams({
+      ...route.params,
+      event: { ...route.params.event, ...data },
+    });
+  };
+
+  route.params.onUpdateEvent = onUpdateEvent;
 
   return (
     <App.Navigator
@@ -129,18 +137,14 @@ const AppRoutes: React.FC<AppProps> = ({ navigation, route }) => {
       <App.Screen name="BottomTabRoutes" options={{ headerShown: false }}>
         {props => <BottomTabRoutes {...props} route={route} />}
       </App.Screen>
-      <App.Screen
-        name="Event"
-        component={EventRoutes}
-        options={{ headerShown: false }}
-      />
 
-      <App.Screen
-        name="Profile"
-        component={ProfileRoutes}
-        options={{ headerShown: false }}
-        initialParams={{ onUpdateUser }}
-      />
+      <App.Screen name="Event" options={{ headerShown: false }}>
+        {props => <EventRoutes {...props} route={route} />}
+      </App.Screen>
+
+      <App.Screen name="Profile" options={{ headerShown: false }}>
+        {props => <ProfileRoutes {...props} route={route} />}
+      </App.Screen>
 
       <App.Screen name="Inbox" component={Inbox} />
       <App.Screen name="Map" component={Custom} />

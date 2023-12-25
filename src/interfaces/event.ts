@@ -1,5 +1,5 @@
 import { IAddress } from './address';
-import { IParticipation, IParticipationStatus } from './participation';
+import { IParticipation } from './participation';
 import { IEventType } from './types';
 import { IUser } from './user';
 
@@ -27,7 +27,23 @@ export interface IEvent {
   participations: IParticipation;
   participating_count: number;
   emojis_count: number;
-  status: 'awaiting' | 'ongoing' | 'finished';
-  participation_id: string;
-  participation_status: IParticipationStatus;
+
+  control: EventControl;
 }
+
+export type EventControl = {
+  participation_id?: string;
+  status: 'awaiting' | 'ongoing' | 'finished';
+  participation_status:
+    | 'author'
+    | 'user_in'
+    | 'user_out'
+    | 'guest_in'
+    | 'guest_out'
+    | 'mod_in'
+    | 'mod_out'
+    | 'vip_in'
+    | 'vip_out'
+    | '';
+  can_see_content: boolean;
+};

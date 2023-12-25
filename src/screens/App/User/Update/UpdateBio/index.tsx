@@ -20,7 +20,7 @@ const UpdateBio: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
 
   const handleBio = async (data: BioFormData) => {
-    route.params.confirm = {
+    route.params.updateUserConfirm = {
       name: 'Biografia',
       description: 'Tem certeza que deseja mudar a sua biografia?',
       type: 'bio',

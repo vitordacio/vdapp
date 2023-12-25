@@ -3,117 +3,118 @@ import { Text } from '@components/Text';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@components/Button';
 import { Picture } from '@components/Picture';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ParamListBase } from '@react-navigation/native';
 import { IUser } from '@interfaces/user';
 import { friendshipService } from '@services/Friendship';
-import useAuth from '@contexts/auth';
 import useMessage from '@contexts/message';
 import { Pressable } from '@components/Pressable';
+import { AppProps } from '@routes/app.routes';
+import {
+  FriendshipStatus,
+  userFriendshipHandler,
+} from '@screens/App/Profile/handlers';
+import { IFriendship } from '@interfaces/friendship';
 import styles from './styles';
 
-type Situation = {
-  status: 'friends' | 'request_sent' | 'request_received' | '';
-  type: 'blue' | 'red' | 'green' | 'gray';
-  icon: 'user-plus' | 'user-check' | 'user-x' | 'user-minus';
-};
-
-type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
-  user: IUser;
-};
-
-const CardUser: React.FC<CardProps> = ({ user, navigation }) => {
-  const { user: self } = useAuth();
-  const { throwError } = useMessage();
-  const { username, name, picture, friendship_status } = user;
-
-  const [situation, setSituation] = useState({} as Situation);
+const CardUser: React.FC<AppProps & { user: IUser }> = ({
+  user,
+  navigation,
+  route,
+}) => {
+  const { user: self, onUpdateUser } = route.params;
+  const { throwInfo, throwError } = useMessage();
+  const [friendshipLoader, setFriendshipLoader] = useState<boolean>(false);
+  const [friendshipStatus, setFriendshipStatus] = useState(
+    {} as FriendshipStatus,
+  );
 
   const handleFriendship = async () => {
+    setFriendshipLoader(true);
+
     try {
-      if (!situation.status) {
-        await friendshipService.createRequest(user.id_user);
-        setSituation({
-          status: 'request_sent',
-          type: 'red',
-          icon: 'user-x',
-        });
-      }
-      if (situation.status === 'request_received') {
-        await friendshipService.createResponse(user.id_user);
-        setSituation({
-          status: 'friends',
-          type: 'red',
-          icon: 'user-minus',
-        });
-      }
-      if (
-        situation.status === 'request_sent' ||
-        situation.status === 'friends'
-      ) {
+      let updatedUser = self;
+      let updatedProfile = user;
+      let dataFriendship: IFriendship;
+      let message = '';
+
+      let status = friendshipStatus;
+
+      if (!status.friendship_status) {
+        dataFriendship = await friendshipService.createRequest(user.id_user);
+
+        message = 'Solicitação enviada com sucesso';
+      } else if (status.friendship_status === 'request_received') {
+        dataFriendship = await friendshipService.createResponse(user.id_user);
+
+        message = 'Amizade aceita com sucesso';
+
+        updatedUser = dataFriendship.receiver;
+        updatedProfile = dataFriendship.author;
+      } else {
         await friendshipService.deleteFriendship(user.id_user);
-        setSituation({
-          status: '',
-          type: 'blue',
-          icon: 'user-plus',
-        });
+        if (status.friendship_status === 'friends') {
+          updatedUser.friends_count -= 1;
+          updatedProfile.friends_count -= 1;
+          message = 'Você desfez a amizade com sucesso';
+        } else {
+          message = 'Solicitação cancelada com sucesso';
+        }
+
+        status.friendship_id = '';
       }
+
+      status.friendship_status = dataFriendship
+        ? dataFriendship.control.friendship_status
+        : '';
+      status.can_see_content = dataFriendship
+        ? dataFriendship.control.can_see_content
+        : user.role_name !== 'user' || !user.private;
+
+      status = userFriendshipHandler(status);
+      setFriendshipStatus(status);
+
+      if (updatedUser !== self) onUpdateUser(updatedUser);
+      if (updatedProfile !== user) user = { ...user, ...updatedProfile };
+      throwInfo(message);
+
+      setFriendshipLoader(false);
     } catch (error) {
       throwError(error.response.data.message);
     }
   };
 
+  const handleOnPress = () => {
+    if (self.id_user === user.id_user) return navigation.navigate('User');
+
+    route.params.profile = user;
+    return navigation.push('Profile');
+  };
+
   useEffect(() => {
-    let type: Situation['type'];
-    let icon: Situation['icon'];
+    const handleFriendshipStatus = userFriendshipHandler(user.control);
 
-    if (!friendship_status) {
-      type = 'blue';
-      icon = 'user-plus';
-    } else if (friendship_status === 'request_received') {
-      type = 'green';
-      icon = 'user-check';
-    } else if (friendship_status === 'request_sent') {
-      type = 'gray';
-      icon = 'user-x';
-    } else {
-      type = 'red';
-      icon = 'user-minus';
-    }
-
-    const handleSituation: Situation = {
-      status: friendship_status,
-      type,
-      icon,
-    };
-
-    setSituation(handleSituation);
+    setFriendshipStatus(handleFriendshipStatus);
   }, []);
 
   return (
     <>
       {user && (
-        <Pressable
-          style={styles.container}
-          onPress={() =>
-            self.id_user !== user.id_user
-              ? navigation.push('Profile', { user })
-              : navigation.navigate('User')
-          }
-        >
-          <Picture card={true} picture={picture} />
+        <Pressable style={styles.container} onPress={handleOnPress}>
+          <Picture card={true} picture={user.picture} />
           <View style={styles.content}>
-            {name && <Text style={styles.name}>{name}</Text>}
-            {username && <Text style={styles.username}>@{username}</Text>}
+            {user.name && <Text style={styles.name}>{user.name}</Text>}
+            {user.username && (
+              <Text style={styles.username}>@{user.username}</Text>
+            )}
           </View>
           {self.id_user !== user.id_user && (
             <Button
-              type={situation.type}
-              icon={situation.icon}
+              type={friendshipStatus.type}
+              icon={friendshipStatus.icon}
               iconSize={30}
               iconColor="#FFFFFF"
               style={styles.friendship}
               onPress={handleFriendship}
+              loading={friendshipLoader}
             />
           )}
         </Pressable>

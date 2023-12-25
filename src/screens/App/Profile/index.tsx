@@ -3,7 +3,6 @@ import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
 import { Picture } from '@components/Picture';
 import { CoverPhoto } from '@components/CoverPhoto';
-import { ProfileProps } from '@routes/Profile/profile.routes';
 import React, { useEffect, useState } from 'react';
 import { Counts } from '@components/Counts';
 import { LineY } from '@components/Line';
@@ -13,23 +12,19 @@ import { UserPrivateTopTabRoutes } from '@routes/user.routes';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
 import useMessage from '@contexts/message';
-import useAuth from '@contexts/auth';
+// import useAuth from '@contexts/auth';
 import { IFriendship } from '@interfaces/friendship';
 import { friendshipService } from '@services/Friendship';
 import { Pressable } from '@components/Pressable';
 import { LoadingView } from '@components/View/Loading';
+import { AppProps } from '@routes/app.routes';
 import NotFoundProfile from './NotFoundProfile';
 import { FriendshipStatus, userFriendshipHandler } from './handlers';
 import styles from './styles';
 
-const Profile: React.FC<ProfileProps> = ({
-  navigation,
-  route,
-  onUpdateProfile,
-}) => {
-  const { user: self } = useAuth();
+const Profile: React.FC<AppProps> = ({ navigation, route }) => {
   const { throwInfo, throwError } = useMessage();
-  const { user, onUpdateUser } = route.params;
+  const { user, onUpdateUser, profile, onUpdateProfile } = route.params;
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const [profileExists, setProfileExists] = useState<boolean>(true);
@@ -60,28 +55,30 @@ const Profile: React.FC<ProfileProps> = ({
     setFriendshipLoader(true);
 
     try {
-      let updatedSelf = self;
-      let updatedProfile = user;
+      let updatedUser = user;
+      let updatedProfile = profile;
       let dataFriendship: IFriendship;
       let message = '';
 
       let status = friendshipStatus;
 
       if (!status.friendship_status) {
-        dataFriendship = await friendshipService.createRequest(user.id_user);
+        dataFriendship = await friendshipService.createRequest(profile.id_user);
 
         message = 'Solicitação enviada com sucesso';
       } else if (status.friendship_status === 'request_received') {
-        dataFriendship = await friendshipService.createResponse(user.id_user);
+        dataFriendship = await friendshipService.createResponse(
+          profile.id_user,
+        );
 
         message = 'Amizade aceita com sucesso';
 
-        updatedSelf = dataFriendship.receiver;
+        updatedUser = dataFriendship.receiver;
         updatedProfile = dataFriendship.author;
       } else {
-        await friendshipService.deleteFriendship(user.id_user);
+        await friendshipService.deleteFriendship(profile.id_user);
         if (status.friendship_status === 'friends') {
-          updatedSelf.friends_count -= 1;
+          updatedUser.friends_count -= 1;
           updatedProfile.friends_count -= 1;
           message = 'Você desfez a amizade com sucesso';
         } else {
@@ -96,14 +93,13 @@ const Profile: React.FC<ProfileProps> = ({
         : '';
       status.can_see_content = dataFriendship
         ? dataFriendship.control.can_see_content
-        : user.role_name !== 'user' || !user.private;
+        : profile.role_name !== 'user' || !profile.private;
 
       status = userFriendshipHandler(status);
       setFriendshipStatus(status);
 
-      if (updatedSelf !== self) onUpdateUser({ ...self, ...updatedSelf });
-      if (updatedProfile !== user)
-        onUpdateProfile({ ...user, ...updatedProfile });
+      if (updatedUser !== user) onUpdateUser(updatedUser);
+      if (updatedProfile !== profile) onUpdateProfile(updatedProfile);
       throwInfo(message);
 
       setFriendshipLoader(false);
@@ -113,7 +109,7 @@ const Profile: React.FC<ProfileProps> = ({
   };
 
   useEffect(() => {
-    fetchData(user.id_user);
+    fetchData(profile.id_user);
   }, []);
 
   return (
@@ -129,27 +125,27 @@ const Profile: React.FC<ProfileProps> = ({
               <LoadingView />
             ) : (
               <>
-                {user && (
+                {profile && (
                   <View style={styles.container}>
-                    <CoverPhoto cover_photo={user.cover_photo} />
-                    <Picture picture={user.picture} />
-                    <Text style={styles.username}>@{user.username}</Text>
+                    <CoverPhoto cover_photo={profile.cover_photo} />
+                    <Picture picture={profile.picture} />
+                    <Text style={styles.username}>@{profile.username}</Text>
                     <View style={styles.counts}>
                       <Counts
-                        number={user.friends_count}
+                        number={profile.friends_count}
                         description="Amigos"
                         onPress={
-                          user.control.can_see_content
+                          profile.control.can_see_content
                             ? () => navigation.push('Friends', { user })
                             : () => throwInfo('Esse conteúdo é privado')
                         }
                       />
                       <LineY />
                       <Counts
-                        number={user.emojis_count}
+                        number={profile.emojis_count}
                         description="Emotes"
                         onPress={
-                          user.control.can_see_content
+                          profile.control.can_see_content
                             ? () => navigation.push('EmojisReceived', { user })
                             : () => throwInfo('Esse conteúdo é privado')
                         }
@@ -172,28 +168,30 @@ const Profile: React.FC<ProfileProps> = ({
                         icon="inbox"
                       />
                     </View>
-                    {user.location && (
+                    {profile.location && (
                       <View style={styles.location}>
                         <Icon
                           name="location"
                           style={{ height: 19, width: 11.83 }}
                         />
-                        <Text style={styles.text}>{user.location}</Text>
+                        <Text style={styles.text}>{profile.location}</Text>
                       </View>
                     )}
-                    {user.bio && <Text style={styles.text}>{user.bio}</Text>}
+                    {profile.bio && (
+                      <Text style={styles.text}>{profile.bio}</Text>
+                    )}
                     <View style={styles.private}>
                       <Pressable
                         onPress={() =>
                           throwInfo(
                             `Esse perfil é ${
-                              user.private ? 'privado' : 'público'
+                              profile.private ? 'privado' : 'público'
                             }.`,
                           )
                         }
                       >
                         <Icon
-                          name={user.private ? 'lock' : 'unlock'}
+                          name={profile.private ? 'lock' : 'unlock'}
                           size={19}
                         />
                       </Pressable>

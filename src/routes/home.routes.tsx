@@ -2,39 +2,33 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ForYou from '@screens/App/Home/Top/ForYou';
 import Latest from '@screens/App/Home/Top/Latest';
 import Trending from '@screens/App/Home/Top/Trending';
+import { screenOptionsTopDefault } from '@styles/screenOptions';
+import { AppProps } from './app.routes';
 
 const HomeTopTab = createMaterialTopTabNavigator();
 
-export const HomeTopRoutes: React.FC = () => {
+export const HomeTopRoutes: React.FC<AppProps> = ({ route }) => {
   return (
-    <HomeTopTab.Navigator
-      screenOptions={{
-        tabBarLabelStyle: { color: 'white' },
-        tabBarStyle: { backgroundColor: 'black' },
-        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
-      }}
-    >
+    <HomeTopTab.Navigator screenOptions={() => screenOptionsTopDefault({})}>
+      {/*
       <HomeTopTab.Screen
         name="ForYou"
         component={ForYou}
         options={{
           tabBarLabel: 'Para Você',
         }}
-      />
-      <HomeTopTab.Screen
-        name="Latest"
-        component={Latest}
-        options={{
-          tabBarLabel: 'Mais Novos',
-        }}
-      />
-      <HomeTopTab.Screen
-        name="Trending"
-        component={Trending}
-        options={{
-          tabBarLabel: 'Em Alta',
-        }}
-      />
+      /> */}
+      <HomeTopTab.Screen name="ForYou" options={{ tabBarLabel: 'Para Você' }}>
+        {props => <ForYou {...props} route={route} />}
+      </HomeTopTab.Screen>
+
+      <HomeTopTab.Screen name="Latest" options={{ tabBarLabel: 'Mais Novos' }}>
+        {props => <Latest {...props} route={route} />}
+      </HomeTopTab.Screen>
+
+      <HomeTopTab.Screen name="Trending" options={{ tabBarLabel: 'Em Alta' }}>
+        {props => <Trending {...props} route={route} />}
+      </HomeTopTab.Screen>
     </HomeTopTab.Navigator>
   );
 };

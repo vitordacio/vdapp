@@ -3,17 +3,11 @@ import { Text } from '@components/Text';
 import React, { useEffect, useState } from 'react';
 import { HomeTopRoutes } from '@routes/home.routes';
 import { Button } from '@components/Button';
-import {
-  ParamListBase,
-  getFocusedRouteNameFromRoute,
-} from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { AppProps } from '@routes/app.routes';
 import styles from './styles';
 
-const Home: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-  route,
-}) => {
+const Home: React.FC<AppProps> = ({ navigation, route }) => {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
@@ -40,16 +34,16 @@ const Home: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <View style={styles.content}>
         <Button
           style={{ width: '100%' }}
-          svgSize={22}
+          iconSize={22}
           onPress={() => navigation.push('Map')}
           title="Abrir Mapa"
-          svg="map"
+          icon="map"
         />
 
         <Text style={styles.description}>{description}</Text>
       </View>
 
-      <HomeTopRoutes />
+      <HomeTopRoutes navigation={navigation} route={route} />
     </AppView>
   );
 };

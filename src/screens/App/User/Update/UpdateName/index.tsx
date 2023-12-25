@@ -24,7 +24,7 @@ const UpdateName: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
 
   const handleName = async (data: NameFormData) => {
-    route.params.confirm = {
+    route.params.updateUserConfirm = {
       name: 'Nome',
       description: 'Tem certeza que deseja mudar o seu nome?',
       type: 'name',

@@ -14,9 +14,9 @@ import { userService } from '@services/User';
 import { Feather } from '@expo/vector-icons';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ICreateSocial } from '@services/User/IUserService';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+// import { ICreateSocial } from '@services/User/IUserService';
+import { ViewUpdate } from '@components/View/ViewUpdate';
+
 import generalstyle from '../styles';
 import styles from './styles';
 
@@ -34,17 +34,15 @@ const schema = yup.object({
 
 type SocialFormData = yup.InferType<typeof schema>;
 
-const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
   const { user } = useAuth();
 
-  const [submitType, setSubmitType] = useState<
-    'create_social' | 'delete_social'
-  >();
+  // const [submitType, setSubmitType] = useState<
+  //   'create_social' | 'delete_social'
+  // >();
 
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState<ICreateSocial | string>();
+  // const [confirm, setConfirm] = useState(false);
+  // const [form, setForm] = useState<ICreateSocial | string>();
 
   const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>([]);
   const [currentType, setCurrentType] = useState<IUserSocialType>();
@@ -178,20 +176,6 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = ({
           </View>
         ))}
       </View>
-
-      {confirm && (
-        <ViewConfirm
-          navigation={navigation}
-          data={form}
-          setConfirm={setConfirm}
-          type={submitType}
-          description={
-            submitType === 'create_social'
-              ? 'Tem certeza que deseja adicionar a ligação a rede social?'
-              : 'Tem certeza que deseja desfazer a ligação a rede social?'
-          }
-        />
-      )}
     </ViewUpdate>
   );
 };

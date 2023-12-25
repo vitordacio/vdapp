@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
-import { EventProps } from '@routes/Event/event.routes';
 import { IUpdateAdditional } from '@services/Event/IEventService';
-import { ViewUpdate } from '../ViewUpdate';
-import { ViewConfirm } from '../ViewConfirm';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -19,21 +18,17 @@ const schema = yup.object({
 
 type AdditionalFormData = yup.InferType<typeof schema>;
 
-const UpdateEventAdditional: React.FC<EventProps> = ({
-  navigation,
-  route,
-  onUpdateEvent,
-}) => {
+const UpdateEventAdditional: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
-  const [confirm, setConfirm] = useState(false);
-  const [form, setForm] = useState({});
 
-  const handleAdditional = async (data: AdditionalFormData) => {
-    setForm({
-      event_id: event.id_event,
-      additional: data.additional,
-    } as IUpdateAdditional);
-    setConfirm(true);
+  const handleAdditional = async ({ additional }: AdditionalFormData) => {
+    route.params.updateEventConfirm = {
+      name: 'Informações adicionais',
+      description: 'Tem certeza que deseja mudar as informações do evento?',
+      type: 'additional',
+      data: { event_id: event.id_event, additional } as IUpdateAdditional,
+    };
+    navigation.push('UpdateEventConfirm');
   };
 
   const {
@@ -59,23 +54,8 @@ const UpdateEventAdditional: React.FC<EventProps> = ({
         lengthMax={150}
       />
       <View style={styles.confirm_button_wrapper}>
-        <Button
-          onPress={handleSubmit(handleAdditional)}
-          title="Salvar"
-          type="blue"
-        />
+        <Button onPress={handleSubmit(handleAdditional)} title="Continuar" />
       </View>
-      {confirm && (
-        <ViewConfirm
-          data={form}
-          navigation={navigation}
-          setConfirm={setConfirm}
-          type="additional"
-          description="Tem certeza que deseja mudar as informações do evento?"
-          event={event}
-          onUpdateEvent={onUpdateEvent}
-        />
-      )}
     </ViewUpdate>
   );
 };

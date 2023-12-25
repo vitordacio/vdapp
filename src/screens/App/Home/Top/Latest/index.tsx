@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ParamListBase } from '@react-navigation/native';
 import { FlatList, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AppProps } from '@routes/app.routes';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import useMessage from '@contexts/message';
@@ -11,9 +10,7 @@ import styles from '../styles';
 
 let loadMore = true;
 
-const Latest: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+const Latest: React.FC<AppProps> = ({ navigation, route }) => {
   const { throwError } = useMessage();
 
   const [data, setData] = useState<IEvent[] | []>([]);
@@ -66,7 +63,7 @@ const Latest: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardEvent navigation={navigation} event={item} />;
+      return <CardEvent navigation={navigation} route={route} event={item} />;
     },
     [data],
   );

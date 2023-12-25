@@ -6,12 +6,12 @@ import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import { Loading } from '@components/View/Loading';
-import { EventProps } from '@routes/Event/event.routes';
-import { ViewUpdate } from '../ViewUpdate';
+import { AppProps } from '@routes/app.routes';
+import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';
 
-const UpdateEventPrivacy: React.FC<EventProps> = ({ route, onUpdateEvent }) => {
-  const { event } = route.params;
+const UpdateEventPrivacy: React.FC<AppProps> = ({ route }) => {
+  const { event, onUpdateEvent } = route.params;
   const { throwInfo, throwError } = useMessage();
 
   const [value, setValue] = useState(event.private);
@@ -30,15 +30,12 @@ const UpdateEventPrivacy: React.FC<EventProps> = ({ route, onUpdateEvent }) => {
       throwError(error.response.data.message);
     }
 
-    if (updatedEvent) {
-      updatedEvent.status = event.status;
-      updatedEvent.participation_status = event.participation_status;
-      onUpdateEvent(updatedEvent);
-      throwInfo('Privacidade do evento atualizada com sucesso!');
-    }
+    if (updatedEvent) onUpdateEvent(updatedEvent);
+    throwInfo('Privacidade do evento atualizada com sucesso!');
 
     setValue(prev => !prev);
     setLoading(false);
+    route.params.updateEventConfirm = null;
   };
 
   return (

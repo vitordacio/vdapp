@@ -26,7 +26,7 @@ const UpdateEmail: React.FC<AppProps> = ({ navigation, route }) => {
     `${splitedEmail[1]}`;
 
   const handleEmail = async (data: EmailFormData) => {
-    route.params.confirm = {
+    route.params.updateUserConfirm = {
       name: 'E-mail',
       description: 'Tem certeza que deseja mudar o seu email?',
       type: 'email',
