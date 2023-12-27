@@ -5,21 +5,13 @@ import { SearchProvider } from '@contexts/search';
 import Search from '@screens/App/Search';
 import SearchUser from '@screens/App/Search/SearchUser';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
-import { AppProps } from './app.routes';
+import { AppProps } from '@routes/app.routes';
 
 const SearchTopTab = createMaterialTopTabNavigator();
 
 export const SearchTopRoutes: React.FC<AppProps> = ({ route }) => {
   return (
     <SearchTopTab.Navigator screenOptions={() => screenOptionsTopDefault({})}>
-      {/* <SearchTopTab.Screen
-        name="SearchEvent"
-        component={SearchEvent}
-        options={{
-          tabBarLabel: 'Eventos',
-        }}
-      /> */}
-
       <SearchTopTab.Screen
         name="SearchEvent"
         options={{ tabBarLabel: 'Eventos' }}

@@ -54,7 +54,6 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
   const SignIn = async (data: ILogin) => {
     setLoginError(null);
     try {
-      // const response = await Login(data);
       const response = await userService.login(data);
       storageService.setItem<IAuthResponse>('@Auth:data', response);
       const { accessToken, user: responseUser } = response;

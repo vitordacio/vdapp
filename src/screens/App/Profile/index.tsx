@@ -143,10 +143,10 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
                       <LineY />
                       <Counts
                         number={profile.emojis_count}
-                        description="Emotes"
+                        description="Reações"
                         onPress={
                           profile.control.can_see_content
-                            ? () => navigation.push('EmojisReceived', { user })
+                            ? () => navigation.push('ReactsReceived', { user })
                             : () => throwInfo('Esse conteúdo é privado')
                         }
                       />
@@ -161,6 +161,13 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
                         onPress={handleFriendship}
                         title={friendshipStatus.buttonTitle}
                         loading={friendshipLoader}
+                      />
+                      <Button
+                        style={{ width: 40 }}
+                        onPress={() =>
+                          navigation.navigate('React', { type: 'user' })
+                        }
+                        icon="smile"
                       />
                       <Button
                         style={{ width: 40 }}

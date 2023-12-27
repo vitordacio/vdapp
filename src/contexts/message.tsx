@@ -21,8 +21,6 @@ type handleMessage = {
 };
 
 interface IMessageContextData {
-  // message: string;
-  // messageType: string;
   handleMessage: handleMessage;
   animatedStyle: style;
   handleEntering: () => void;
@@ -45,8 +43,6 @@ export const MessageProvider: React.FC<IProps> = ({ children }) => {
   const translateY = useSharedValue(-100);
   const opac = useSharedValue(0);
 
-  // const [message, setMessage] = useState<string>();
-  // const [messageType, setMessageType] = useState<'info' | 'alert'>('info');
   const [refresh, setRefresh] = useState<boolean>(false);
   const [handleMessage, setHandleMessage] = useState<handleMessage>({
     message: '',
@@ -69,8 +65,7 @@ export const MessageProvider: React.FC<IProps> = ({ children }) => {
     setHandleMessage({
       message: infoMessage,
     });
-    // setMessageType('info');
-    // setMessage(infoMessage);
+
     handleEntering();
   };
 
@@ -80,8 +75,7 @@ export const MessageProvider: React.FC<IProps> = ({ children }) => {
       message: errorMessage,
       icon: 'alert',
     });
-    // setMessageType('alert');
-    // setMessage(errorMessage);
+
     handleEntering();
   };
 

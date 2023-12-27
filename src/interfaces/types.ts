@@ -4,3 +4,7 @@ export interface IEventType {
   free_access: boolean;
   count: number;
 }
+export interface IEmojiType {
+  id_emoji_type: string;
+  category: 'animal' | 'body' | 'face' | 'people' | 'symbol';
+}

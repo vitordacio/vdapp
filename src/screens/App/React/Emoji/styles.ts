@@ -5,9 +5,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: `${colors.GRAY_BACKGROUND}`,
-    padding: 14,
+    // backgroundColor: `${colors.BLACK}`,
+    paddingHorizontal: 14,
+    paddingVertical: 25,
   },
-  emojis: {},
 });
 
 export default styles;

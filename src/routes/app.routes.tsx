@@ -5,7 +5,6 @@ import {
 } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '@styles/colors';
-import EmojisReceived from '@screens/App/Emojis';
 import Friends from '@screens/App/Friends';
 import Custom from '@screens/Custom';
 import Inbox from '@screens/App/Inbox';
@@ -22,6 +21,7 @@ import CreateEventRoutes from './createEvent.routes';
 import { EventRoutes } from './Event/event.routes';
 import { UserRoutes } from './User/user.routes';
 import { ProfileRoutes } from './Profile/profile.routes';
+import { ReactRoutes } from './React/react.routes';
 
 export type AppProps = NativeStackScreenProps<ParamListBase> & {
   route: {
@@ -126,7 +126,6 @@ const AppRoutes: React.FC<AppProps> = ({ navigation, route }) => {
       event: { ...route.params.event, ...data },
     });
   };
-
   route.params.onUpdateEvent = onUpdateEvent;
 
   return (
@@ -146,11 +145,15 @@ const AppRoutes: React.FC<AppProps> = ({ navigation, route }) => {
         {props => <ProfileRoutes {...props} route={route} />}
       </App.Screen>
 
+      <App.Screen name="React" options={{ headerShown: false }}>
+        {props => <ReactRoutes {...props} route={route} />}
+      </App.Screen>
+
       <App.Screen name="Inbox" component={Inbox} />
       <App.Screen name="Map" component={Custom} />
 
       <App.Screen name="Friends" component={Friends} />
-      <App.Screen name="EmojisReceived" component={EmojisReceived} />
+      <App.Screen name="ReactUser" component={Custom} />
     </App.Navigator>
   );
 };
