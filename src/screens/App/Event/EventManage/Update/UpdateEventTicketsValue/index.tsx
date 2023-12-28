@@ -4,7 +4,7 @@ import { TextInput } from 'react-native';
 import { View } from '@components/View';
 import { IUpdateTicketsValue } from '@services/Event/IEventService';
 import colors from '@styles/colors';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';
 

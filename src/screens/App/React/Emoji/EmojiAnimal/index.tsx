@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import useMessage from '@contexts/message';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { Loading } from '@components/View/Loading';
 import useEmoji from '@contexts/emoji';
 import { IEmoji } from '@interfaces/emoji';
@@ -12,14 +12,14 @@ import styles from '../styles';
 let loadMore = true;
 
 const EmojiAnimal: React.FC<AppProps> = ({ navigation }) => {
-  const { emojiAnimal, setEmojiAnimal, loadingEmoji, setLoadingEmoji } =
-    useEmoji();
+  const { emojiAnimal, setEmojiAnimal, loadingEmoji } = useEmoji();
   const { throwError } = useMessage();
 
   const [page, setPage] = useState(2);
+  const [showLoader, setShowLoader] = useState(false);
 
   const fetchNewData = async () => {
-    setLoadingEmoji(true);
+    setShowLoader(true);
     let animals: IEmoji[];
 
     try {
@@ -33,7 +33,7 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation }) => {
 
       setEmojiAnimal(prev => [...prev, ...animals]);
       setPage(page + 1);
-      setLoadingEmoji(false);
+      setShowLoader(false);
     } catch (error) {
       throwError(error.response.data.message);
     }
@@ -41,7 +41,6 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation }) => {
 
   const renderItem = useCallback(
     ({ item }: { item: IEmoji }) => {
-      // return <CardUser navigation={navigation} route={route} user={item} />;
       return (
         <Button
           title={item.value}
@@ -69,22 +68,22 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation }) => {
     return <Loading size={80} />;
   }, []);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
   return (
     <View style={styles.container}>
-      <FlatList
-        data={emojiAnimal}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        ItemSeparatorComponent={itemSeparatorComponent}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.9}
-        ListFooterComponent={loadingEmoji && listFooterComponent}
-        showsVerticalScrollIndicator={false}
-      />
+      {!loadingEmoji && (
+        <FlatList
+          data={emojiAnimal}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          ItemSeparatorComponent={itemSeparatorComponent}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.9}
+          ListFooterComponent={showLoader && listFooterComponent}
+          showsHorizontalScrollIndicator={false}
+          numColumns={6}
+          columnWrapperStyle={styles.wrapper}
+        />
+      )}
     </View>
   );
 };

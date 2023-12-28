@@ -1,7 +1,7 @@
 import { AppView, View } from '@components/View';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import {
   CardUpdateOptions,
   ICardUpdateOption,

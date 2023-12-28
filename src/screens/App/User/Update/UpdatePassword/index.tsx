@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from '@components/View';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import { IUpdatePassword } from '@services/User/IUserService';
 import styles from '../styles';

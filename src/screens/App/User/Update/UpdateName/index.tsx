@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { IUpdateName } from '@services/User/IUserService';
 import { View } from '@components/View';
 import { ViewUpdate } from '@components/View/ViewUpdate';

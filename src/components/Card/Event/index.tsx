@@ -10,26 +10,19 @@ import { LineX } from '@components/Line';
 import { Pressable } from '@components/Pressable';
 import { Icon } from '@components/Icon';
 import { Picture } from '@components/Picture';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
-
-// type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
-//   event: IEvent;
-//   hideAuthor?: boolean;
-// };
 
 const CardEvent: React.FC<
   AppProps & { event: IEvent; hideAuthor?: boolean }
 > = ({ event, navigation, route, hideAuthor }) => {
   const { user } = route.params;
-  // const CardEvent = ({ event, navigation, hideAuthor }: CardProps) => {
-  // const { user } = useAuth();
+
   const {
     type,
     cover_photo,
     name,
     location,
-    status,
     start_time,
     finish_time,
     additional,
@@ -38,6 +31,7 @@ const CardEvent: React.FC<
     participating_count,
     emojis_count,
     author,
+    status,
   } = event;
 
   const hours = formatTimeRange(
@@ -54,11 +48,7 @@ const CardEvent: React.FC<
   return (
     <>
       {event && (
-        <Pressable
-          style={styles.container}
-          onPress={onPress}
-          // onPress={() => navigation.push('Event', { event })}
-        >
+        <Pressable style={styles.container} onPress={onPress}>
           {cover_photo && (
             <Image
               source={{ uri: cover_photo }}

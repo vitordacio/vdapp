@@ -11,7 +11,7 @@ import {
   IUpdatePassword,
   IUpdateUsername,
 } from '@services/User/IUserService';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import useMessage from '@contexts/message';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 

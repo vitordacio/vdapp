@@ -3,7 +3,7 @@ import {
   screenOptionsDefault,
   screenOptionsTopDefault,
 } from '@styles/screenOptions';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { EmojiProvider } from '@contexts/emoji';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Custom from '@screens/Custom';

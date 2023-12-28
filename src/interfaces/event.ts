@@ -27,13 +27,13 @@ export interface IEvent {
   participations: IParticipation;
   participating_count: number;
   emojis_count: number;
+  status: 'awaiting' | 'ongoing' | 'finished';
 
   control: EventControl;
 }
 
 export type EventControl = {
   participation_id?: string;
-  status: 'awaiting' | 'ongoing' | 'finished';
   participation_status:
     | 'author'
     | 'user_in'

@@ -3,27 +3,27 @@ import { AxiosResponse } from 'axios';
 import { IFriendship } from '@interfaces/friendship';
 
 interface IFriendshipService {
-  createRequest: (data: string) => Promise<IFriendship>;
-  createResponse: (data: string) => Promise<IFriendship>;
-  deleteFriendship: (data: string) => Promise<void>;
+  createRequest: (user_id: string) => Promise<IFriendship>;
+  createResponse: (user_id: string) => Promise<IFriendship>;
+  deleteFriendship: (friendship_id: string) => Promise<void>;
 }
 
 const service: IFriendshipService = {
-  createRequest: async (data: string): Promise<IFriendship> => {
+  createRequest: async (user_id: string): Promise<IFriendship> => {
     const response: AxiosResponse<IFriendship> = await api.post(
-      `/friendship/request/${data}`,
+      `/friendship/request/${user_id}`,
     );
     return response.data;
   },
-  createResponse: async (data: string): Promise<IFriendship> => {
+  createResponse: async (user_id: string): Promise<IFriendship> => {
     const response: AxiosResponse<IFriendship> = await api.post(
-      `/friendship/response/${data}`,
+      `/friendship/response/${user_id}`,
     );
     return response.data;
   },
-  deleteFriendship: async (data: string): Promise<void> => {
+  deleteFriendship: async (friendship_id: string): Promise<void> => {
     const response: AxiosResponse<void> = await api.delete(
-      `/friendship/${data}`,
+      `/friendship/${friendship_id}`,
     );
     return response.data;
   },

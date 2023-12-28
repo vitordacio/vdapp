@@ -7,12 +7,6 @@ const styles = StyleSheet.create({
     backgroundColor: `${colors.GRAY_BACKGROUND}`,
     padding: 14,
   },
-  error: {
-    fontSize: 14,
-    textAlign: 'center',
-    color: 'red',
-  },
-  friends: {},
 });
 
 export default styles;

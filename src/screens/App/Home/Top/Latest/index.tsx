@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import useMessage from '@contexts/message';

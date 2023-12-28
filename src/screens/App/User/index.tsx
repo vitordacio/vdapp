@@ -9,8 +9,9 @@ import { Counts } from '@components/Counts';
 import { LineY } from '@components/Line';
 import { ScrollView } from 'react-native';
 import { Icon } from '@components/Icon';
-import { UserTopTabRoutes } from '@routes/User/UserTopTab';
-import { AppProps } from '@routes/app.routes';
+// import { UserTopTabRoutes } from '@routes/User/UserTopTab';
+import { UserTopTabRoutes } from '@routes/App/BottomTab/User/UserTopTab';
+import { AppProps } from '@routes/App/app.routes';
 import { Pressable } from '@components/Pressable';
 import useMessage from '@contexts/message';
 import styles from './styles';
@@ -18,6 +19,16 @@ import styles from './styles';
 const User: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
   const { throwInfo } = useMessage();
+
+  const handleFriends = () => {
+    route.params.user_friends = user;
+    navigation.push('Friends');
+  };
+
+  const handleReactsReceived = () => {
+    route.params.user_reacts_received = user;
+    navigation.push('ReactsReceived');
+  };
 
   return (
     <AppView
@@ -37,13 +48,13 @@ const User: React.FC<AppProps> = ({ navigation, route }) => {
                 <Counts
                   number={user.friends_count}
                   description="Amigos"
-                  onPress={() => navigation.push('Friends', { user })}
+                  onPress={handleFriends}
                 />
                 <LineY />
                 <Counts
-                  number={user.emojis_count}
-                  description="Emotes"
-                  onPress={() => navigation.push('EmojisReceived', { user })}
+                  number={user.reacts_count}
+                  description="Reações"
+                  onPress={handleReactsReceived}
                 />
               </View>
               <View style={styles.buttons}>
@@ -75,7 +86,7 @@ const User: React.FC<AppProps> = ({ navigation, route }) => {
                 <Pressable
                   onPress={() =>
                     throwInfo(
-                      `Esse perfil é ${user.private ? 'privado' : 'público'}.`,
+                      `Seu perfil é ${user.private ? 'privado' : 'público'}.`,
                     )
                   }
                 >
@@ -84,7 +95,7 @@ const User: React.FC<AppProps> = ({ navigation, route }) => {
               </View>
             </View>
             <View style={{ minHeight: 800 }}>
-              <UserTopTabRoutes user={user} />
+              <UserTopTabRoutes navigation={navigation} route={route} />
             </View>
           </>
         )}

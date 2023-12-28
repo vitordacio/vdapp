@@ -1,6 +1,6 @@
 import { IUser } from '@interfaces/user';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import Profile from '@screens/App/Profile';
 import { screenOptionsDefault } from '@styles/screenOptions';
 

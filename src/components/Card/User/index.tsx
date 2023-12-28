@@ -7,7 +7,7 @@ import { IUser } from '@interfaces/user';
 import { friendshipService } from '@services/Friendship';
 import useMessage from '@contexts/message';
 import { Pressable } from '@components/Pressable';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import {
   FriendshipStatus,
   userFriendshipHandler,
@@ -85,7 +85,7 @@ const CardUser: React.FC<AppProps & { user: IUser }> = ({
   const handleOnPress = () => {
     if (self.id_user === user.id_user) return navigation.navigate('User');
 
-    route.params.profile = user;
+    route.params.user_profile = user;
     return navigation.push('Profile');
   };
 

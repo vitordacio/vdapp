@@ -2,7 +2,7 @@ import { View } from '@components/View';
 import { Text } from '@components/Text';
 import React from 'react';
 import colors from '@styles/colors';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 
 const Custom: React.FC<AppProps> = () => {
   return (

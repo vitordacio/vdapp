@@ -6,7 +6,7 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { View } from '@components/View';
 import { ViewUpdate } from '@components/View/ViewUpdate';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { IUpdateLocation } from '@services/User/IUserService';
 import styles from '../styles';
 

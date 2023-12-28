@@ -5,7 +5,7 @@ import { userService } from '@services/User';
 import CardUser from '@components/Card/User';
 import useSearch from '@contexts/search';
 import useMessage from '@contexts/message';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { Loading } from '@components/View/Loading';
 import styles from '../styles';
 

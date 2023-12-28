@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios';
 import {
   IEventResponse,
   IFindByEventAndUser,
+  IFindByUserId,
   IFindRequests,
   IInviteRequest,
 } from './IParticipationService';
@@ -20,7 +21,7 @@ interface IParticipationService {
   findRequestsPending: (data: IFindRequests) => Promise<IParticipation[]>;
   findRequestsReviwed: (data: IFindRequests) => Promise<IParticipation[]>;
   findById: (participation_id: string) => Promise<IParticipation>;
-  findByUser: () => Promise<IParticipation[]>;
+  findByUserId: (data: IFindByUserId) => Promise<IParticipation[]>;
   deleteParticipation: (participation_id: string) => Promise<void>;
 }
 
@@ -87,9 +88,10 @@ const service: IParticipationService = {
     );
     return response.data;
   },
-  findByUser: async (): Promise<IParticipation[]> => {
-    const response: AxiosResponse<IParticipation[]> =
-      await api.get('/participation');
+  findByUserId: async (data: IFindByUserId): Promise<IParticipation[]> => {
+    const response: AxiosResponse<IParticipation[]> = await api.get(
+      `/participation/user/${data.user_id}?page=${data.page || 1}`,
+    );
     return response.data;
   },
   deleteParticipation: async (participation_id: string): Promise<void> => {

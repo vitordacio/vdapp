@@ -17,21 +17,39 @@ import { IFriendship } from '@interfaces/friendship';
 import { friendshipService } from '@services/Friendship';
 import { Pressable } from '@components/Pressable';
 import { LoadingView } from '@components/View/Loading';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import NotFoundProfile from './NotFoundProfile';
 import { FriendshipStatus, userFriendshipHandler } from './handlers';
 import styles from './styles';
 
 const Profile: React.FC<AppProps> = ({ navigation, route }) => {
   const { throwInfo, throwError } = useMessage();
-  const { user, onUpdateUser, profile, onUpdateProfile } = route.params;
+  const { user, onUpdateUser, user_profile, onUpdateProfile } = route.params;
 
   const [showLoader, setShowLoader] = useState<boolean>(false);
-  const [profileExists, setProfileExists] = useState<boolean>(true);
+  const [user_profileExists, setProfileExists] = useState<boolean>(true);
   const [friendshipLoader, setFriendshipLoader] = useState<boolean>(false);
   const [friendshipStatus, setFriendshipStatus] = useState(
     {} as FriendshipStatus,
   );
+
+  const handleFriends = () => {
+    route.params.user_friends = user;
+    navigation.push('Friends');
+  };
+
+  const handleReactsReceived = () => {
+    route.params.user_reacts_received = user;
+    navigation.push('ReactsReceived');
+  };
+
+  const handleCreateReact = () => {
+    route.params.react = {
+      type: 'user',
+      user: user_profile,
+    };
+    navigation.navigate('React');
+  };
 
   const fetchData = async (user_id: string) => {
     setShowLoader(true);
@@ -56,19 +74,21 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
 
     try {
       let updatedUser = user;
-      let updatedProfile = profile;
+      let updatedProfile = user_profile;
       let dataFriendship: IFriendship;
       let message = '';
 
       let status = friendshipStatus;
 
       if (!status.friendship_status) {
-        dataFriendship = await friendshipService.createRequest(profile.id_user);
+        dataFriendship = await friendshipService.createRequest(
+          user_profile.id_user,
+        );
 
         message = 'Solicitação enviada com sucesso';
       } else if (status.friendship_status === 'request_received') {
         dataFriendship = await friendshipService.createResponse(
-          profile.id_user,
+          user_profile.id_user,
         );
 
         message = 'Amizade aceita com sucesso';
@@ -76,7 +96,7 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
         updatedUser = dataFriendship.receiver;
         updatedProfile = dataFriendship.author;
       } else {
-        await friendshipService.deleteFriendship(profile.id_user);
+        await friendshipService.deleteFriendship(user_profile.id_user);
         if (status.friendship_status === 'friends') {
           updatedUser.friends_count -= 1;
           updatedProfile.friends_count -= 1;
@@ -93,13 +113,13 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
         : '';
       status.can_see_content = dataFriendship
         ? dataFriendship.control.can_see_content
-        : profile.role_name !== 'user' || !profile.private;
+        : user_profile.role_name !== 'user' || !user_profile.private;
 
       status = userFriendshipHandler(status);
       setFriendshipStatus(status);
 
       if (updatedUser !== user) onUpdateUser(updatedUser);
-      if (updatedProfile !== profile) onUpdateProfile(updatedProfile);
+      if (updatedProfile !== user_profile) onUpdateProfile(updatedProfile);
       throwInfo(message);
 
       setFriendshipLoader(false);
@@ -109,7 +129,7 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    fetchData(profile.id_user);
+    fetchData(user_profile.id_user);
   }, []);
 
   return (
@@ -119,34 +139,36 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
       }}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        {profileExists ? (
+        {user_profileExists ? (
           <>
             {showLoader ? (
               <LoadingView />
             ) : (
               <>
-                {profile && (
+                {user_profile && (
                   <View style={styles.container}>
-                    <CoverPhoto cover_photo={profile.cover_photo} />
-                    <Picture picture={profile.picture} />
-                    <Text style={styles.username}>@{profile.username}</Text>
+                    <CoverPhoto cover_photo={user_profile.cover_photo} />
+                    <Picture picture={user_profile.picture} />
+                    <Text style={styles.username}>
+                      @{user_profile.username}
+                    </Text>
                     <View style={styles.counts}>
                       <Counts
-                        number={profile.friends_count}
+                        number={user_profile.friends_count}
                         description="Amigos"
                         onPress={
-                          profile.control.can_see_content
-                            ? () => navigation.push('Friends', { user })
+                          user_profile.control.can_see_content
+                            ? () => handleFriends()
                             : () => throwInfo('Esse conteúdo é privado')
                         }
                       />
                       <LineY />
                       <Counts
-                        number={profile.emojis_count}
+                        number={user_profile.reacts_count}
                         description="Reações"
                         onPress={
-                          profile.control.can_see_content
-                            ? () => navigation.push('ReactsReceived', { user })
+                          user_profile.control.can_see_content
+                            ? () => handleReactsReceived()
                             : () => throwInfo('Esse conteúdo é privado')
                         }
                       />
@@ -164,9 +186,7 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
                       />
                       <Button
                         style={{ width: 40 }}
-                        onPress={() =>
-                          navigation.navigate('React', { type: 'user' })
-                        }
+                        onPress={handleCreateReact}
                         icon="smile"
                       />
                       <Button
@@ -175,30 +195,30 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
                         icon="inbox"
                       />
                     </View>
-                    {profile.location && (
+                    {user_profile.location && (
                       <View style={styles.location}>
                         <Icon
                           name="location"
                           style={{ height: 19, width: 11.83 }}
                         />
-                        <Text style={styles.text}>{profile.location}</Text>
+                        <Text style={styles.text}>{user_profile.location}</Text>
                       </View>
                     )}
-                    {profile.bio && (
-                      <Text style={styles.text}>{profile.bio}</Text>
+                    {user_profile.bio && (
+                      <Text style={styles.text}>{user_profile.bio}</Text>
                     )}
                     <View style={styles.private}>
                       <Pressable
                         onPress={() =>
                           throwInfo(
                             `Esse perfil é ${
-                              profile.private ? 'privado' : 'público'
+                              user_profile.private ? 'privado' : 'público'
                             }.`,
                           )
                         }
                       >
                         <Icon
-                          name={profile.private ? 'lock' : 'unlock'}
+                          name={user_profile.private ? 'lock' : 'unlock'}
                           size={19}
                         />
                       </Pressable>

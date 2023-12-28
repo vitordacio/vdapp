@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import useMessage from '@contexts/message';
 import CardEvent from '@components/Card/Event';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
+import { Loading } from '@components/View/Loading';
 import styles from '../styles';
 
 let loadMore = true;
@@ -13,7 +14,6 @@ const UserEvents: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
   const { throwError } = useMessage();
 
-  // const [showContent, setShowContent] = useState<boolean>(false);
   const [data, setData] = useState<IEvent[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -64,7 +64,14 @@ const UserEvents: React.FC<AppProps> = ({ navigation, route }) => {
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardEvent navigation={navigation} event={item} />;
+      return (
+        <CardEvent
+          route={route}
+          navigation={navigation}
+          event={item}
+          hideAuthor={true}
+        />
+      );
     },
     [data],
   );
@@ -82,7 +89,7 @@ const UserEvents: React.FC<AppProps> = ({ navigation, route }) => {
   };
 
   const listFooterComponent = useCallback(() => {
-    return <ActivityIndicator style={{ marginVertical: 16 }} size="large" />;
+    return <Loading size={80} />;
   }, []);
 
   useEffect(() => {

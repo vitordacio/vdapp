@@ -9,7 +9,7 @@ import {
 import { SearchInput } from '@components/Input/SearchInput';
 import { SearchTopRoutes } from '@routes/search.routes';
 import useSearch from '@contexts/search';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 
 const Search: React.FC<AppProps> = ({ navigation, route }) => {
   const { search, setSearch, setRefreshing } = useSearch();

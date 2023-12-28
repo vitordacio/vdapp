@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { HomeTopRoutes } from '@routes/home.routes';
 import { Button } from '@components/Button';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
 
 const Home: React.FC<AppProps> = ({ navigation, route }) => {

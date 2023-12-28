@@ -17,7 +17,7 @@ export interface IUser {
   role_name: string;
   google_id: string;
   friends_count: number;
-  emojis_count: number;
+  reacts_count: number;
   social_networks: IUserSocial[];
   control: UserControl;
 }

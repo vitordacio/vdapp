@@ -19,6 +19,17 @@ import twitter from './SocialNetwork/twitter.svg';
 import twitch from './SocialNetwork/twitch.svg';
 import youtube from './SocialNetwork/youtube.svg';
 
+import add_circle_outline from './BottomTab/add_circle_outline.svg';
+import add_circle from './BottomTab/add_circle.svg';
+import home from './BottomTab/home.svg';
+import home_outline from './BottomTab/home_outline.svg';
+import notifications from './BottomTab/notifications.svg';
+import notifications_outline from './BottomTab/notifications_outline.svg';
+import person from './BottomTab/person.svg';
+import person_outline from './BottomTab/person_outline.svg';
+import search from './BottomTab/search.svg';
+import search_outline from './BottomTab/search_outline.svg';
+
 import attach from './attach.svg';
 import clock from './clock.svg';
 import drink from './drink.svg';
@@ -97,4 +108,14 @@ export default {
   user_x,
   edit,
   camera,
+  add_circle_outline,
+  add_circle,
+  home,
+  home_outline,
+  notifications,
+  notifications_outline,
+  person,
+  person_outline,
+  search,
+  search_outline,
 };

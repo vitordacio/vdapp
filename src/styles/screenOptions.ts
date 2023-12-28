@@ -1,5 +1,6 @@
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { MaterialTopTabNavigationOptions } from '@react-navigation/material-top-tabs';
+import { IUser } from '@interfaces/user';
 import colors from './colors';
 
 type screenOptionsProps = {
@@ -48,4 +49,18 @@ export const screenOptionsTopDefault = ({
       backgroundColor: colorSelected || `${colors.GOLD}`,
     },
   };
+};
+
+type screenOptionsFriendsTitle = {
+  user: IUser;
+  user_friends?: IUser;
+};
+
+export const screenOptionsFriendsTitle = ({
+  user,
+  user_friends,
+}: screenOptionsFriendsTitle): string => {
+  if (user_friends && user.id_user === user_friends.id_user)
+    return 'Seus Amigos';
+  return user_friends ? `Amigos de ${user_friends.name}` : `Amigos`;
 };

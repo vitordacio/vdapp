@@ -4,7 +4,7 @@ import { userService } from '@services/User';
 import { View } from '@components/View';
 import { IUser } from '@interfaces/user';
 import { ActivityIndicator, Switch } from 'react-native';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import useMessage from '@contexts/message';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';

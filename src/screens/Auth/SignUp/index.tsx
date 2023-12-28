@@ -7,7 +7,7 @@ import { Button } from '@components/Button';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -16,10 +16,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { userService } from '@services/User';
+import useMessage from '@contexts/message';
 import styles from './styles';
 
 const schema = yup.object({
-  name: yup.string().min(3).max(30).required('Informe o seu nome'),
+  name: yup
+    .string()
+    .min(4, 'O nome deve ter ao menos 4 dígitos')
+    .max(30, 'O nome deve ter no máximo 30 dígitos')
+    .required('Informe o seu nome'),
   username: yup
     .string()
     .min(4, 'O nome de usuário deve ter ao menos 4 dígitos')
@@ -41,7 +46,7 @@ type SignUpFormData = yup.InferType<typeof schema>;
 const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   navigation,
 }) => {
-  const [errorMsg, setErrorMsg] = useState();
+  const { throwInfo, throwError } = useMessage();
 
   const handleValid = async (username: string): Promise<boolean> => {
     if (username.length < 4 || username.length > 16) return false;
@@ -68,10 +73,10 @@ const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         email: data.email,
         password: data.password,
       });
-
+      throwInfo('Usuário criado com sucesso.');
       navigation.replace('Login');
     } catch (error) {
-      setErrorMsg(error.response.data.message);
+      throwError(error.response.data.message);
     }
   };
 
@@ -144,11 +149,7 @@ const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
                 secureTextEntry
                 error={errors.password_confirm}
               />
-              {errorMsg && (
-                <Text style={{ color: 'red', textAlign: 'center' }}>
-                  {errorMsg}
-                </Text>
-              )}
+
               <Button
                 title="Criar Conta"
                 onPress={handleSubmit(handleSignUp)}

@@ -6,7 +6,7 @@ import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
 import { eventService } from '@services/Event';
 import { Loading } from '@components/View/Loading';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';
 

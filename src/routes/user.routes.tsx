@@ -4,7 +4,7 @@ import {
 } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import UserAchievements from '@screens/App/User/Top/UserAchievements';
-import UserEmojisSent from '@screens/App/User/Top/UserEmojisSent';
+import UserEmojisSent from '@screens/App/User/Top/UserReactsSent';
 import UserEvents from '@screens/App/User/Top/UserEvents';
 import UserParticipations from '@screens/App/User/Top/UserParticipations';
 import UpdateUser from '@screens/App/User/Update';

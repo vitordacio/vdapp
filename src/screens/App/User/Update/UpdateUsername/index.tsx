@@ -7,7 +7,7 @@ import { Button } from '@components/Button';
 import { userService } from '@services/User';
 import { View } from '@components/View';
 import { IUpdateUsername } from '@services/User/IUserService';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from '../styles';
 

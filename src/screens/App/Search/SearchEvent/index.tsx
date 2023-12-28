@@ -6,7 +6,7 @@ import { eventService } from '@services/Event';
 import CardEvent from '@components/Card/Event';
 import useMessage from '@contexts/message';
 import { Loading } from '@components/View/Loading';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import styles from '../styles';
 
 let loadMore = true;

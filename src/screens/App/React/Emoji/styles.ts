@@ -5,9 +5,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: `${colors.GRAY_BACKGROUND}`,
-    // backgroundColor: `${colors.BLACK}`,
     paddingHorizontal: 14,
     paddingVertical: 25,
+  },
+  wrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 14,
   },
 });
 

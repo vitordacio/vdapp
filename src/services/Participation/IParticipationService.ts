@@ -19,3 +19,9 @@ export interface IFindRequests {
   page?: number;
   limit?: number;
 }
+
+export interface IFindByUserId {
+  user_id: string;
+  page?: number;
+  limit?: number;
+}

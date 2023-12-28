@@ -15,7 +15,7 @@ import { Pressable } from '@components/Pressable';
 import useMessage from '@contexts/message';
 import { Icon } from '@components/Icon';
 import { LoadingView } from '@components/View/Loading';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { EventTopTabRoutes } from '@routes/Event/EventTopTab';
 import { IParticipation } from '@interfaces/participation';
 import styles from './styles';

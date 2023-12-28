@@ -5,7 +5,7 @@ import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
 import { TextInput } from '@components/Input/TextInput';
 import { View, TouchableOpacity } from 'react-native';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import generalstyle from '../styles';
 import styles from './styles';

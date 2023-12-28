@@ -1,8 +1,5 @@
-/* eslint-disable no-console */
 import React, { useCallback, useEffect, useState } from 'react';
-import { ParamListBase, useRoute } from '@react-navigation/native';
 import {
-  ActivityIndicator,
   Keyboard,
   KeyboardAvoidingView,
   FlatList,
@@ -10,27 +7,21 @@ import {
   View,
 } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
-import { Text } from '@components/Text';
 import { IUser } from '@interfaces/user';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { userService } from '@services/User';
 import CardUser from '@components/Card/User';
 import useDebounce from '@hooks/useDebounce';
+import { AppProps } from '@routes/App/app.routes';
+import useMessage from '@contexts/message';
+import { Loading } from '@components/View/Loading';
 import styles from './styles';
-
-type UserParam = ParamListBase & {
-  user?: IUser;
-};
 
 let loadMore = true;
 
-const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const route = useRoute();
-  const { user } = route.params as UserParam;
+const Friends: React.FC<AppProps> = ({ navigation, route }) => {
+  const { throwError } = useMessage();
+  const { user_friends } = route.params;
 
-  const [responseError, setResponseError] = useState();
   const [search, setSearch] = useState('');
   const [data, setData] = useState<IUser[] | []>([]);
   const [page, setPage] = useState(2);
@@ -45,7 +36,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
     try {
       friends = await userService.findFriends({
-        user_id: user.id_user,
+        user_id: user_friends.id_user,
         page: 1,
         name: debouncedSearch,
       });
@@ -57,7 +48,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setData(friends);
       setShowLoader(false);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      throwError(error.response.data.message);
     }
   };
 
@@ -66,7 +57,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
     let friends: IUser[];
     try {
       friends = await userService.findFriends({
-        user_id: user.id_user,
+        user_id: user_friends.id_user,
         page,
         name: search,
       });
@@ -79,13 +70,13 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
-      setResponseError(error.response.data.message);
+      throwError(error.response.data.message);
     }
   };
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardUser navigation={navigation} user={item} />;
+      return <CardUser route={route} navigation={navigation} user={item} />;
     },
     [data],
   );
@@ -103,7 +94,7 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   };
 
   const listFooterComponent = useCallback(() => {
-    return <ActivityIndicator style={{ marginVertical: 16 }} size="large" />;
+    return <Loading size={80} />;
   }, []);
 
   useEffect(() => {
@@ -119,7 +110,6 @@ const Friends: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             onChangeText={e => setSearch(e)}
             value={search}
           />
-          {responseError && <Text style={styles.error}>{responseError}</Text>}
           <FlatList
             data={data}
             renderItem={renderItem}

@@ -5,7 +5,7 @@ import { View } from '@components/View';
 import { IUpdateMinAmount } from '@services/Event/IEventService';
 import colors from '@styles/colors';
 import useMessage from '@contexts/message';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import styles from './styles';
 

@@ -17,7 +17,7 @@ import {
 } from '@services/Event/IEventService';
 import useMessage from '@contexts/message';
 import { IEvent } from '@interfaces/event';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 
 export type UpdatEventConfirmProps = {

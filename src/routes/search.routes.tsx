@@ -5,7 +5,7 @@ import { SearchProvider } from '@contexts/search';
 import Search from '@screens/App/Search';
 import SearchUser from '@screens/App/Search/SearchUser';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 
 const SearchTopTab = createMaterialTopTabNavigator();
 

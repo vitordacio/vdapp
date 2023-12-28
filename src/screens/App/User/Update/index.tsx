@@ -8,7 +8,7 @@ import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
-import { AppProps } from '@routes/app.routes';
+import { AppProps } from '@routes/App/app.routes';
 import { Icon } from '@components/Icon';
 import { Pressable } from '@components/Pressable';
 import styles from './styles';
