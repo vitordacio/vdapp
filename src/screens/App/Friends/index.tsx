@@ -9,11 +9,11 @@ import {
 import { SearchInput } from '@components/Input/SearchInput';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
-import CardUser from '@components/Card/User';
 import useDebounce from '@hooks/useDebounce';
 import { AppProps } from '@routes/App/app.routes';
 import useMessage from '@contexts/message';
 import { Loading } from '@components/View/Loading';
+import CardUserWithFriendship from '@components/Card/User/Friendship';
 import styles from './styles';
 
 let loadMore = true;
@@ -76,7 +76,13 @@ const Friends: React.FC<AppProps> = ({ navigation, route }) => {
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardUser route={route} navigation={navigation} user={item} />;
+      return (
+        <CardUserWithFriendship
+          route={route}
+          navigation={navigation}
+          user={item}
+        />
+      );
     },
     [data],
   );

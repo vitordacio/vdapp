@@ -29,10 +29,7 @@ export const BottomTabRoutes: React.FC<AppProps> = ({ route }) => {
             iconName = focused ? 'person' : 'person_outline';
           }
 
-          return (
-            // <Ionicons name={iconName as 'key'} size={size} color={color} />
-            <Icon name={iconName} size={size} tintColor={color} />
-          );
+          return <Icon name={iconName} size={size} tintColor={color} />;
         },
         tabBarShowLabel: false,
         tabBarInactiveBackgroundColor: `${colors.BLACK}`,

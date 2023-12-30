@@ -54,12 +54,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 18,
   },
-  error: {
-    fontSize: 16,
-    maxWidth: 326,
-    height: 19,
+  info: {
+    fontSize: 14,
     textAlign: 'center',
-    color: `${colors.RED}`,
+    color: `${colors.GRAY_DESCRIPTION}`,
+    marginBottom: 5,
   },
 });
 

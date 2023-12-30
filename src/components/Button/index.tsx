@@ -5,12 +5,6 @@ import { Loading } from '@components/View/Loading';
 import { Icon } from '@components/Icon';
 import styles from './styles';
 
-// const svgMapping: Record<string, ImageSourcePropType> = {
-//   inbox: assets.inbox,
-//   smile: assets.smile,
-//   map: assets.map,
-// };
-
 interface IButtonProps extends PressableProps {
   title?: string;
   type?: string;

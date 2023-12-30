@@ -19,11 +19,17 @@ export interface IUser {
   friends_count: number;
   reacts_count: number;
   social_networks: IUserSocial[];
-  control: UserControl;
-}
-
-export type UserControl = {
-  friendship_id?: string;
+  friendship_id: string | '';
   friendship_status: 'friends' | 'request_sent' | 'request_received' | '';
   can_see_content: boolean;
-};
+  react_id: string | '';
+  blocked: boolean;
+
+  // control: UserControl;
+}
+
+// export type UserControl = {
+//   friendship_id?: string;
+//   friendship_status: 'friends' | 'request_sent' | 'request_received' | '';
+//   can_see_content: boolean;
+// };

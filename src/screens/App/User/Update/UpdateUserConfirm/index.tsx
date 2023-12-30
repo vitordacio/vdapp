@@ -88,6 +88,7 @@ export const UpdateUserConfirm: React.FC<AppProps> = ({
       }
     } catch (error) {
       throwError(error.response.data.message);
+      return navigation.goBack();
     }
 
     if (updatedUser) {

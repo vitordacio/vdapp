@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { SearchInput } from '@components/Input/SearchInput';
-import { SearchTopRoutes } from '@routes/search.routes';
+import { SearchTopRoutes } from '@routes/App/BottomTab/Search/SearchTopRoutes';
 import useSearch from '@contexts/search';
 import { AppProps } from '@routes/App/app.routes';
 

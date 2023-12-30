@@ -2,19 +2,25 @@ import { View } from '@components/View';
 import { Text } from '@components/Text';
 import React from 'react';
 import { Picture } from '@components/Picture';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ParamListBase } from '@react-navigation/native';
 import { IUser } from '@interfaces/user';
 import { Pressable } from '@components/Pressable';
+import { AppProps } from '@routes/App/app.routes';
 import styles from '../styles';
 
-type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
-  user: IUser;
-  onPress?: () => void;
-};
-
-const CardUserInfo = ({ user, onPress }: CardProps) => {
+const CardUserInfo: React.FC<AppProps & { user: IUser }> = ({
+  user,
+  navigation,
+  route,
+}) => {
+  const { user: self } = route.params;
   const { username, name, picture } = user;
+
+  const onPress = () => {
+    if (self.id_user === user.id_user) return navigation.navigate('User');
+
+    route.params.user_profile = user;
+    return navigation.push('Profile');
+  };
 
   return (
     <>

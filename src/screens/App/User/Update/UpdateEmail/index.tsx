@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
+import { Text } from '@components/Text';
 import { View } from '@components/View';
 import { AppProps } from '@routes/App/app.routes';
-import { IUpdateEmail } from '@services/User/IUserService';
+import { ICanUpdateResponse, IUpdateEmail } from '@services/User/IUserService';
 import { ViewUpdate } from '@components/View/ViewUpdate';
+import useMessage from '@contexts/message';
+import { userService } from '@services/User';
+import { formatDate } from '@utils/formaters';
+import { Loading } from '@components/View/Loading';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -18,6 +23,10 @@ type EmailFormData = yup.InferType<typeof schema>;
 
 const UpdateEmail: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
+  const { throwError } = useMessage();
+
+  const [canUpdateResponse, setCanUpdateResponse] =
+    useState<ICanUpdateResponse>();
 
   const splitedEmail = user.email.split('@');
   const email =
@@ -43,8 +52,25 @@ const UpdateEmail: React.FC<AppProps> = ({ navigation, route }) => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    const handleCanUpdate = async () => {
+      try {
+        const data = await userService.verifyCanUpdate('email');
+
+        setCanUpdateResponse(data);
+      } catch (error) {
+        throwError(error.response.data.message);
+      }
+    };
+
+    handleCanUpdate();
+  }, []);
+
   return (
-    <ViewUpdate name="E-mail" description={email}>
+    <ViewUpdate
+      name="E-mail"
+      description={`${email}. Você pode alterar o seu nome a cada 30 dias.`}
+    >
       <>
         <ControlledTextInput
           name="email"
@@ -58,7 +84,31 @@ const UpdateEmail: React.FC<AppProps> = ({ navigation, route }) => {
         />
       </>
       <View style={styles.confirm_button_wrapper}>
-        <Button onPress={handleSubmit(handleEmail)} title="Continuar" />
+        {canUpdateResponse ? (
+          <>
+            {!canUpdateResponse.canUpdate && (
+              <Text
+                style={styles.info}
+              >{`Por favor, aguarde 30 dias a partir da sua última modificação. ${
+                canUpdateResponse.update &&
+                formatDate(canUpdateResponse.update.created_at, user.locale)
+              }`}</Text>
+            )}
+            {canUpdateResponse.canUpdate ? (
+              <Button onPress={handleSubmit(handleEmail)} title="Continuar" />
+            ) : (
+              <Button
+                onPress={() =>
+                  throwError('Não é possível alterar o e-mail no momento')
+                }
+                title="Continuar"
+                disabled={true}
+              />
+            )}
+          </>
+        ) : (
+          <Loading size={32} />
+        )}
       </View>
     </ViewUpdate>
   );

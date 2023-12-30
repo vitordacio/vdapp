@@ -1,11 +1,8 @@
-// import colors from '@styles/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { AppProps } from '@routes/App/app.routes';
 import SearchEvent from '@screens/App/Search/SearchEvent';
-import { SearchProvider } from '@contexts/search';
-import Search from '@screens/App/Search';
 import SearchUser from '@screens/App/Search/SearchUser';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
-import { AppProps } from '@routes/App/app.routes';
 
 const SearchTopTab = createMaterialTopTabNavigator();
 
@@ -28,13 +25,3 @@ export const SearchTopRoutes: React.FC<AppProps> = ({ route }) => {
     </SearchTopTab.Navigator>
   );
 };
-
-const SearchRoutes: React.FC<AppProps> = ({ navigation, route }) => {
-  return (
-    <SearchProvider>
-      <Search navigation={navigation} route={route} />
-    </SearchProvider>
-  );
-};
-
-export default SearchRoutes;

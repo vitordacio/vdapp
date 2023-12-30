@@ -13,9 +13,9 @@ import {
   userFriendshipHandler,
 } from '@screens/App/Profile/handlers';
 import { IFriendship } from '@interfaces/friendship';
-import styles from './styles';
+import styles from '../styles';
 
-const CardUser: React.FC<AppProps & { user: IUser }> = ({
+const CardUserWithFriendship: React.FC<AppProps & { user: IUser }> = ({
   user,
   navigation,
   route,
@@ -29,15 +29,12 @@ const CardUser: React.FC<AppProps & { user: IUser }> = ({
 
   const handleFriendship = async () => {
     setFriendshipLoader(true);
+    let updatedUser = self;
+    let dataFriendship: IFriendship;
+    let status = friendshipStatus;
+    let message: string;
 
     try {
-      let updatedUser = self;
-      // let updatedProfile = user;
-      let dataFriendship: IFriendship;
-      let message = '';
-
-      let status = friendshipStatus;
-
       if (!status.friendship_status) {
         dataFriendship = await friendshipService.createRequest(user.id_user);
 
@@ -46,37 +43,29 @@ const CardUser: React.FC<AppProps & { user: IUser }> = ({
         dataFriendship = await friendshipService.createResponse(user.id_user);
 
         message = 'Amizade aceita com sucesso';
-
         updatedUser = dataFriendship.receiver;
-        // updatedProfile = dataFriendship.author;
       } else {
         await friendshipService.deleteFriendship(user.id_user);
         if (status.friendship_status === 'friends') {
           updatedUser.friends_count -= 1;
-          // updatedProfile.friends_count -= 1;
           message = 'Você desfez a amizade com sucesso';
         } else {
           message = 'Solicitação cancelada com sucesso';
         }
-
-        status.friendship_id = '';
       }
 
-      status.friendship_status = dataFriendship
-        ? dataFriendship.friendship_status
-        : '';
-
-      status = userFriendshipHandler(status);
-      setFriendshipStatus(status);
-
-      if (updatedUser !== self) onUpdateUser(updatedUser);
-      // if (updatedProfile !== user) user = { ...user, ...updatedProfile };
-      throwInfo(message);
-
-      setFriendshipLoader(false);
+      status = userFriendshipHandler({
+        friendship_id: dataFriendship?.friendship_id || '',
+        friendship_status: dataFriendship?.friendship_status || '',
+      });
     } catch (error) {
       throwError(error.response.data.message);
     }
+
+    if (status !== friendshipStatus) setFriendshipStatus(status);
+    if (updatedUser !== self) onUpdateUser(updatedUser);
+    if (message) throwInfo(message);
+    setFriendshipLoader(false);
   };
 
   const handleOnPress = () => {
@@ -111,7 +100,6 @@ const CardUser: React.FC<AppProps & { user: IUser }> = ({
               type={friendshipStatus.type}
               icon={friendshipStatus.icon}
               iconSize={30}
-              iconColor="#FFFFFF"
               style={styles.friendship}
               onPress={handleFriendship}
               loading={friendshipLoader}
@@ -123,4 +111,4 @@ const CardUser: React.FC<AppProps & { user: IUser }> = ({
   );
 };
 
-export default CardUser;
+export default CardUserWithFriendship;

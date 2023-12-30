@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
-import { userService } from '@services/User';
+import { Text } from '@components/Text';
 import { View } from '@components/View';
-import { IUpdateUsername } from '@services/User/IUserService';
+import {
+  ICanUpdateResponse,
+  IUpdateUsername,
+} from '@services/User/IUserService';
 import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
+import { userService } from '@services/User';
+import useMessage from '@contexts/message';
+import { formatDate } from '@utils/formaters';
+import { Loading } from '@components/View/Loading';
 import styles from '../styles';
 
 const schema = yup.object({
@@ -23,6 +30,10 @@ type UsernameFormData = yup.InferType<typeof schema>;
 
 const UpdateUsername: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
+  const { throwError } = useMessage();
+
+  const [canUpdateResponse, setCanUpdateResponse] =
+    useState<ICanUpdateResponse>();
 
   const handleValid = async (username: string): Promise<boolean> => {
     if (username.length < 4 || username.length > 16) return false;
@@ -51,6 +62,20 @@ const UpdateUsername: React.FC<AppProps> = ({ navigation, route }) => {
     navigation.push('UpdateUserConfirm');
   };
 
+  useEffect(() => {
+    const handleCanUpdate = async () => {
+      try {
+        const data = await userService.verifyCanUpdate('username');
+
+        setCanUpdateResponse(data);
+      } catch (error) {
+        throwError(error.response.data.message);
+      }
+    };
+
+    handleCanUpdate();
+  }, []);
+
   const {
     control,
     handleSubmit,
@@ -78,7 +103,36 @@ const UpdateUsername: React.FC<AppProps> = ({ navigation, route }) => {
         />
       </>
       <View style={styles.confirm_button_wrapper}>
-        <Button onPress={handleSubmit(handleUsername)} title="Continuar" />
+        {canUpdateResponse ? (
+          <>
+            {!canUpdateResponse.canUpdate && (
+              <Text
+                style={styles.info}
+              >{`Por favor, aguarde 30 dias a partir da sua última modificação. ${
+                canUpdateResponse.update &&
+                formatDate(canUpdateResponse.update.created_at, user.locale)
+              }`}</Text>
+            )}
+            {canUpdateResponse.canUpdate ? (
+              <Button
+                onPress={handleSubmit(handleUsername)}
+                title="Continuar"
+              />
+            ) : (
+              <Button
+                onPress={() =>
+                  throwError(
+                    'Não é possível alterar o nome de usuário no momento',
+                  )
+                }
+                title="Continuar"
+                disabled={true}
+              />
+            )}
+          </>
+        ) : (
+          <Loading size={32} />
+        )}
       </View>
     </ViewUpdate>
   );

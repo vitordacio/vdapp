@@ -1,4 +1,4 @@
-import { IUser, UserControl } from '@interfaces/user';
+import { IUser } from '@interfaces/user';
 
 export interface IFriendship {
   id_friendship: string;
@@ -7,5 +7,7 @@ export interface IFriendship {
   confirmed: boolean;
   author: IUser;
   receiver: IUser;
-  control: UserControl;
+  friendship_id: string | '';
+  friendship_status: 'friends' | 'request_sent' | 'request_received' | '';
+  can_see_content: boolean;
 }

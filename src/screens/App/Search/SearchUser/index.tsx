@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
-import CardUser from '@components/Card/User';
 import useSearch from '@contexts/search';
 import useMessage from '@contexts/message';
 import { AppProps } from '@routes/App/app.routes';
 import { Loading } from '@components/View/Loading';
+import CardUserInfo from '@components/Card/User/Info';
 import styles from '../styles';
 
 let loadMore = true;
@@ -67,7 +67,7 @@ const SearchUser: React.FC<AppProps> = ({ navigation, route }) => {
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardUser navigation={navigation} route={route} user={item} />;
+      return <CardUserInfo navigation={navigation} route={route} user={item} />;
     },
     [data],
   );

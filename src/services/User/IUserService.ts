@@ -1,4 +1,5 @@
 import { IUser } from '@interfaces/user';
+import { IUserUpdate } from '@interfaces/user_update';
 
 export interface ILogin {
   login: string;
@@ -61,6 +62,11 @@ export interface IUpdatePrivacy {
 
 export interface IUpdateUsername {
   username: string;
+}
+
+export interface ICanUpdateResponse {
+  canUpdate: boolean;
+  update: IUserUpdate | null;
 }
 
 export interface ICreateSocial {

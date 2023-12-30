@@ -2,6 +2,7 @@ import api from '@config/api';
 import { IUser } from '@interfaces/user';
 import { IUserSocialType } from '@interfaces/social_network';
 import { AxiosResponse } from 'axios';
+import { IUserUpdate } from '@interfaces/user_update';
 import {
   ILogin,
   IAuthResponse,
@@ -17,6 +18,7 @@ import {
   IUpdatePrivacy,
   ICreateSocial,
   IUpdateUsername,
+  ICanUpdateResponse,
 } from './IUserService';
 
 interface IUserService {
@@ -38,6 +40,7 @@ interface IUserService {
   createSocial: (data: ICreateSocial) => Promise<IUser>;
   deleteSocial: (data: string) => Promise<IUser>;
   verifyUsername: (data: string) => Promise<boolean>;
+  verifyCanUpdate: (data: IUserUpdate['type']) => Promise<ICanUpdateResponse>;
 }
 
 const service: IUserService = {
@@ -78,6 +81,14 @@ const service: IUserService = {
   verifyUsername: async (data: string): Promise<boolean> => {
     const response: AxiosResponse<boolean> = await api.get(
       `/user/check-username/${data}`,
+    );
+    return response.data;
+  },
+  verifyCanUpdate: async (
+    data: IUserUpdate['type'],
+  ): Promise<ICanUpdateResponse> => {
+    const response: AxiosResponse<ICanUpdateResponse> = await api.get(
+      `/user/check-update/${data}`,
     );
     return response.data;
   },

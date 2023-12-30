@@ -3,10 +3,8 @@ import useAuth from '@contexts/auth';
 import { LoadingView } from '@components/View/Loading';
 import RoutesView from '@components/View/Routes';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import AppRoutes from './App/app.routes';
-// import AppRoutes from './app.routes';
-import AuthRoutes from './auth.routes';
+import AuthRoutes from './Auth/auth.routes';
 
 const Stack = createNativeStackNavigator();
 

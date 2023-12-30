@@ -1,7 +1,7 @@
 import { AppView, View } from '@components/View';
 import { Text } from '@components/Text';
 import React, { useEffect, useState } from 'react';
-import { HomeTopRoutes } from '@routes/home.routes';
+import { HomeTopRoutes } from '@routes/App/BottomTab/Home/home.routes';
 import { Button } from '@components/Button';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { AppProps } from '@routes/App/app.routes';

@@ -1,17 +1,22 @@
-import { UserControl } from '@interfaces/user';
+import { IUser } from '@interfaces/user';
 
 export type FriendshipStatus = {
-  friendship_id?: UserControl['friendship_id'];
-  friendship_status: UserControl['friendship_status'];
-  can_see_content: UserControl['can_see_content'];
+  friendship_id: IUser['friendship_id'];
+  friendship_status: IUser['friendship_status'];
   type: 'blue' | 'red' | 'green' | 'gray';
   icon: 'user_plus' | 'user_check' | 'user_x' | 'user_minus';
   buttonTitle: string;
 };
 
-export const userFriendshipHandler = (data: UserControl): FriendshipStatus => {
-  const { friendship_id, friendship_status, can_see_content } = data;
+type FriendShipHandlerProps = {
+  friendship_id?: IUser['friendship_id'];
+  friendship_status: IUser['friendship_status'];
+};
 
+export const userFriendshipHandler = ({
+  friendship_id,
+  friendship_status,
+}: FriendShipHandlerProps): FriendshipStatus => {
   let type: FriendshipStatus['type'];
   let icon: FriendshipStatus['icon'];
   let buttonTitle: string = '';
@@ -37,7 +42,6 @@ export const userFriendshipHandler = (data: UserControl): FriendshipStatus => {
   return {
     friendship_id,
     friendship_status,
-    can_see_content,
     type,
     icon,
     buttonTitle,
