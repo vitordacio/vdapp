@@ -7,12 +7,14 @@ import styles from './styles';
 
 export type ITextInputProps = TextInputProps & {
   value?: string;
+  placeholder?: string;
   handlePress: () => void;
 };
 
 export const SearchInput = ({
   handlePress,
   value,
+  placeholder,
   ...rest
 }: ITextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -46,7 +48,7 @@ export const SearchInput = ({
         ]}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
-        placeholder="Pesquisar"
+        placeholder={placeholder || 'Pesquisar'}
         {...rest}
       />
     </View>

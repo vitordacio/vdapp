@@ -7,15 +7,17 @@ import { Pressable } from '@components/Pressable';
 import { AppProps } from '@routes/App/app.routes';
 import styles from '../styles';
 
-const CardUserInfo: React.FC<AppProps & { user: IUser }> = ({
+const CardUserInfo: React.FC<AppProps & { user: IUser; goBack?: boolean }> = ({
   user,
   navigation,
   route,
+  goBack,
 }) => {
   const { user: self } = route.params;
   const { username, name, picture } = user;
 
   const onPress = () => {
+    if (goBack) return navigation.goBack();
     if (self.id_user === user.id_user) return navigation.navigate('User');
 
     route.params.user_profile = user;

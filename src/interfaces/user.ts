@@ -1,3 +1,4 @@
+import { IReact } from './react';
 import { IUserSocial } from './social_network';
 
 export interface IUser {
@@ -22,7 +23,7 @@ export interface IUser {
   friendship_id: string | '';
   friendship_status: 'friends' | 'request_sent' | 'request_received' | '';
   can_see_content: boolean;
-  react_id: string | '';
+  user_react: IReact;
   blocked: boolean;
 
   // control: UserControl;

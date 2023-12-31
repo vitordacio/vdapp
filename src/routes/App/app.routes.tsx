@@ -11,6 +11,7 @@ import { UpdateUserConfirmProps } from '@screens/App/User/Update/UpdateUserConfi
 import {
   screenOptionsDefault,
   screenOptionsFriendsTitle,
+  screenOptionsReactsReceivedTitle,
 } from '@styles/screenOptions';
 import { UpdatEventConfirmProps } from '@screens/App/Event/EventManage/Update/UpdateEventConfirm';
 import { IEvent } from '@interfaces/event';
@@ -18,6 +19,10 @@ import { EventRoutes } from '@routes/App/Event/event.routes';
 import { BottomTabRoutes } from '@routes/App/BottomTab/bottomtab.routes';
 import { ProfileRoutes } from '@routes/App/Profile/profile.routes';
 import { ReactRoutes } from '@routes/App/React/react.routes';
+import { IEmoji } from '@interfaces/emoji';
+import { IReact } from '@interfaces/react';
+import ReactsReceived from '@screens/App/ReactsReceived';
+import { ReactUserViewRoutes } from './React/ReactUserViewRoutes';
 
 export type AppProps = NativeStackScreenProps<ParamListBase> & {
   route: {
@@ -25,7 +30,6 @@ export type AppProps = NativeStackScreenProps<ParamListBase> & {
       user: IUser;
       onUpdateUser?: (data: IUser) => void;
       updateUserConfirm?: UpdateUserConfirmProps;
-      // onUpdateProfile?: (data: IUser) => void;
       event?: IEvent;
       onUpdateEvent?: (data: IEvent) => void;
       updateEventConfirm?: UpdatEventConfirmProps;
@@ -36,6 +40,8 @@ export type AppProps = NativeStackScreenProps<ParamListBase> & {
         type: 'user' | 'event';
         user?: IUser;
         event?: IEvent;
+        emoji?: IEmoji;
+        react?: IReact;
       };
     };
   };
@@ -93,19 +99,28 @@ const AppRoutes: React.FC<AppProps> = ({ navigation, route }) => {
         {props => <Friends {...props} route={route} />}
       </App.Screen>
 
-      <App.Screen name="ReactsReceived">
-        {props => <Custom {...props} route={route} />}
+      <App.Screen
+        name="ReactsReceived"
+        options={{
+          headerTitle: screenOptionsReactsReceivedTitle({
+            user: route.params.user,
+            user_reacts_received: route.params.user_reacts_received,
+          }),
+        }}
+      >
+        {props => <ReactsReceived {...props} route={route} />}
       </App.Screen>
 
       <App.Screen name="React" options={{ headerShown: false }}>
         {props => <ReactRoutes {...props} route={route} />}
       </App.Screen>
 
+      <App.Screen name="ReactUserView" options={{ headerShown: false }}>
+        {props => <ReactUserViewRoutes {...props} route={route} />}
+      </App.Screen>
+
       <App.Screen name="Inbox" component={Inbox} />
       <App.Screen name="Map" component={Custom} />
-
-      {/* <App.Screen name="Friends" component={Friends} /> */}
-      {/* <App.Screen name="ReactUser" component={Custom} /> */}
     </App.Navigator>
   );
 };

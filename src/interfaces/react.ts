@@ -14,4 +14,5 @@ export interface IReact {
   receiver: IUser;
   event_id?: string;
   event: IEvent;
+  created_at: Date;
 }

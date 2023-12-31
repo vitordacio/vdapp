@@ -69,7 +69,7 @@ const CardEvent: React.FC<
             <View style={styles.container_event}>
               {name && (
                 <View style={styles.data_text}>
-                  <Icon name={type.name} />
+                  {type && <Icon name={type.name} />}
                   <Text style={[styles.text_default_color, styles.text_large]}>
                     {name}
                   </Text>

@@ -64,3 +64,19 @@ export const screenOptionsFriendsTitle = ({
     return 'Seus Amigos';
   return user_friends ? `Amigos de ${user_friends.name}` : `Amigos`;
 };
+
+type screenOptionsReactsReceivedTitle = {
+  user: IUser;
+  user_reacts_received?: IUser;
+};
+
+export const screenOptionsReactsReceivedTitle = ({
+  user,
+  user_reacts_received,
+}: screenOptionsReactsReceivedTitle): string => {
+  if (user_reacts_received && user.id_user === user_reacts_received.id_user)
+    return 'Suas Reações';
+  return user_reacts_received
+    ? `Reações de ${user_reacts_received.name}`
+    : `Reações`;
+};

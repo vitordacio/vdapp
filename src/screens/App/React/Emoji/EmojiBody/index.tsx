@@ -11,8 +11,8 @@ import styles from '../styles';
 
 let loadMore = true;
 
-const EmojiAnimal: React.FC<AppProps> = ({ navigation, route }) => {
-  const { emojiAnimal, setEmojiAnimal, loadingEmoji } = useEmoji();
+const EmojiBody: React.FC<AppProps> = ({ navigation, route }) => {
+  const { emojiBody, setEmojiBody, loadingEmoji } = useEmoji();
   const { throwError } = useMessage();
 
   const [page, setPage] = useState(2);
@@ -28,7 +28,7 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation, route }) => {
     let animals: IEmoji[];
 
     try {
-      animals = await emojiService.findEmojiAnimal({
+      animals = await emojiService.findEmojiBody({
         page,
       });
 
@@ -36,7 +36,7 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation, route }) => {
         loadMore = false;
       }
 
-      setEmojiAnimal(prev => [...prev, ...animals]);
+      setEmojiBody(prev => [...prev, ...animals]);
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
@@ -50,19 +50,18 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation, route }) => {
         <Button
           title={item.value}
           style={{ width: 40 }}
-          // onPress={() => navigation.push('ReactConfirm')}
           onPress={() => handleReactConfirm(item)}
         />
       );
     },
-    [emojiAnimal],
+    [emojiBody],
   );
 
   const keyExtractor = useCallback((item: IEmoji) => `${item.id_emoji}`, []);
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ height: 14 }} />;
-  }, [emojiAnimal]);
+  }, [emojiBody]);
 
   const onEndReached = () => {
     if (loadMore) {
@@ -78,7 +77,7 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation, route }) => {
     <View style={styles.container}>
       {!loadingEmoji && (
         <FlatList
-          data={emojiAnimal}
+          data={emojiBody}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           ItemSeparatorComponent={itemSeparatorComponent}
@@ -94,4 +93,4 @@ const EmojiAnimal: React.FC<AppProps> = ({ navigation, route }) => {
   );
 };
 
-export default EmojiAnimal;
+export default EmojiBody;
