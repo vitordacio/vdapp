@@ -1,5 +1,6 @@
 import { IAddress } from './address';
 import { IParticipation } from './participation';
+import { IReact } from './react';
 import { IEventType } from './types';
 import { IUser } from './user';
 
@@ -26,13 +27,9 @@ export interface IEvent {
   author: IUser;
   participations: IParticipation;
   participating_count: number;
-  emojis_count: number;
-  status: 'awaiting' | 'ongoing' | 'finished';
-
-  control: EventControl;
-}
-
-export type EventControl = {
+  reacts_count: number;
+  react?: IReact;
+  event_status: 'awaiting' | 'ongoing' | 'finished';
   participation_id?: string;
   participation_status:
     | 'author'
@@ -46,4 +43,4 @@ export type EventControl = {
     | 'vip_out'
     | '';
   can_see_content: boolean;
-};
+}

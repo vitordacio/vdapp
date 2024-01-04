@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from '@components/View';
 import { Text } from '@components/Text';
 import { IReact } from '@interfaces/react';
-import { formatTimeRange } from '@utils/formaters';
+import { formatDate, formatTimeRange } from '@utils/formaters';
 import { LineX } from '@components/Line';
 import { Pressable } from '@components/Pressable';
 import { Icon } from '@components/Icon';
@@ -110,7 +110,7 @@ const CardReact: React.FC<
                     <Text
                       style={[styles.text_default_color, styles.text_medium]}
                     >
-                      {event.emojis_count}
+                      {event.reacts_count}
                     </Text>
                   </View>
                   <View style={styles.data_counts}>
@@ -124,6 +124,9 @@ const CardReact: React.FC<
                 </View>
               </View>
             )}
+            <Text style={styles.created_at}>
+              {formatDate(react.created_at, self.locale)}
+            </Text>
           </View>
         </Pressable>
       )}

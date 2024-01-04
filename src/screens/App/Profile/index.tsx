@@ -224,29 +224,14 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
             ) : (
               <NotFoundProfile />
             )}
-            <View style={{ minHeight: 800 }}>
-              {!showLoader ? (
-                <>
-                  {user && user.can_see_content ? (
-                    <ProfileTopTabRoutes
-                      navigation={navigation}
-                      route={route}
-                    />
-                  ) : (
-                    <UserPrivateTopTabRoutes />
-                  )}
-                </>
-              ) : (
-                <UserPrivateTopTabRoutes />
-              )}
-            </View>
-            {/* <View style={{ minHeight: 800 }}>
-              {user.can_see_content ? (
-                <ProfileTopTabRoutes navigation={navigation} route={route} />
-              ) : (
-                <UserPrivateTopTabRoutes />
-              )}
-            </View> */}
+            {user && !user.blocked && (
+              <View style={{ minHeight: 800 }}>
+                {user.can_see_content && (
+                  <ProfileTopTabRoutes navigation={navigation} route={route} />
+                )}
+                {!user.can_see_content && <UserPrivateTopTabRoutes />}
+              </View>
+            )}
           </>
         ) : (
           <LoadingView />

@@ -3,27 +3,33 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
     height: 70,
     flexDirection: 'row',
     paddingHorizontal: 24,
     paddingVertical: 10,
     backgroundColor: `${colors.BLACK}`,
     borderRadius: 8,
-    marginBottom: 14,
     alignItems: 'center',
-    gap: 19,
+    justifyContent: 'space-between',
+    borderWidth: 1,
   },
-  data: {
-    justifyContent: 'center',
-    fontSize: 16,
-    flex: 1,
-    flexDirection: 'column',
+  text: {
+    fontSize: 14,
   },
-  username: {
+  text_default_color: {
     color: `${colors.TEXT_DEFAULT}`,
   },
-  name: {
+  text_gray_color: {
     color: `${colors.GRAY_DESCRIPTION}`,
+  },
+  difficulty_1: {
+    borderColor: `${colors.TEXT_DEFAULT}`,
+  },
+  difficulty_2: {
+    borderColor: `${colors.BLUE_LINK}`,
+  },
+  difficulty_3: {
+    borderColor: `${colors.GOLD}`,
   },
 });

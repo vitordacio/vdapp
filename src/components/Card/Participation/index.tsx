@@ -4,7 +4,7 @@ import { View } from '@components/View';
 import { Text } from '@components/Text';
 import assets from '@assets/index';
 import { Image } from 'react-native';
-import { IEvent } from '@interfaces/event';
+import { IParticipation } from '@interfaces/participation';
 import { formatTimeRange } from '@utils/formaters';
 import { LineX } from '@components/Line';
 import { Pressable } from '@components/Pressable';
@@ -13,13 +13,13 @@ import { Picture } from '@components/Picture';
 import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
 
-type CardEventProps = AppProps & {
-  event: IEvent;
+type CardParticipationProps = AppProps & {
+  participation: IParticipation;
   hideAuthor?: boolean;
 };
 
-const CardEvent: React.FC<CardEventProps> = ({
-  event,
+const CardParticipation: React.FC<CardParticipationProps> = ({
+  participation,
   navigation,
   route,
   hideAuthor,
@@ -40,7 +40,13 @@ const CardEvent: React.FC<CardEventProps> = ({
     reacts_count,
     author,
     event_status,
-  } = event;
+  } = participation.event;
+
+  let participationType: string;
+  if (participation.type.name === 'user') participationType = 'Participante';
+  if (participation.type.name === 'guest') participationType = 'Convidado';
+  if (participation.type.name === 'vip') participationType = 'Convidado VIP';
+  if (participation.type.name === 'mod') participationType = 'Moderador';
 
   const hours = formatTimeRange(
     new Date(start_time),
@@ -49,14 +55,21 @@ const CardEvent: React.FC<CardEventProps> = ({
   );
 
   const onPress = () => {
-    route.params.event = event;
+    route.params.event = participation.event;
     return navigation.push('Event');
   };
 
   return (
     <>
-      {event && (
+      {participation && participation.event && (
         <Pressable style={styles.container} onPress={onPress}>
+          {participationType && (
+            <View style={styles.participation}>
+              <Text style={[styles.text_gold_color, styles.text_large]}>
+                {participationType}
+              </Text>
+            </View>
+          )}
           {cover_photo && (
             <Image
               source={{ uri: cover_photo }}
@@ -169,4 +182,4 @@ const CardEvent: React.FC<CardEventProps> = ({
   );
 };
 
-export default CardEvent;
+export default CardParticipation;

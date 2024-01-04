@@ -17,8 +17,8 @@ export default StyleSheet.create({
     marginLeft: 19,
     justifyContent: 'center',
     fontSize: 16,
-    flex: 1,
     flexDirection: 'column',
+    width: '100%',
   },
   name: {
     color: `${colors.TEXT_DEFAULT}`,

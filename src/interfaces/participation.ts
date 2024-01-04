@@ -1,5 +1,5 @@
 import { IUser } from '@interfaces/user';
-import { EventControl, IEvent } from './event';
+import { IEvent } from './event';
 import { IAddress } from './address';
 
 export interface IParticipation {
@@ -17,7 +17,10 @@ export interface IParticipation {
   user: IUser;
   reviwer: IUser;
   type: IParticipationType;
-  control: EventControl;
+  event_status: IEvent['event_status'];
+  participation_id?: IEvent['participation_id'];
+  participation_status: IEvent['participation_status'];
+  can_see_content: IEvent['can_see_content'];
 }
 
 export interface IParticipationType {

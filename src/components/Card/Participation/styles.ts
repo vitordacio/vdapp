@@ -8,8 +8,17 @@ export default StyleSheet.create({
     flex: 1,
     padding: 8,
     backgroundColor: `${colors.BLACK}`,
-    // backgroundColor: `${colors.GRAY_BACKGROUND}`,
     borderRadius: 8,
+  },
+  participation: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: `${colors.GOLD}`,
+    paddingBottom: 5,
+    marginBottom: 5,
   },
   cover_photo: {
     width: '100%',

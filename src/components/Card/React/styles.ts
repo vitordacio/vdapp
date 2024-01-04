@@ -77,4 +77,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
+  created_at: {
+    marginTop: 5,
+    width: '100%',
+    textAlign: 'right',
+    fontSize: 14,
+    color: `${colors.GRAY_DESCRIPTION}`,
+  },
 });
