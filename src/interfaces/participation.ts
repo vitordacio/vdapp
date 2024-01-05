@@ -21,6 +21,7 @@ export interface IParticipation {
   participation_id?: IEvent['participation_id'];
   participation_status: IEvent['participation_status'];
   can_see_content: IEvent['can_see_content'];
+  participating: IEvent['participating'];
 }
 
 export interface IParticipationType {

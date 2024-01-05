@@ -175,16 +175,18 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
                   />
                 </View>
                 <View style={styles.buttons}>
-                  <Button
-                    type={friendshipStatus.type}
-                    icon={friendshipStatus.icon}
-                    style={{ maxWidth: 200 }}
-                    iconSize={22}
-                    iconColor="#FFFFFF"
-                    onPress={handleFriendship}
-                    title={friendshipStatus.buttonTitle}
-                    loading={friendshipLoader}
-                  />
+                  {friendshipStatus && (
+                    <Button
+                      type={friendshipStatus.type}
+                      icon={friendshipStatus.icon}
+                      style={{ maxWidth: 200 }}
+                      iconSize={22}
+                      iconColor="#FFFFFF"
+                      onPress={handleFriendship}
+                      title={friendshipStatus.buttonTitle}
+                      loading={friendshipLoader}
+                    />
+                  )}
                   <Button
                     style={{ width: 40 }}
                     onPress={handleReact}
@@ -224,6 +226,7 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
             ) : (
               <NotFoundProfile />
             )}
+
             {user && !user.blocked && (
               <View style={{ minHeight: 800 }}>
                 {user.can_see_content && (

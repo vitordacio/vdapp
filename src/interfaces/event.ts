@@ -28,7 +28,7 @@ export interface IEvent {
   participations: IParticipation;
   participating_count: number;
   reacts_count: number;
-  react?: IReact;
+  user_react?: IReact;
   event_status: 'awaiting' | 'ongoing' | 'finished';
   participation_id?: string;
   participation_status:
@@ -43,4 +43,5 @@ export interface IEvent {
     | 'vip_out'
     | '';
   can_see_content: boolean;
+  participating: boolean;
 }

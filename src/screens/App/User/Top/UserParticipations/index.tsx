@@ -4,9 +4,8 @@ import { IParticipation } from '@interfaces/participation';
 import useMessage from '@contexts/message';
 import { AppProps } from '@routes/App/app.routes';
 import { participationService } from '@services/Participation';
-import { IEvent } from '@interfaces/event';
-import CardEvent from '@components/Card/Event';
 import { Loading } from '@components/View/Loading';
+import CardParticipation from '@components/Card/Participation';
 import styles from '../styles';
 
 let loadMore = true;
@@ -15,7 +14,7 @@ const UserParticipations: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
   const { throwError } = useMessage();
 
-  const [data, setData] = useState<IEvent[] | []>([]);
+  const [data, setData] = useState<IParticipation[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
@@ -34,9 +33,7 @@ const UserParticipations: React.FC<AppProps> = ({ navigation, route }) => {
         loadMore = false;
       }
 
-      const events = participations.map(participation => participation.event);
-
-      setData(events);
+      setData(participations);
       setShowLoader(false);
     } catch (error) {
       throwError(error.response.data.message);
@@ -57,9 +54,7 @@ const UserParticipations: React.FC<AppProps> = ({ navigation, route }) => {
         loadMore = false;
       }
 
-      const events = participations.map(participation => participation.event);
-
-      setData(prev => [...prev, ...events]);
+      setData(prev => [...prev, ...participations]);
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
@@ -69,12 +64,21 @@ const UserParticipations: React.FC<AppProps> = ({ navigation, route }) => {
 
   const renderItem = useCallback(
     ({ item }) => {
-      return <CardEvent route={route} navigation={navigation} event={item} />;
+      return (
+        <CardParticipation
+          route={route}
+          navigation={navigation}
+          participation={item}
+        />
+      );
     },
     [data],
   );
 
-  const keyExtractor = useCallback((item: IEvent) => `${item.id_event}`, []);
+  const keyExtractor = useCallback(
+    (item: IParticipation) => `${item.id_participation}`,
+    [],
+  );
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ height: 14 }} />;

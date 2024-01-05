@@ -1,24 +1,29 @@
-import { EventControl, IEvent } from '@interfaces/event';
+import { IEvent } from '@interfaces/event';
 
 export type ParticipationStatus = {
-  participation_id: IEvent['control']['participation_id'];
-  status: IEvent['control']['status'];
-  participation_status: IEvent['control']['participation_status'];
-  can_see_content: IEvent['control']['can_see_content'];
-  userIn: boolean;
+  participation_id: IEvent['participation_id'];
+  participation_status: IEvent['participation_status'];
   type: 'blue' | 'red' | 'green' | 'gray' | 'dark_gold' | '';
   icon: 'plus' | 'check' | 'x' | 'minus' | 'chevron' | '';
   title: string;
   buttonTitle: string;
 };
 
-export const eventParticipationHandler = (
-  data: EventControl,
-): ParticipationStatus => {
-  const { participation_id, status, participation_status, can_see_content } =
-    data;
+// event.event_status = eventControl.event_status;
+// event.participation_id = eventControl.participation_id;
+// event.participation_status = eventControl.participation_status;
+// event.participating = eventControl.participating;
+// event.can_see_content = eventControl.can_see_content;
 
-  let userIn: boolean = false;
+type ParticipationHandlerProps = {
+  participation_id?: IEvent['participation_id'];
+  participation_status: IEvent['participation_status'];
+};
+
+export const eventParticipationHandler = ({
+  participation_id,
+  participation_status,
+}: ParticipationHandlerProps): ParticipationStatus => {
   let type: ParticipationStatus['type'];
   let icon: ParticipationStatus['icon'];
   let title: string = '';
@@ -51,15 +56,11 @@ export const eventParticipationHandler = (
     type = 'red';
     icon = 'minus';
     buttonTitle = 'Sair do Evento';
-    userIn = true;
   }
 
   return {
     participation_id,
-    status,
     participation_status,
-    can_see_content,
-    userIn,
     type,
     icon,
     title,

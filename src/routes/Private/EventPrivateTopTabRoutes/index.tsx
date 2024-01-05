@@ -2,41 +2,41 @@ import { PrivateContentView } from '@components/View/PrivateContent';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
 
-const UserPrivateTopTab = createMaterialTopTabNavigator();
+const EventPrivateTopTab = createMaterialTopTabNavigator();
 
-export const UserPrivateTopTabRoutes: React.FC = () => {
+export const EventPrivateTopTabRoutes: React.FC = () => {
   return (
-    <UserPrivateTopTab.Navigator
+    <EventPrivateTopTab.Navigator
       screenOptions={() => screenOptionsTopDefault({})}
     >
-      <UserPrivateTopTab.Screen
-        name="UserPrivateEvents"
+      <EventPrivateTopTab.Screen
+        name="EventPrivateMoments"
         component={PrivateContentView}
         options={{
-          tabBarLabel: 'Eventos',
+          tabBarLabel: 'Momentos',
         }}
       />
-      <UserPrivateTopTab.Screen
-        name="UserPrivateParticipations"
+      <EventPrivateTopTab.Screen
+        name="EventPrivateParticipations"
         component={PrivateContentView}
         options={{
-          tabBarLabel: 'Participações',
+          tabBarLabel: 'Participando',
         }}
       />
-      <UserPrivateTopTab.Screen
-        name="UserPrivateEmojisSent"
+      <EventPrivateTopTab.Screen
+        name="EventPrivateReactsReceived"
         component={PrivateContentView}
         options={{
           tabBarLabel: 'Reações',
         }}
       />
-      <UserPrivateTopTab.Screen
-        name="UserPrivateAchievements"
+      <EventPrivateTopTab.Screen
+        name="EventPrivateAchievements"
         component={PrivateContentView}
         options={{
           tabBarLabel: 'Conquistas',
         }}
       />
-    </UserPrivateTopTab.Navigator>
+    </EventPrivateTopTab.Navigator>
   );
 };

@@ -17,22 +17,44 @@ import { Icon } from '@components/Icon';
 import { LoadingView } from '@components/View/Loading';
 import { AppProps } from '@routes/App/app.routes';
 import { EventTopTabRoutes } from '@routes/App/Event/EventTopTab';
+import { EventPrivateTopTabRoutes } from '@routes/Private/EventPrivateTopTabRoutes';
 import { IParticipation } from '@interfaces/participation';
 import styles from './styles';
 import { ParticipationStatus, eventParticipationHandler } from './handlers';
 import NotFoundEvent from './NotFoundEvent';
 
 const Event: React.FC<AppProps> = ({ navigation, route }) => {
-  const { event, onUpdateEvent } = route.params;
+  const { event: paramEvent, user: self } = route.params;
   const { throwInfo, throwError } = useMessage();
 
+  const [event, setEvent] = useState<IEvent>();
   const [showLoader, setShowLoader] = useState<boolean>(false);
-  const [eventExists, setEventExists] = useState<boolean>(true);
   const [participationLoader, setParticipationLoader] =
     useState<boolean>(false);
   const [participationStatus, setParticipationStatus] = useState(
     {} as ParticipationStatus,
   );
+
+  const handleReact = () => {
+    if (event.user_react) {
+      route.params.react = {
+        type: 'event',
+        react: event.user_react,
+        event,
+      };
+      navigation.navigate('ReactEventView');
+    } else {
+      route.params.react = {
+        type: 'event',
+        event,
+      };
+      navigation.navigate('React');
+    }
+  };
+
+  const handleMap = () => {
+    if (!event.address) throwInfo('O evento não possui localização cadastrada');
+  };
 
   const fetchData = async (event_id: string) => {
     setShowLoader(true);
@@ -42,32 +64,37 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
     try {
       dataEvent = await eventService.findById(event_id);
 
-      const handleParticipationStatus = eventParticipationHandler(
-        dataEvent.control,
-      );
+      setEvent(dataEvent);
+
+      const handleParticipationStatus = eventParticipationHandler({
+        participation_id: dataEvent.participation_id,
+        participation_status: dataEvent.participation_status,
+      });
 
       setParticipationStatus(handleParticipationStatus);
     } catch (error) {
       throwError(error.response.data.message);
-      setEventExists(false);
     }
     setShowLoader(false);
   };
 
   const handleParticipation = async () => {
     setParticipationLoader(true);
+    let updatedEvent = event;
+    let dataParticipation: IParticipation;
+    let status = participationStatus;
+    let message = '';
 
     try {
-      const updatedEvent = event;
-      let dataParticipation: IParticipation;
-      let message = '';
-
-      let status = participationStatus;
-
       if (!status.participation_status) {
         dataParticipation = await participationService.requestByUser(
           event.id_event,
         );
+
+        updatedEvent.event_status = dataParticipation.event_status;
+        updatedEvent.participating = dataParticipation.participating;
+        updatedEvent.can_see_content = dataParticipation.can_see_content;
+
         message = 'Solicitação enviada com sucesso';
       } else if (
         ['guest_out', 'vip_out', 'mod_out'].includes(
@@ -77,16 +104,20 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
         dataParticipation = await participationService.inviteResponse(
           event.id_event,
         );
+        updatedEvent = dataParticipation.event;
+        updatedEvent.event_status = dataParticipation.event_status;
+        updatedEvent.participating = dataParticipation.participating;
+        updatedEvent.can_see_content = dataParticipation.can_see_content;
+
         message = 'Convite aceito com sucesso';
-        updatedEvent.participating_count += 1;
       } else {
         await participationService.deleteParticipation(status.participation_id);
-        if (
-          ['user_in', 'guest_in', 'vip_in', 'mod_in'].includes(
-            status.participation_status,
-          )
-        ) {
+        if (event.participating) {
           updatedEvent.participating_count -= 1;
+          updatedEvent.participating = false;
+          if (updatedEvent.private && !event.type.verified)
+            updatedEvent.can_see_content = false;
+
           message = 'Você saiu do evento com sucesso';
         } else {
           message = 'Solicitação cancelada com sucesso';
@@ -95,32 +126,23 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
         status.participation_id = '';
       }
 
-      status.participation_status = dataParticipation
-        ? dataParticipation.control.participation_status
-        : '';
-      status.can_see_content = dataParticipation
-        ? dataParticipation.control.can_see_content
-        : !event.type.free_access || !event.private;
-
-      status = eventParticipationHandler(status);
-
-      // status = eventParticipationHandler({
-      //   participation_status: dataParticipation?.participation_status || '',
-      //   participation_id: dataParticipation?.id_participation || '',
-      // });
-
-      setParticipationStatus(status);
-      if (updatedEvent !== event) onUpdateEvent(updatedEvent);
-      throwInfo(message);
-      setParticipationLoader(false);
+      status = eventParticipationHandler({
+        participation_id: dataParticipation?.participation_id || '',
+        participation_status: dataParticipation?.participation_status || '',
+      });
     } catch (error) {
       throwError(error.response.data.message);
     }
+
+    if (status !== participationStatus) setParticipationStatus(status);
+    if (updatedEvent !== event) setEvent(updatedEvent);
+    if (message) throwInfo(message);
+    setParticipationLoader(false);
   };
 
   useEffect(() => {
-    fetchData(event.id_event);
-  }, []);
+    fetchData(paramEvent.id_event);
+  }, [route.params.event]);
 
   return (
     <AppView
@@ -129,298 +151,267 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
       }}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        {eventExists ? (
+        {!showLoader ? (
           <>
-            {showLoader ? (
-              <LoadingView />
-            ) : (
-              <>
-                {event && (
-                  <View style={styles.container}>
-                    <View style={styles.cover_photo}>
-                      {event.cover_photo && (
-                        <CoverPhoto
-                          cover_photo={event.cover_photo}
-                          style={styles.cover_photo}
-                        />
-                      )}
-                    </View>
-                    <View style={styles.container_data}>
-                      {participationStatus.status === 'ongoing' && (
-                        <>
-                          <View style={styles.status}>
-                            <Text style={styles.status_message}>
-                              Acontecendo agora!
-                            </Text>
-                            <LottieView
-                              style={styles.status_animation}
-                              source={assets.ongoing}
-                              autoPlay
-                              loop
-                            />
-                          </View>
-                        </>
-                      )}
-                      <View style={styles.container_event}>
-                        <View style={styles.data_text}>
-                          <Icon name={event.type.name} />
-                          <Text
-                            style={[
-                              styles.text_default_color,
-                              styles.text_large,
-                            ]}
-                          >
-                            {event.name || '--'}
-                          </Text>
-                        </View>
-                        <View style={styles.data_text}>
-                          <Icon name="location" />
-
-                          <Text
-                            style={[
-                              styles.text_default_color,
-                              styles.text_medium,
-                            ]}
-                          >
-                            {event.location || '--'}
-                          </Text>
-                        </View>
-                        <View style={styles.data_text}>
-                          <Icon name="clock" />
-
-                          <Text
-                            style={[
-                              styles.text_default_color,
-                              styles.text_medium,
-                            ]}
-                          >
-                            {formatTimeRange(
-                              new Date(event.start_time),
-                              new Date(event.finish_time),
-                              event.author.locale,
-                            ) || '--'}
-                          </Text>
-                        </View>
-                        <View style={styles.data_text}>
-                          <Icon name="attach" />
-
-                          <Text
-                            style={[styles.text_gray_color, styles.text_medium]}
-                          >
-                            {event.additional || '--'}
-                          </Text>
-                        </View>
-                        <View style={styles.data_text}>
-                          <Icon name="drink" />
-
-                          <Text
-                            style={[styles.text_gray_color, styles.text_medium]}
-                          >
-                            {event.drink_preferences || '--'}
-                          </Text>
-                        </View>
-                        <View style={styles.data_text}>
-                          <Icon name="coin" />
-
-                          <Text
-                            style={[styles.text_gray_color, styles.text_medium]}
-                          >
-                            {event.min_amount || '0'}
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View style={styles.data_footer}>
-                        <View style={styles.container_author}>
-                          <Picture card={true} picture={event.author.picture} />
-                          <View style={styles.data_author}>
-                            <Text
-                              style={[
-                                styles.text_default_color,
-                                styles.text_medium,
-                              ]}
-                            >
-                              {event.author.username || ''}
-                            </Text>
-                            <Text
-                              style={[
-                                styles.text_gray_color,
-                                styles.text_medium,
-                              ]}
-                            >
-                              {event.author.name || ''}
-                            </Text>
-                          </View>
-                        </View>
-
-                        {[
-                          'author',
-                          'user_in',
-                          'guest_in',
-                          'vip_in',
-                          'mod_in',
-                        ].includes(
-                          participationStatus.participation_status,
-                        ) && (
-                          <Button
-                            style={{ width: 40 }}
-                            onPress={() => navigation.navigate('Inbox')}
-                            icon="inbox"
-                          />
-                        )}
-
-                        <Button
-                          style={{ width: 40 }}
-                          onPress={() => throwInfo('handle emote')}
-                          icon="smile"
-                        />
-
-                        <Button
-                          style={{ width: 160 }}
-                          onPress={
-                            event.address
-                              ? () =>
-                                  navigation.push('Map', {
-                                    address: event.address,
-                                  })
-                              : () =>
-                                  throwInfo(
-                                    'O evento não possui localização cadastrada',
-                                  )
-                          }
-                          title="Ver no mapa"
-                          icon="map"
-                          iconSize={22}
-                          disabled={!event.address_id}
-                        />
-                      </View>
-
-                      <View style={styles.container_counts}>
-                        <View style={styles.data_counts}>
-                          <Icon name="smile" size={24} />
-                          <Text
-                            style={[
-                              styles.text_default_color,
-                              styles.text_large,
-                            ]}
-                          >
-                            {event.emojis_count || 0}
-                          </Text>
-                        </View>
-                        <View style={styles.data_counts}>
-                          <Icon name="users" size={24} />
-                          <Text
-                            style={[
-                              styles.text_default_color,
-                              styles.text_large,
-                            ]}
-                          >
-                            {event.participating_count || 0}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-
-                    {participationStatus && (
-                      <View style={styles.container_participation}>
-                        <View style={styles.container_adm}>
-                          {['author', 'mod_in'].includes(
-                            participationStatus.participation_status,
-                          ) && (
-                            <>
-                              <Button
-                                type="dark_gold"
-                                icon="chevron"
-                                maxWidth={200}
-                                iconColor="#FFFFFF"
-                                onPress={() => navigation.push('EventRequests')}
-                                title="Solicitações"
-                              />
-                              <Button
-                                type="dark_gold"
-                                icon="chevron"
-                                maxWidth={200}
-                                iconColor="#FFFFFF"
-                                onPress={() => navigation.push('EventInvite')}
-                                title="Convidar"
-                              />
-                              <Button
-                                type="dark_gold"
-                                icon="chevron"
-                                maxWidth={200}
-                                iconColor="#FFFFFF"
-                                onPress={() => navigation.push('EventManage')}
-                                title="Gerenciar"
-                              />
-                            </>
-                          )}
-                        </View>
-
-                        {participationStatus.title && (
-                          <Text
-                            style={[
-                              styles.text_default_color,
-                              styles.text_extra_large,
-                            ]}
-                          >
-                            {participationStatus.title}
-                          </Text>
-                        )}
-
-                        {participationStatus.participation_status !==
-                          'author' && (
-                          <Button
-                            type={participationStatus.type}
-                            icon={participationStatus.icon}
-                            style={{ maxWidth: 200 }}
-                            iconSize={22}
-                            iconColor="#FFFFFF"
-                            onPress={handleParticipation}
-                            title={participationStatus.buttonTitle}
-                            loading={participationLoader}
-                          />
-                        )}
-                      </View>
-                    )}
-
-                    <View style={styles.container_footer}>
-                      {participationStatus && (
-                        <Text
-                          style={[
-                            styles.text_gray_color,
-                            styles.text_medium,
-                            { textAlign: 'right' },
-                          ]}
-                        >
-                          {participationStatus.userIn
-                            ? 'Você está participando'
-                            : 'Você não está participando'}
+            {event ? (
+              <View style={styles.container}>
+                <View style={styles.cover_photo}>
+                  {event.cover_photo && (
+                    <CoverPhoto
+                      cover_photo={event.cover_photo}
+                      style={styles.cover_photo}
+                    />
+                  )}
+                </View>
+                <View style={styles.container_data}>
+                  {event.event_status === 'ongoing' && (
+                    <>
+                      <View style={styles.status}>
+                        <Text style={styles.status_message}>
+                          Acontecendo agora!
                         </Text>
-                      )}
-
-                      <Pressable
-                        onPress={() =>
-                          throwInfo(
-                            `O evento é ${
-                              event.private ? 'privado' : 'público'
-                            }.`,
-                          )
-                        }
-                      >
-                        <Icon
-                          name={event.private ? 'lock' : 'unlock'}
-                          size={19}
+                        <LottieView
+                          style={styles.status_animation}
+                          source={assets.ongoing}
+                          autoPlay
+                          loop
                         />
-                      </Pressable>
+                      </View>
+                    </>
+                  )}
+                  <View style={styles.container_event}>
+                    <View style={styles.data_text}>
+                      <Icon name={event.type.name} />
+                      <Text
+                        style={[styles.text_default_color, styles.text_large]}
+                      >
+                        {event.name || '--'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.data_text}>
+                      <Icon name="location" />
+
+                      <Text
+                        style={[styles.text_default_color, styles.text_medium]}
+                      >
+                        {event.location || '--'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.data_text}>
+                      <Icon name="clock" />
+
+                      <Text
+                        style={[styles.text_default_color, styles.text_medium]}
+                      >
+                        {formatTimeRange(
+                          new Date(event.start_time),
+                          new Date(event.finish_time),
+                          event.author.locale,
+                        ) || '--'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.data_text}>
+                      <Icon name="attach" />
+
+                      <Text
+                        style={[styles.text_gray_color, styles.text_medium]}
+                      >
+                        {event.additional || '--'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.data_text}>
+                      <Icon name="drink" />
+
+                      <Text
+                        style={[styles.text_gray_color, styles.text_medium]}
+                      >
+                        {event.drink_preferences || '--'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.data_text}>
+                      <Icon name="coin" />
+
+                      <Text
+                        style={[styles.text_gray_color, styles.text_medium]}
+                      >
+                        {event.min_amount || '0'}
+                      </Text>
                     </View>
                   </View>
+
+                  <View style={styles.data_footer}>
+                    <View style={styles.container_author}>
+                      <Picture card={true} picture={event.author.picture} />
+                      <View style={styles.data_author}>
+                        <Text
+                          style={[
+                            styles.text_default_color,
+                            styles.text_medium,
+                          ]}
+                        >
+                          {event.author.username || ''}
+                        </Text>
+                        <Text
+                          style={[styles.text_gray_color, styles.text_medium]}
+                        >
+                          {event.author.name || ''}
+                        </Text>
+                      </View>
+                    </View>
+
+                    {(self.id_user === event.author_id ||
+                      event.participating) && (
+                      <Button
+                        style={{ width: 40 }}
+                        onPress={() => navigation.navigate('Inbox')}
+                        icon="inbox"
+                      />
+                    )}
+
+                    <Button
+                      style={{ width: 40 }}
+                      onPress={handleReact}
+                      title={event.user_react?.emoji.value}
+                      icon={!event.user_react && 'smile'}
+                    />
+
+                    {event.can_see_content && (
+                      <Button
+                        style={{ width: 160 }}
+                        onPress={handleMap}
+                        title="Ver no mapa"
+                        icon="map"
+                        iconSize={22}
+                        disabled={!event.address_id}
+                      />
+                    )}
+                  </View>
+
+                  <View style={styles.container_counts}>
+                    <View style={styles.data_counts}>
+                      <Icon name="smile" size={24} />
+                      <Text
+                        style={[styles.text_default_color, styles.text_large]}
+                      >
+                        {event.reacts_count || 0}
+                      </Text>
+                    </View>
+                    <View style={styles.data_counts}>
+                      <Icon name="users" size={24} />
+                      <Text
+                        style={[styles.text_default_color, styles.text_large]}
+                      >
+                        {event.participating_count || 0}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+
+                {participationStatus && (
+                  <View style={styles.container_participation}>
+                    <View style={styles.container_adm}>
+                      {['author', 'mod_in'].includes(
+                        participationStatus.participation_status,
+                      ) && (
+                        <>
+                          <Button
+                            type="dark_gold"
+                            icon="chevron"
+                            maxWidth={200}
+                            iconColor="#FFFFFF"
+                            onPress={() => navigation.push('EventRequests')}
+                            title="Solicitações"
+                          />
+                          <Button
+                            type="dark_gold"
+                            icon="chevron"
+                            maxWidth={200}
+                            iconColor="#FFFFFF"
+                            onPress={() => navigation.push('EventInvite')}
+                            title="Convidar"
+                          />
+                          <Button
+                            type="dark_gold"
+                            icon="chevron"
+                            maxWidth={200}
+                            iconColor="#FFFFFF"
+                            onPress={() => navigation.push('EventManage')}
+                            title="Gerenciar"
+                          />
+                        </>
+                      )}
+                    </View>
+
+                    {participationStatus.title && (
+                      <Text
+                        style={[
+                          styles.text_default_color,
+                          styles.text_extra_large,
+                        ]}
+                      >
+                        {participationStatus.title}
+                      </Text>
+                    )}
+
+                    {participationStatus.participation_status !== 'author' && (
+                      <Button
+                        type={participationStatus.type}
+                        icon={participationStatus.icon}
+                        style={{ maxWidth: 200 }}
+                        iconSize={22}
+                        iconColor="#FFFFFF"
+                        onPress={handleParticipation}
+                        title={participationStatus.buttonTitle}
+                        loading={participationLoader}
+                      />
+                    )}
+                  </View>
                 )}
-              </>
+
+                <View style={styles.container_footer}>
+                  <Text
+                    style={[
+                      styles.text_gray_color,
+                      styles.text_medium,
+                      { textAlign: 'right' },
+                    ]}
+                  >
+                    {event.participating
+                      ? 'Você está participando'
+                      : 'Você não está participando'}
+                  </Text>
+
+                  <Pressable
+                    onPress={() =>
+                      throwInfo(
+                        `O evento é ${event.private ? 'privado' : 'público'}.`,
+                      )
+                    }
+                  >
+                    <Icon name={event.private ? 'lock' : 'unlock'} size={19} />
+                  </Pressable>
+                </View>
+              </View>
+            ) : (
+              <NotFoundEvent />
             )}
-            <EventTopTabRoutes />
+
+            {event && (
+              <View style={{ minHeight: 800 }}>
+                {event.can_see_content && (
+                  <EventTopTabRoutes navigation={navigation} route={route} />
+                )}
+                {!event.can_see_content && <EventPrivateTopTabRoutes />}
+              </View>
+            )}
           </>
         ) : (
-          <NotFoundEvent />
+          <LoadingView />
         )}
       </ScrollView>
     </AppView>

@@ -1,8 +1,7 @@
 export interface IEventType {
   id_event_type: string;
   name: string;
-  free_access: boolean;
-  count: number;
+  verified: boolean;
 }
 export interface IEmojiType {
   id_emoji_type: string;

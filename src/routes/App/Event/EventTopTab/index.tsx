@@ -1,40 +1,46 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { AppProps } from '@routes/App/app.routes';
 import Custom from '@screens/Custom';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
 
 const EventTopTab = createMaterialTopTabNavigator();
 
-export const EventTopTabRoutes: React.FC = () => {
+export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
   return (
     <EventTopTab.Navigator screenOptions={() => screenOptionsTopDefault({})}>
       <EventTopTab.Screen
-        name="EventPictures"
-        component={Custom}
+        name="EventMoments"
         options={{
           tabBarLabel: 'Momentos',
         }}
-      />
+      >
+        {props => <Custom {...props} route={route} />}
+      </EventTopTab.Screen>
       <EventTopTab.Screen
         name="EventParticipations"
-        component={Custom}
         options={{
           tabBarLabel: 'Participando',
         }}
-      />
+      >
+        {props => <Custom {...props} route={route} />}
+      </EventTopTab.Screen>
       <EventTopTab.Screen
-        name="EventEmojisReceived"
-        component={Custom}
+        name="EventReactsReceived"
         options={{
-          tabBarLabel: 'Emotes',
+          tabBarLabel: 'Reações',
         }}
-      />
+      >
+        {props => <Custom {...props} route={route} />}
+      </EventTopTab.Screen>
+
       <EventTopTab.Screen
         name="EventAchievements"
-        component={Custom}
         options={{
           tabBarLabel: 'Conquistas',
         }}
-      />
+      >
+        {props => <Custom {...props} route={route} />}
+      </EventTopTab.Screen>
     </EventTopTab.Navigator>
   );
 };
