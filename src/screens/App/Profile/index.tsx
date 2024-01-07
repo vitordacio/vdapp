@@ -17,6 +17,7 @@ import { friendshipService } from '@services/Friendship';
 import { Pressable } from '@components/Pressable';
 import { LoadingView } from '@components/View/Loading';
 import { ProfileTopTabRoutes } from '@routes/App/Profile/ProfileTopTab';
+import { Socials } from '@components/Socials';
 import { AppProps } from '@routes/App/app.routes';
 import NotFoundProfile from './NotFoundProfile';
 import { FriendshipStatus, userFriendshipHandler } from './handlers';
@@ -153,6 +154,9 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
                 <CoverPhoto cover_photo={user.cover_photo} />
                 <Picture picture={user.picture} />
                 <Text style={styles.username}>@{user.username}</Text>
+                {user.social_networks && user.social_networks.length !== 0 && (
+                  <Socials socials={user.social_networks} />
+                )}
                 <View style={styles.counts}>
                   <Counts
                     number={user.friends_count}

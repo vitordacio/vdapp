@@ -37,12 +37,3 @@ export const ViewUpdate: React.FC<IUpdateViewProps> = ({
     </ScrollView>
   );
 };
-
-//   /* <ScrollView
-//         style={{ flex: 1, backgroundColor: 'green' }}
-//         showsVerticalScrollIndicator={false}
-//       > */
-// }
-// {
-//   /* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */
-// }

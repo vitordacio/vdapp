@@ -1,11 +1,11 @@
 import { AppView, View } from '@components/View';
 import React from 'react';
-import { EventProps } from '@routes/Event/event.routes';
 import { Text } from '@components/Text';
 import { Button } from '@components/Button';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
 
-const FinishEvent: React.FC<EventProps> = ({ navigation, route }) => {
+const FinishEvent: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
 
   const handleFinish = () => {
@@ -26,8 +26,9 @@ const FinishEvent: React.FC<EventProps> = ({ navigation, route }) => {
             Não é possível alterar o horário de um evento finalizado.
           </Text>
         </View>
-
-        <Button title="Finalizar" type="blue" onPress={handleFinish} />
+        <View style={styles.button_wrapper}>
+          <Button title="Finalizar" type="blue" onPress={handleFinish} />
+        </View>
       </View>
     </AppView>
   );

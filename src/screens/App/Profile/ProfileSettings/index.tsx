@@ -8,7 +8,7 @@ import { Icon } from '@components/Icon';
 import { Pressable } from '@components/Pressable';
 import styles from './styles';
 
-const EventManage: React.FC<AppProps> = ({ navigation }) => {
+const ProfileSettings: React.FC<AppProps> = ({ navigation }) => {
   return (
     <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -16,28 +16,20 @@ const EventManage: React.FC<AppProps> = ({ navigation }) => {
           <View style={styles.main}>
             <Pressable
               style={styles.card}
-              onPress={() => navigation.push('UpdateEvent')}
+              onPress={() => navigation.push('ProfileReport')}
             >
-              <Text style={[styles.text, styles.text_default]}>
-                Editar Evento
-              </Text>
+              <Text style={[styles.text, styles.text_default]}>Reportar</Text>
               <Icon name="chevron" />
             </Pressable>
+
             <Pressable
               style={styles.card}
-              onPress={() => navigation.push('FinishEvent')}
+              onPress={() => navigation.push('ProfileBlock')}
             >
               <Text style={[styles.text, styles.text_default]}>
-                Finalizar Evento
+                Bloquear / Desbloquear
               </Text>
               <Icon name="chevron" />
-            </Pressable>
-            <Pressable
-              style={styles.card}
-              onPress={() => navigation.push('DeleteEvent')}
-            >
-              <Text style={[styles.text, styles.text_red]}>Excluir Evento</Text>
-              <Icon name="chevron" tintColor="#E63C3D" />
             </Pressable>
           </View>
         </View>
@@ -46,4 +38,4 @@ const EventManage: React.FC<AppProps> = ({ navigation }) => {
   );
 };
 
-export default EventManage;
+export default ProfileSettings;

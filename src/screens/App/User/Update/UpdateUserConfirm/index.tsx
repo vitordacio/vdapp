@@ -42,7 +42,7 @@ export const UpdateUserConfirm: React.FC<AppProps> = ({
   navigation,
   route,
 }) => {
-  const { onUpdateUser, updateUserConfirm } = route.params;
+  const { updateUserConfirm } = route.params;
 
   const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
@@ -92,11 +92,16 @@ export const UpdateUserConfirm: React.FC<AppProps> = ({
     }
 
     if (updatedUser) {
-      onUpdateUser(updatedUser);
+      // onUpdateUser(updatedUser);
+      route.params.user = updatedUser;
       throwInfo(message);
     }
 
     route.params.updateUserConfirm = null;
+
+    if (type === 'create_social' || type === 'delete_social')
+      return navigation.goBack();
+
     return navigation.navigate('UpdateUserScreen');
   };
 

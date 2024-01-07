@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 18,
+    marginTop: 18,
   },
   info: {
     fontSize: 14,

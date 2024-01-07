@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import assets from '@assets/index';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { IUserSocial, IUserSocialType } from '@interfaces/social_network';
-import { Pressable, ImageBackground } from 'react-native';
+import { Pressable } from 'react-native';
 import { View } from '@components/View';
 import { Text } from '@components/Text';
 import { userService } from '@services/User';
-import { Feather } from '@expo/vector-icons';
 import { ViewUpdate } from '@components/View/ViewUpdate';
 import { Icon } from '@components/Icon';
 import { AppProps } from '@routes/App/app.routes';
 import useMessage from '@contexts/message';
 import { ICreateSocial } from '@services/User/IUserService';
+import { Social } from '@components/Socials';
+import { Loading } from '@components/View/Loading';
 import generalstyle from '../styles';
 import styles from './styles';
 
@@ -29,7 +29,7 @@ const UpdateSocial: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
   const { throwError } = useMessage();
 
-  const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>([]);
+  const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>();
   const [currentType, setCurrentType] = useState<IUserSocialType>();
   const [disabledTypes, setDisabledTypes] = useState<IUserSocialType['name'][]>(
     [],
@@ -93,21 +93,6 @@ const UpdateSocial: React.FC<AppProps> = ({ navigation, route }) => {
     navigation.push('UpdateUserConfirm');
   };
 
-  // const handleCreateSocial = async (data: SocialFormData) => {
-  //   setSubmitType('create_social');
-  //   setForm({
-  //     username: data.username,
-  //     type_id: currentType.id_social_network_type,
-  //   });
-  //   setConfirm(true);
-  // };
-
-  // const handleDeleteSocial = async (data: IUserSocial) => {
-  //   setSubmitType('delete_social');
-  //   setForm(data.id_social_network);
-  //   setConfirm(true);
-  // };
-
   const {
     control,
     handleSubmit,
@@ -126,21 +111,25 @@ const UpdateSocial: React.FC<AppProps> = ({ navigation, route }) => {
       description="Você pode editar a suas ligações a qualquer momento."
     >
       <View style={styles.social_container}>
-        {socialTypes.map(socialType => (
-          <View
-            key={socialType.id_social_network_type}
-            style={[
-              styles.social_wrapper,
-              currentType.name === socialType.name && styles.selected,
-              disabledTypes.some(disabled => disabled === socialType.name) &&
-                styles.disabled,
-            ]}
-          >
-            <Pressable onPress={() => handleCurrentType(socialType)}>
-              <Icon name={socialType.name} size={30} />
-            </Pressable>
-          </View>
-        ))}
+        {socialTypes ? (
+          socialTypes.map(socialType => (
+            <View
+              key={socialType.id_social_network_type}
+              style={[
+                styles.social_wrapper,
+                currentType.name === socialType.name && styles.selected,
+                disabledTypes.some(disabled => disabled === socialType.name) &&
+                  styles.disabled,
+              ]}
+            >
+              <Pressable onPress={() => handleCurrentType(socialType)}>
+                <Social name={socialType.name} />
+              </Pressable>
+            </View>
+          ))
+        ) : (
+          <Loading size={30} />
+        )}
       </View>
 
       <>
@@ -159,7 +148,7 @@ const UpdateSocial: React.FC<AppProps> = ({ navigation, route }) => {
         {currentType && `${currentType.base_url}${value}`}
       </Text>
 
-      <View style={generalstyle.confirm_button_wrapper}>
+      <View style={styles.button_wrapper}>
         <Button
           onPress={handleSubmit(handleCreateSocial)}
           title="Salvar"
@@ -169,18 +158,21 @@ const UpdateSocial: React.FC<AppProps> = ({ navigation, route }) => {
 
       <View style={styles.user_socials}>
         <Text style={styles.user_socials_title}>Suas Ligações</Text>
-        {userSocials.map(social => (
-          <View key={social.id_social_network} style={styles.user_social}>
-            <ImageBackground
-              style={styles.social}
-              source={assets[social.type.name]}
-            />
-            <Text style={styles.user_social_username}>/{social.username}</Text>
-            <Pressable onPress={() => handleDeleteSocial(social)}>
-              <Feather name="trash-2" size={30} color="white" />
-            </Pressable>
-          </View>
-        ))}
+        {userSocials ? (
+          userSocials.map(social => (
+            <View key={social.id_social_network} style={styles.user_social}>
+              <Social name={social.type.name} />
+              <Text style={styles.user_social_username}>
+                /{social.username}
+              </Text>
+              <Pressable onPress={() => handleDeleteSocial(social)}>
+                <Icon name="trash" size={22} />
+              </Pressable>
+            </View>
+          ))
+        ) : (
+          <Loading size={30} />
+        )}
       </View>
     </ViewUpdate>
   );

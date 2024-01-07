@@ -14,10 +14,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
   },
-  social: {
-    width: 30,
-    height: 30,
-  },
   preview: {
     textAlign: 'center',
     fontSize: 16,

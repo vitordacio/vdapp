@@ -9,7 +9,6 @@ import { Counts } from '@components/Counts';
 import { LineY } from '@components/Line';
 import { ScrollView } from 'react-native';
 import { Icon } from '@components/Icon';
-// import { UserTopTabRoutes } from '@routes/User/UserTopTab';
 import { UserTopTabRoutes } from '@routes/App/BottomTab/User/UserTopTab';
 import { AppProps } from '@routes/App/app.routes';
 import { Pressable } from '@components/Pressable';
@@ -18,6 +17,7 @@ import styles from './styles';
 
 const User: React.FC<AppProps> = ({ navigation, route }) => {
   const { user } = route.params;
+
   const { throwInfo } = useMessage();
 
   const handleFriends = () => {
@@ -42,8 +42,12 @@ const User: React.FC<AppProps> = ({ navigation, route }) => {
             <View style={styles.container}>
               <CoverPhoto cover_photo={user.cover_photo} />
               <Picture picture={user.picture} />
-              <Text style={styles.username}>@{user.username}</Text>
-              <Socials user={user} />
+              {user.username && (
+                <Text style={styles.username}>@{user.username}</Text>
+              )}
+              {user.social_networks && user.social_networks.length !== 0 && (
+                <Socials socials={user.social_networks} />
+              )}
               <View style={styles.counts}>
                 <Counts
                   number={user.friends_count}

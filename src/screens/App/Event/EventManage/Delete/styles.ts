@@ -25,6 +25,13 @@ const styles = StyleSheet.create({
     color: `${colors.GRAY_DESCRIPTION}`,
     width: '100%',
   },
+  button_wrapper: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 37,
+  },
 });
 
 export default styles;

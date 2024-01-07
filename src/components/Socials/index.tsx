@@ -1,31 +1,32 @@
-import {
-  FlatList,
-  ImageBackground,
-  ImageSourcePropType,
-  Linking,
-} from 'react-native';
+import { FlatList, ImageBackground, Linking } from 'react-native';
 import { Pressable } from '@components/Pressable';
 import { View } from '@components/View';
 import assets from '@assets/index';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { IUserSocial } from '@interfaces/social_network';
-import { IUser } from '@interfaces/user';
+import useMessage from '@contexts/message';
 import styles from './styles';
 
-const assetMapping: Record<string, ImageSourcePropType> = {
-  instagram: assets.instagram,
-  tiktok: assets.tiktok,
-  twitter: assets.twitter,
-  twitch: assets.twitch,
-  youtube: assets.youtube,
+interface ISocialProps {
+  name: IUserSocial['type']['name'];
+  size?: number;
+}
+
+export const Social = ({ name, size }: ISocialProps) => {
+  return (
+    <ImageBackground
+      style={{ width: size || 30, height: size || 30 }}
+      source={assets[name]}
+    />
+  );
 };
 
 interface ISocialsProps {
-  user: IUser;
+  socials: IUserSocial[];
 }
 
-export const Socials: React.FC<ISocialsProps> = ({ user }) => {
-  const [data, setData] = useState<IUserSocial[] | []>([]);
+export const Socials: React.FC<ISocialsProps> = ({ socials }) => {
+  const { throwError } = useMessage();
 
   const handlePress = async (item: IUserSocial) => {
     const formattedUrl = `${item.type.base_url}${item.username}`;
@@ -34,8 +35,7 @@ export const Socials: React.FC<ISocialsProps> = ({ user }) => {
     if (supported) {
       await Linking.openURL(formattedUrl);
     } else {
-      // eslint-disable-next-line no-console
-      console.error(`Não é possível abrir o URL: ${formattedUrl}`);
+      throwError(`Não é possível abrir o URL: ${formattedUrl}`);
     }
   };
 
@@ -48,33 +48,30 @@ export const Socials: React.FC<ISocialsProps> = ({ user }) => {
     ({ item }: { item: IUserSocial }) => {
       return (
         <Pressable onPress={() => handlePress(item)}>
-          <ImageBackground
-            style={styles.social}
-            source={assetMapping[item.type.name]}
-          />
+          <Social name={item.type.name} />
         </Pressable>
       );
     },
-    [data],
+    [socials],
   );
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ width: 21 }} />;
-  }, [data]);
-
-  useEffect(() => {
-    setData(user.social_networks);
-  }, [user]);
+  }, [socials]);
 
   return (
-    <FlatList
-      style={styles.container}
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      ItemSeparatorComponent={itemSeparatorComponent}
-      showsHorizontalScrollIndicator={false}
-      horizontal={true}
-    />
+    <>
+      {socials && (
+        <FlatList
+          style={styles.container}
+          data={socials}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          ItemSeparatorComponent={itemSeparatorComponent}
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+        />
+      )}
+    </>
   );
 };

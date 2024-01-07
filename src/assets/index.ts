@@ -58,6 +58,8 @@ import camera from './camera.svg';
 import plus_simple from './plus_simple.svg';
 import arrow_right from './arrow_right.svg';
 import more_horizontal from './more_horizontal.svg';
+import more_vertical from './more_vertical.svg';
+import trash from './trash.svg';
 
 import ongoing from './Animation/ongoing.json';
 import loading from './Animation/loading.json';
@@ -124,4 +126,6 @@ export default {
   search_outline,
   arrow_right,
   more_horizontal,
+  more_vertical,
+  trash,
 };

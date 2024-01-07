@@ -7,15 +7,22 @@ import { AppProps } from '@routes/App/app.routes';
 import { EventInviteRoutes } from './EventInviteStackTab';
 import { EventManageRoutes } from './EventManageStackTab';
 import { EventRequestsTopTabRoutes } from './EventRequestsTopTab';
+import { EventSettingsRoutes } from './EventSettingsStackTab';
+import EventHeaderRight from './EventHeaderRight/HeaderRight';
 
 const EventStackTab = createNativeStackNavigator();
 
-export const EventRoutes: React.FC<AppProps> = ({ route }) => {
+export const EventRoutes: React.FC<AppProps> = ({ navigation, route }) => {
   return (
     <EventStackTab.Navigator screenOptions={() => screenOptionsDefault({})}>
       <EventStackTab.Screen
         name="EventScreen"
-        options={{ headerTitle: formatEventName(route.params.event) }}
+        options={{
+          headerTitle: formatEventName(route.params.event),
+          headerRight: () => (
+            <EventHeaderRight navigation={navigation} route={route} />
+          ),
+        }}
       >
         {props => <Event {...props} route={route} />}
       </EventStackTab.Screen>
@@ -34,6 +41,13 @@ export const EventRoutes: React.FC<AppProps> = ({ route }) => {
 
       <EventStackTab.Screen name="EventInbox" component={Custom} />
       <EventStackTab.Screen name="EventLists" component={Custom} />
+
+      <EventStackTab.Screen
+        name="EventSettings"
+        options={{ headerShown: false }}
+      >
+        {props => <EventSettingsRoutes {...props} route={route} />}
+      </EventStackTab.Screen>
     </EventStackTab.Navigator>
   );
 };

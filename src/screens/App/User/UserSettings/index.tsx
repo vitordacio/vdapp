@@ -8,7 +8,7 @@ import { Icon } from '@components/Icon';
 import { Pressable } from '@components/Pressable';
 import styles from './styles';
 
-const EventManage: React.FC<AppProps> = ({ navigation }) => {
+const UserSettings: React.FC<AppProps> = ({ navigation }) => {
   return (
     <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -16,27 +16,49 @@ const EventManage: React.FC<AppProps> = ({ navigation }) => {
           <View style={styles.main}>
             <Pressable
               style={styles.card}
-              onPress={() => navigation.push('UpdateEvent')}
+              onPress={() => navigation.push('ToS')}
             >
               <Text style={[styles.text, styles.text_default]}>
-                Editar Evento
+                Termos de Serviço
               </Text>
               <Icon name="chevron" />
             </Pressable>
+
             <Pressable
               style={styles.card}
-              onPress={() => navigation.push('FinishEvent')}
+              onPress={() => navigation.push('PrivacyPolicy')}
             >
               <Text style={[styles.text, styles.text_default]}>
-                Finalizar Evento
+                Política de Privacidade
               </Text>
               <Icon name="chevron" />
             </Pressable>
+
             <Pressable
               style={styles.card}
-              onPress={() => navigation.push('DeleteEvent')}
+              onPress={() => navigation.push('Suggestion')}
             >
-              <Text style={[styles.text, styles.text_red]}>Excluir Evento</Text>
+              <Text style={[styles.text, styles.text_default]}>
+                Enviar Sugestão
+              </Text>
+              <Icon name="chevron" />
+            </Pressable>
+
+            <Pressable
+              style={styles.card}
+              onPress={() => navigation.push('Logout')}
+            >
+              <Text style={[styles.text, styles.text_blue]}>
+                Sair / Encerrar Sessão
+              </Text>
+              <Icon name="chevron" tintColor="#276BC6" />
+            </Pressable>
+
+            <Pressable
+              style={styles.card}
+              onPress={() => navigation.push('DeleteUser')}
+            >
+              <Text style={[styles.text, styles.text_red]}>Excluir Conta</Text>
               <Icon name="chevron" tintColor="#E63C3D" />
             </Pressable>
           </View>
@@ -46,4 +68,4 @@ const EventManage: React.FC<AppProps> = ({ navigation }) => {
   );
 };
 
-export default EventManage;
+export default UserSettings;

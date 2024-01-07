@@ -42,6 +42,7 @@ interface IUserService {
   deleteSocial: (data: string) => Promise<IUser>;
   verifyUsername: (data: string) => Promise<boolean>;
   verifyCanUpdate: (data: IUserUpdate['type']) => Promise<ICanUpdateResponse>;
+  deleteUserSelf: () => Promise<void>;
 }
 
 const service: IUserService = {
@@ -152,6 +153,10 @@ const service: IUserService = {
     const response: AxiosResponse<IUser> = await api.delete(
       `/user/social/${data}`,
     );
+    return response.data;
+  },
+  deleteUserSelf: async (): Promise<void> => {
+    const response: AxiosResponse<void> = await api.delete(`/user/self`);
     return response.data;
   },
 };
