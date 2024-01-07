@@ -6,27 +6,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { IUserSocial, IUserSocialType } from '@interfaces/social_network';
-import useAuth from '@contexts/auth';
 import { Pressable, ImageBackground } from 'react-native';
 import { View } from '@components/View';
 import { Text } from '@components/Text';
 import { userService } from '@services/User';
 import { Feather } from '@expo/vector-icons';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-// import { ICreateSocial } from '@services/User/IUserService';
 import { ViewUpdate } from '@components/View/ViewUpdate';
-
+import { Icon } from '@components/Icon';
+import { AppProps } from '@routes/App/app.routes';
+import useMessage from '@contexts/message';
+import { ICreateSocial } from '@services/User/IUserService';
 import generalstyle from '../styles';
 import styles from './styles';
-
-// const assetMapping: Record<string, ImageSourcePropType> = {
-//   instagram: assets.instagram,
-//   tiktok: assets.tiktok,
-//   twitter: assets.twitter,
-//   twitch: assets.twitch,
-//   youtube: assets.youtube,
-// };
 
 const schema = yup.object({
   username: yup.string().required('Informe o nome de usuário'),
@@ -34,15 +25,9 @@ const schema = yup.object({
 
 type SocialFormData = yup.InferType<typeof schema>;
 
-const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
-  const { user } = useAuth();
-
-  // const [submitType, setSubmitType] = useState<
-  //   'create_social' | 'delete_social'
-  // >();
-
-  // const [confirm, setConfirm] = useState(false);
-  // const [form, setForm] = useState<ICreateSocial | string>();
+const UpdateSocial: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user } = route.params;
+  const { throwError } = useMessage();
 
   const [socialTypes, setSocialTypes] = useState<IUserSocialType[]>([]);
   const [currentType, setCurrentType] = useState<IUserSocialType>();
@@ -54,25 +39,26 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
 
   const fetchData = async () => {
     try {
-      setUserSocials(user.social_networks);
-      const dataSocialTypes = await userService.findSocialTypes();
-      setSocialTypes(dataSocialTypes);
+      const [dataUserSocials, dataSocialTypes] = await Promise.all([
+        userService.findSocialSelf(),
+        userService.findSocialTypes(),
+      ]);
 
       const disableds =
-        user.social_networks.length === 0
+        dataUserSocials.length === 0
           ? []
-          : user.social_networks.map(userSocial => userSocial.type.name);
-
-      setDisabledTypes(disableds);
+          : dataUserSocials.map(userSocial => userSocial.type.name);
 
       const current = dataSocialTypes.find(
         socialType => !disableds.includes(socialType.name),
       );
 
+      setDisabledTypes(disableds);
+      setUserSocials(dataUserSocials);
+      setSocialTypes(dataSocialTypes);
       setCurrentType(current);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      throwError(error.response.data.message);
     }
   };
 
@@ -85,19 +71,42 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
   };
 
   const handleCreateSocial = async (data: SocialFormData) => {
-    setSubmitType('create_social');
-    setForm({
-      username: data.username,
-      type_id: currentType.id_social_network_type,
-    });
-    setConfirm(true);
+    route.params.updateUserConfirm = {
+      name: 'Ligação a rede social',
+      description: 'Tem certeza que deseja adicionar a rede social?',
+      type: 'create_social',
+      data: {
+        username: data.username,
+        type_id: currentType.id_social_network_type,
+      } as ICreateSocial,
+    };
+    navigation.push('UpdateUserConfirm');
   };
 
   const handleDeleteSocial = async (data: IUserSocial) => {
-    setSubmitType('delete_social');
-    setForm(data.id_social_network);
-    setConfirm(true);
+    route.params.updateUserConfirm = {
+      name: 'Ligação a rede social',
+      description: 'Tem certeza que deseja excluir a rede social?',
+      type: 'delete_social',
+      data: data.id_social_network,
+    };
+    navigation.push('UpdateUserConfirm');
   };
+
+  // const handleCreateSocial = async (data: SocialFormData) => {
+  //   setSubmitType('create_social');
+  //   setForm({
+  //     username: data.username,
+  //     type_id: currentType.id_social_network_type,
+  //   });
+  //   setConfirm(true);
+  // };
+
+  // const handleDeleteSocial = async (data: IUserSocial) => {
+  //   setSubmitType('delete_social');
+  //   setForm(data.id_social_network);
+  //   setConfirm(true);
+  // };
 
   const {
     control,
@@ -128,10 +137,7 @@ const UpdateSocial: React.FC<NativeStackScreenProps<ParamListBase>> = () => {
             ]}
           >
             <Pressable onPress={() => handleCurrentType(socialType)}>
-              <ImageBackground
-                style={styles.social}
-                source={assets[socialType.name]}
-              />
+              <Icon name={socialType.name} size={30} />
             </Pressable>
           </View>
         ))}

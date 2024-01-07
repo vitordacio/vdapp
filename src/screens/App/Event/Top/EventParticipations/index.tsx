@@ -1,39 +1,39 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
+import { IParticipation } from '@interfaces/participation';
 import useMessage from '@contexts/message';
 import { AppProps } from '@routes/App/app.routes';
+import { participationService } from '@services/Participation';
 import { Loading } from '@components/View/Loading';
-import { IReact } from '@interfaces/react';
-import { reactService } from '@services/React';
-import CardReact from '@components/Card/React';
+import CardParticipationEventTopTab from '@components/Card/Participation/EventTopTab';
 import styles from '../styles';
 
 let loadMore = true;
 
-const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
-  const { user } = route.params;
+const EventParticipations: React.FC<AppProps> = ({ navigation, route }) => {
+  const { event } = route.params;
   const { throwError } = useMessage();
 
-  const [data, setData] = useState<IReact[] | []>([]);
+  const [data, setData] = useState<IParticipation[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
   const fetchData = async () => {
     setShowLoader(true);
 
-    let reacts: IReact[];
+    let participations: IParticipation[];
 
     try {
-      reacts = await reactService.findReactsUser({
-        user_id: user.id_user,
+      participations = await participationService.findByEventId({
+        event_id: event.id_event,
         page: 1,
       });
 
-      if (reacts.length === 0) {
+      if (participations.length === 0) {
         loadMore = false;
       }
 
-      setData(reacts);
+      setData(participations);
       setShowLoader(false);
     } catch (error) {
       throwError(error.response.data.message);
@@ -42,19 +42,19 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
 
   const fetchNewData = async () => {
     setShowLoader(true);
-    let reacts: IReact[];
+    let participations: IParticipation[];
 
     try {
-      reacts = await reactService.findReactsUser({
-        user_id: user.id_user,
+      participations = await participationService.findByEventId({
+        event_id: event.id_event,
         page,
       });
 
-      if (reacts.length === 0) {
+      if (participations.length === 0) {
         loadMore = false;
       }
 
-      setData(prev => [...prev, ...reacts]);
+      setData(prev => [...prev, ...participations]);
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
@@ -63,20 +63,22 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
   };
 
   const renderItem = useCallback(
-    ({ item }: { item: IReact }) => {
+    ({ item }) => {
       return (
-        <CardReact
+        <CardParticipationEventTopTab
           route={route}
           navigation={navigation}
-          react={item}
-          user={item.receiver}
+          participation={item}
         />
       );
     },
     [data],
   );
 
-  const keyExtractor = useCallback((item: IReact) => `${item.id_react}`, []);
+  const keyExtractor = useCallback(
+    (item: IParticipation) => `${item.id_participation}`,
+    [],
+  );
 
   const itemSeparatorComponent = useCallback(() => {
     return <View style={{ height: 14 }} />;
@@ -112,4 +114,4 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
   );
 };
 
-export default UserReactsSent;
+export default EventParticipations;

@@ -53,7 +53,7 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
   };
 
   const handleMap = () => {
-    if (!event.address) throwInfo('O evento não possui localização cadastrada');
+    if (!event.address) throwError('Localização não cadastrada');
   };
 
   const fetchData = async (event_id: string) => {

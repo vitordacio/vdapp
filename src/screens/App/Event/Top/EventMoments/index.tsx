@@ -1,39 +1,39 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
+import { IMoment } from '@interfaces/moment';
+import { momentService } from '@services/Moment';
 import useMessage from '@contexts/message';
+import CardMomentThumb from '@components/Card/Moment/Thumb';
 import { AppProps } from '@routes/App/app.routes';
 import { Loading } from '@components/View/Loading';
-import { IReact } from '@interfaces/react';
-import { reactService } from '@services/React';
-import CardReact from '@components/Card/React';
 import styles from '../styles';
 
 let loadMore = true;
 
-const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
-  const { user } = route.params;
+const EventMoments: React.FC<AppProps> = ({ navigation, route }) => {
+  const { event } = route.params;
   const { throwError } = useMessage();
 
-  const [data, setData] = useState<IReact[] | []>([]);
+  const [data, setData] = useState<IMoment[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
   const fetchData = async () => {
     setShowLoader(true);
 
-    let reacts: IReact[];
+    let moments: IMoment[];
 
     try {
-      reacts = await reactService.findReactsUser({
-        user_id: user.id_user,
+      moments = await momentService.findByEventId({
+        event_id: event.id_event,
         page: 1,
       });
 
-      if (reacts.length === 0) {
+      if (moments.length === 0) {
         loadMore = false;
       }
 
-      setData(reacts);
+      setData(moments);
       setShowLoader(false);
     } catch (error) {
       throwError(error.response.data.message);
@@ -42,19 +42,19 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
 
   const fetchNewData = async () => {
     setShowLoader(true);
-    let reacts: IReact[];
+    let moments: IMoment[];
 
     try {
-      reacts = await reactService.findReactsUser({
-        user_id: user.id_user,
+      moments = await momentService.findByEventId({
+        event_id: event.id_event,
         page,
       });
 
-      if (reacts.length === 0) {
+      if (moments.length === 0) {
         loadMore = false;
       }
 
-      setData(prev => [...prev, ...reacts]);
+      setData(prev => [...prev, ...moments]);
       setPage(page + 1);
       setShowLoader(false);
     } catch (error) {
@@ -63,24 +63,19 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
   };
 
   const renderItem = useCallback(
-    ({ item }: { item: IReact }) => {
+    ({ item }) => {
       return (
-        <CardReact
-          route={route}
-          navigation={navigation}
-          react={item}
-          user={item.receiver}
-        />
+        <CardMomentThumb route={route} navigation={navigation} moment={item} />
       );
     },
     [data],
   );
 
-  const keyExtractor = useCallback((item: IReact) => `${item.id_react}`, []);
+  const keyExtractor = useCallback((item: IMoment) => `${item.id_moment}`, []);
 
-  const itemSeparatorComponent = useCallback(() => {
-    return <View style={{ height: 14 }} />;
-  }, [data]);
+  // const itemSeparatorComponent = useCallback(() => {
+  //   return <View style={{ height: 14 }} />;
+  // }, [data]);
 
   const onEndReached = () => {
     if (loadMore) {
@@ -102,14 +97,16 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
         data={data}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        ItemSeparatorComponent={itemSeparatorComponent}
+        // ItemSeparatorComponent={itemSeparatorComponent}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.9}
         ListFooterComponent={showLoader && listFooterComponent}
-        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        numColumns={3}
+        // columnWrapperStyle={styles.wrapper}
       />
     </View>
   );
 };
 
-export default UserReactsSent;
+export default EventMoments;

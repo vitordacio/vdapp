@@ -30,7 +30,7 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
     privacy: {
       title: 'Privacidade',
       redirect: 'UpdateEventPrivacy',
-      icon: 'arrow-right',
+      icon: 'arrow_right',
       description: `${
         event.private ? 'Esse evento é privado' : 'Esse evento é público'
       }`,
@@ -38,7 +38,7 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
     address: {
       title: 'Localização',
       redirect: 'UpdateEventAddress',
-      icon: 'arrow-right',
+      icon: 'arrow_right',
       description: `${
         event.address?.id_address || 'Adicione a localização do evento'
       }`,
@@ -46,17 +46,17 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
     additional: {
       title: 'Informações Adicionais',
       redirect: 'UpdateEventAdditional',
-      icon: 'plus',
+      icon: 'plus_simple',
     },
     drink_preferences: {
       title: 'Preferência de bebidas',
       redirect: 'UpdateEventDrinkPreferences',
-      icon: 'plus',
+      icon: 'plus_simple',
     },
     min_amount: {
       title: 'Valor mínimo recomendado',
       redirect: 'UpdateEventMinAmount',
-      icon: 'plus',
+      icon: 'plus_simple',
     },
     performer: {
       title: 'Artista',

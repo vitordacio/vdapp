@@ -37,6 +37,7 @@ interface IUserService {
   updatePrivacy: (data: IUpdatePrivacy) => Promise<IUser>;
   updateUsername: (data: IUpdateUsername) => Promise<IUser>;
   findSocialTypes: () => Promise<IUserSocialType[]>;
+  findSocialSelf: () => Promise<IUser['social_networks']>;
   createSocial: (data: ICreateSocial) => Promise<IUser>;
   deleteSocial: (data: string) => Promise<IUser>;
   verifyUsername: (data: string) => Promise<boolean>;
@@ -135,7 +136,12 @@ const service: IUserService = {
   },
   findSocialTypes: async (): Promise<IUserSocialType[]> => {
     const response: AxiosResponse<IUserSocialType[]> =
-      await api.get('/social/type');
+      await api.get('/type/social');
+    return response.data;
+  },
+  findSocialSelf: async (): Promise<IUser['social_networks']> => {
+    const response: AxiosResponse<IUser['social_networks']> =
+      await api.get('/self/social');
     return response.data;
   },
   createSocial: async (data: ICreateSocial): Promise<IUser> => {

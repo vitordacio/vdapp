@@ -10,8 +10,8 @@ import styles from '../styles';
 
 let loadMore = true;
 
-const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
-  const { user } = route.params;
+const EventReactsReceived: React.FC<AppProps> = ({ navigation, route }) => {
+  const { event } = route.params;
   const { throwError } = useMessage();
 
   const [data, setData] = useState<IReact[] | []>([]);
@@ -24,8 +24,8 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
     let reacts: IReact[];
 
     try {
-      reacts = await reactService.findReactsUser({
-        user_id: user.id_user,
+      reacts = await reactService.findReactsEvent({
+        event_id: event.id_event,
         page: 1,
       });
 
@@ -45,8 +45,8 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
     let reacts: IReact[];
 
     try {
-      reacts = await reactService.findReactsUser({
-        user_id: user.id_user,
+      reacts = await reactService.findReactsEvent({
+        event_id: event.id_event,
         page,
       });
 
@@ -69,7 +69,7 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
           route={route}
           navigation={navigation}
           react={item}
-          user={item.receiver}
+          user={item.author}
         />
       );
     },
@@ -112,4 +112,4 @@ const UserReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
   );
 };
 
-export default UserReactsSent;
+export default EventReactsReceived;

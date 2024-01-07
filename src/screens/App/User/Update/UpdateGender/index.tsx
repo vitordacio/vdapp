@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Text } from '@components/Text';
 import { RadioInput } from '@components/Input/RadioInput';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
@@ -7,17 +6,16 @@ import { TextInput } from '@components/Input/TextInput';
 import { View, TouchableOpacity } from 'react-native';
 import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
-import generalstyle from '../styles';
+import useMessage from '@contexts/message';
 import styles from './styles';
 
 const UpdateGender: React.FC<AppProps> = ({ route }) => {
-  const { user, onUpdateUser } = route.params;
+  const { user } = route.params;
+  const { throwError } = useMessage();
 
   const [currentValue, setCurrentValue] = useState<IUser['gender']>(
     user.gender || ('' as IUser['gender']),
   );
-
-  const [responseError, setResponseError] = useState('');
 
   const handleGender = async (gender: IUser['gender']) => {
     let updatedUser: IUser;
@@ -25,10 +23,12 @@ const UpdateGender: React.FC<AppProps> = ({ route }) => {
       updatedUser = await userService.updateGender({
         gender: gender || '',
       });
+
+      route.params.user = updatedUser;
     } catch (error) {
-      setResponseError(error.message);
+      throwError(error.response.data.message);
     }
-    if (updatedUser) onUpdateUser(updatedUser);
+
     setCurrentValue(gender);
   };
 
@@ -96,8 +96,6 @@ const UpdateGender: React.FC<AppProps> = ({ route }) => {
           onChange={(e: null) => handleGender(e)}
         />
       </View>
-
-      <Text style={generalstyle.error}>{responseError}</Text>
     </ViewUpdate>
   );
 };

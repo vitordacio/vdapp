@@ -55,6 +55,9 @@ import user_check from './user_check.svg';
 import user_x from './user_x.svg';
 import edit from './edit.svg';
 import camera from './camera.svg';
+import plus_simple from './plus_simple.svg';
+import arrow_right from './arrow_right.svg';
+import more_horizontal from './more_horizontal.svg';
 
 import ongoing from './Animation/ongoing.json';
 import loading from './Animation/loading.json';
@@ -101,6 +104,7 @@ export default {
   x,
   minus,
   plus,
+  plus_simple,
   user,
   user_plus,
   user_minus,
@@ -118,4 +122,6 @@ export default {
   person_outline,
   search,
   search_outline,
+  arrow_right,
+  more_horizontal,
 };

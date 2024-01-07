@@ -69,8 +69,7 @@ const ProfileReactsSent: React.FC<AppProps> = ({ navigation, route }) => {
           route={route}
           navigation={navigation}
           react={item}
-          user={item.type === 'user' ? item.receiver : null}
-          event={item.type === 'event' ? item.event : null}
+          user={item.receiver}
         />
       );
     },

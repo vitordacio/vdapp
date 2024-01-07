@@ -35,17 +35,17 @@ const UpdateUser: React.FC<AppProps> = ({ navigation, route }) => {
     gender: {
       title: 'Gênero',
       redirect: 'UpdateUserGender',
-      icon: 'arrow-right',
+      icon: 'arrow_right',
     },
     socials: {
       title: 'Ligação a redes sociais',
       redirect: 'UpdateUserSocial',
-      icon: 'plus',
+      icon: 'plus_simple',
     },
     privacy: {
       title: 'Privacidade',
       redirect: 'UpdateUserPrivacy',
-      icon: 'arrow-right',
+      icon: 'arrow_right',
       description: `${
         user.private ? 'Seu perfil é privado' : 'Seu perfil é público'
       }`,

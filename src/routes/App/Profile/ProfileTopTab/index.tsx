@@ -32,7 +32,7 @@ export const ProfileTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <ProfileTopTab.Screen
         name="ProfileReactsSent"
         options={{
-          tabBarLabel: 'Reações',
+          tabBarLabel: 'Reações Realizadas',
         }}
       >
         {props => <ProfileReactsSent {...props} route={route} />}

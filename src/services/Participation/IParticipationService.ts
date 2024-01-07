@@ -25,3 +25,9 @@ export interface IFindByUserId {
   page?: number;
   limit?: number;
 }
+
+export interface IFindByEventId {
+  event_id: string;
+  page?: number;
+  limit?: number;
+}
