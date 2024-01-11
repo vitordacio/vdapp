@@ -7,14 +7,14 @@ import { Loading } from '@components/View/Loading';
 import useMessage from '@contexts/message';
 import { IUser } from '@interfaces/user';
 import { userService } from '@services/User';
-import { EventProps } from '@routes/Event/event.routes';
-import CardUserInfo from '@components/Card/User/Info';
 import useDebounce from '@hooks/useDebounce';
+import { AppProps } from '@routes/App/app.routes';
+import CardUserEventInvite from '@components/Card/User/EventInvite';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventInvite: React.FC<EventProps> = ({ route, navigation }) => {
+const EventInvite: React.FC<AppProps> = ({ route, navigation }) => {
   const [searchInvite, setSearchInvite] = useState<string>('');
 
   const [refreshingInviteSearch, setRefreshingInviteSearch] =
@@ -27,12 +27,6 @@ const EventInvite: React.FC<EventProps> = ({ route, navigation }) => {
   const [data, setData] = useState<IUser[] | []>([]);
   const [page, setPage] = useState(2);
   const [showLoader, setShowLoader] = useState(false);
-
-  const handleSelectUser = (user: IUser) => {
-    route.params.user = user;
-
-    navigation.push('EventInviteConfirm');
-  };
 
   const fetchData = async () => {
     setShowLoader(true);
@@ -83,7 +77,11 @@ const EventInvite: React.FC<EventProps> = ({ route, navigation }) => {
   const renderItem = useCallback(
     ({ item }) => {
       return (
-        <CardUserInfo user={item} onPress={() => handleSelectUser(item)} />
+        <CardUserEventInvite
+          route={route}
+          navigation={navigation}
+          user={item}
+        />
       );
     },
     [data],

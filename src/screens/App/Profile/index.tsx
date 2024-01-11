@@ -28,7 +28,7 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
   const { user: self, onUpdateUser, user_profile } = route.params;
 
   const [user, setUser] = useState<IUser>();
-  const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [showLoader, setShowLoader] = useState<boolean>(true);
   const [friendshipLoader, setFriendshipLoader] = useState<boolean>(false);
   const [friendshipStatus, setFriendshipStatus] = useState(
     {} as FriendshipStatus,
@@ -62,8 +62,6 @@ const Profile: React.FC<AppProps> = ({ navigation, route }) => {
   };
 
   const fetchData = async (user_id: string) => {
-    setShowLoader(true);
-
     let dataProfile: IUser;
 
     try {

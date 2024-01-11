@@ -9,11 +9,11 @@ import useMessage from '@contexts/message';
 import { participationService } from '@services/Participation';
 import { Loading } from '@components/View/Loading';
 import { IParticipation, IParticipationType } from '@interfaces/participation';
-import { EventProps } from '@routes/Event/event.routes';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
 
-const EventInviteConfirm: React.FC<EventProps> = ({ route }) => {
-  const { user, event } = route.params;
+const EventInviteConfirm: React.FC<AppProps> = ({ route, navigation }) => {
+  const { user_invite: user, event } = route.params;
 
   const { throwInfo, throwError } = useMessage();
 
@@ -139,7 +139,7 @@ const EventInviteConfirm: React.FC<EventProps> = ({ route }) => {
           Escolha como será a participação do usuário no evento
         </Text>
         <View style={styles.user}>
-          <CardUserInfo user={user} />
+          <CardUserInfo route={route} navigation={navigation} user={user} />
         </View>
 
         <View style={styles.content}>
@@ -259,7 +259,13 @@ const EventInviteConfirm: React.FC<EventProps> = ({ route }) => {
               <View style={styles.submit}>
                 <Text style={[styles.text, styles.description]}>
                   <Text style={styles.color_blue}>{user.name}</Text> já está
-                  participando do evento
+                  participando do evento{' '}
+                  {participation.participation_status === 'guest_in' &&
+                    'como convidado.'}
+                  {participation.participation_status === 'mod_in' &&
+                    'como moderador.'}
+                  {participation.participation_status === 'vip_in' &&
+                    'como convidado VIP.'}
                 </Text>
                 <Text style={[styles.text, styles.description]}>
                   Pressione o botão abaixo para{' '}
@@ -282,7 +288,7 @@ const EventInviteConfirm: React.FC<EventProps> = ({ route }) => {
                   onPress={() =>
                     participation.type.id_participation_type ===
                     selectedInviteType.id_participation_type
-                      ? throwInfo(
+                      ? throwError(
                           `${user.name} já é um ${selectedInviteType.inviteDescription}`,
                         )
                       : handleInvite('promote')

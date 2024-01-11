@@ -34,6 +34,7 @@ export type AppProps = NativeStackScreenProps<ParamListBase> & {
       onUpdateEvent?: (data: IEvent) => void;
       updateEventConfirm?: UpdatEventConfirmProps;
       user_profile?: IUser;
+      user_invite?: IUser;
       user_friends?: IUser;
       user_reacts_received?: IUser;
       react: {

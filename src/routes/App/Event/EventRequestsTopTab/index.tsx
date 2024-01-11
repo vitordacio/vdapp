@@ -1,15 +1,12 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { AppProps } from '@routes/App/app.routes';
 import EventRequestsPending from '@screens/App/Event/EventRequests/Pending';
 import EventRequestsReviwed from '@screens/App/Event/EventRequests/Reviwed';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
-import { EventProps } from '../event.routes';
 
 const EventRequestsTopTab = createMaterialTopTabNavigator();
 
-export const EventRequestsTopTabRoutes: React.FC<EventProps> = ({
-  route,
-  onUpdateEvent,
-}) => {
+export const EventRequestsTopTabRoutes: React.FC<AppProps> = ({ route }) => {
   return (
     <EventRequestsTopTab.Navigator
       screenOptions={() => screenOptionsTopDefault({})}
@@ -20,13 +17,7 @@ export const EventRequestsTopTabRoutes: React.FC<EventProps> = ({
           tabBarLabel: 'Pendentes',
         }}
       >
-        {props => (
-          <EventRequestsPending
-            {...props}
-            route={route}
-            onUpdateEvent={onUpdateEvent}
-          />
-        )}
+        {props => <EventRequestsPending {...props} route={route} />}
       </EventRequestsTopTab.Screen>
 
       <EventRequestsTopTab.Screen
@@ -35,13 +26,7 @@ export const EventRequestsTopTabRoutes: React.FC<EventProps> = ({
           tabBarLabel: 'Revisados',
         }}
       >
-        {props => (
-          <EventRequestsReviwed
-            {...props}
-            route={route}
-            onUpdateEvent={onUpdateEvent}
-          />
-        )}
+        {props => <EventRequestsReviwed {...props} route={route} />}
       </EventRequestsTopTab.Screen>
     </EventRequestsTopTab.Navigator>
   );

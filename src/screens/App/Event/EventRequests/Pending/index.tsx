@@ -9,15 +9,13 @@ import { participationService } from '@services/Participation';
 import { IParticipation } from '@interfaces/participation';
 import CardUserEventRequestPending from '@components/Card/User/EventRequestPending';
 import { IEventResponse } from '@services/Participation/IParticipationService';
-import { EventProps } from '@routes/Event/event.routes';
-import useAuth from '@contexts/auth';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
 
 let loadMore = true;
 
-const EventRequestsPending: React.FC<EventProps> = ({ route, navigation }) => {
-  const { event } = route.params;
-  const { user } = useAuth();
+const EventRequestsPending: React.FC<AppProps> = ({ route, navigation }) => {
+  const { event, user } = route.params;
   const {
     eventRequestsPending,
     setEventRequestsPending,
@@ -28,11 +26,11 @@ const EventRequestsPending: React.FC<EventProps> = ({ route, navigation }) => {
   const { throwInfo, throwError } = useMessage();
 
   const [page, setPage] = useState(2);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
 
   const handleConfirm = async (data: IEventResponse) => {
     try {
-      await participationService.responseByEvent(data);
+      const newParticipation = await participationService.responseByEvent(data);
 
       const participation = eventRequestsPending.find(
         pending => pending.id_participation === data.participation_id,
@@ -51,7 +49,7 @@ const EventRequestsPending: React.FC<EventProps> = ({ route, navigation }) => {
           participation.confirmed_by_event && participation.confirmed_by_user;
         if (participation.in) participation.participation_status = 'user_in';
 
-        setEventRequestsReviwed([participation, ...eventRequestsReviwed]);
+        setEventRequestsReviwed([newParticipation, ...eventRequestsReviwed]);
         throwInfo(
           `Solicitação ${data.confirm ? 'aceita' : 'recusada'} com sucesso`,
         );

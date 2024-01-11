@@ -28,7 +28,7 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
   const { throwInfo, throwError } = useMessage();
 
   const [event, setEvent] = useState<IEvent>();
-  const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [showLoader, setShowLoader] = useState<boolean>(true);
   const [participationLoader, setParticipationLoader] =
     useState<boolean>(false);
   const [participationStatus, setParticipationStatus] = useState(
@@ -57,8 +57,6 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
   };
 
   const fetchData = async (event_id: string) => {
-    setShowLoader(true);
-
     let dataEvent: IEvent;
 
     try {
