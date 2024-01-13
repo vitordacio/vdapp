@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     width: '100%',
     paddingTop: 20,
-    // paddingBottom: 8,
   },
   status: {
     position: 'absolute',
@@ -55,12 +54,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 6,
   },
-  data_text: {
-    flex: 1,
+  event_data: {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 10,
+    flexWrap: 'wrap',
+  },
+  data_text: {
+    marginLeft: 10,
+    flexWrap: 'wrap',
+    maxWidth: '100%',
+  },
+  performer_name: {
+    marginLeft: 2,
+    marginRight: 6,
+    color: `${colors.TEXT_DEFAULT}`,
   },
   data_footer: {
     display: 'flex',
@@ -122,6 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
+    flexWrap: 'wrap',
   },
   container_footer: {
     display: 'flex',
@@ -129,21 +138,19 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 8,
     paddingVertical: 5,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     gap: 8,
     marginBottom: 16,
   },
   text_extra_large: {
-    flex: 1,
+    // flex: 1,
     fontSize: 22,
   },
   text_large: {
-    flex: 1,
     fontSize: 18,
   },
   text_medium: {
-    flex: 1,
     fontSize: 14,
   },
   text_default_color: {
@@ -151,6 +158,12 @@ const styles = StyleSheet.create({
   },
   text_gray_color: {
     color: `${colors.GRAY_DESCRIPTION}`,
+  },
+  text_gold_color: {
+    color: `${colors.GOLD}`,
+  },
+  text_link_color: {
+    color: `${colors.BLUE_LINK}`,
   },
 });
 

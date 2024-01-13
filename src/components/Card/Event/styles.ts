@@ -8,8 +8,11 @@ export default StyleSheet.create({
     flex: 1,
     padding: 8,
     backgroundColor: `${colors.BLACK}`,
-    // backgroundColor: `${colors.GRAY_BACKGROUND}`,
     borderRadius: 8,
+    borderWidth: 1,
+  },
+  verified: {
+    borderColor: `${colors.GOLD}`,
   },
   cover_photo: {
     width: '100%',
@@ -35,35 +38,47 @@ export default StyleSheet.create({
     height: 15,
   },
   container_event: {
-    flex: 1,
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    gap: 11,
+    gap: 8,
+    marginBottom: 10,
+    paddingHorizontal: 6,
   },
-  data_text: {
+  event_data: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start',
     flexDirection: 'row',
-    gap: 10,
+    flexWrap: 'wrap',
+  },
+  data_text: {
+    marginLeft: 10,
+    flexWrap: 'wrap',
+    maxWidth: '100%',
+  },
+  performer_name: {
+    marginLeft: 2,
+    marginRight: 6,
+    color: `${colors.TEXT_DEFAULT}`,
   },
   text_large: {
-    flex: 1,
     fontSize: 18,
   },
   text_medium: {
-    flex: 1,
     fontSize: 14,
   },
   text_default_color: {
     color: `${colors.TEXT_DEFAULT}`,
   },
+  text_gray_color: {
+    color: `${colors.GRAY_DESCRIPTION}`,
+  },
   text_gold_color: {
     color: `${colors.GOLD}`,
   },
-  text_gray_color: {
-    color: `${colors.GRAY_DESCRIPTION}`,
+  text_link_color: {
+    color: `${colors.BLUE_LINK}`,
   },
   container_author: {
     marginTop: 8,

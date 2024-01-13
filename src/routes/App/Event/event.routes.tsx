@@ -31,7 +31,10 @@ export const EventRoutes: React.FC<AppProps> = ({ navigation, route }) => {
         {props => <EventManageRoutes {...props} route={route} />}
       </EventStackTab.Screen>
 
-      <EventStackTab.Screen name="EventRequests">
+      <EventStackTab.Screen
+        name="EventRequests"
+        options={{ headerTitle: 'Solicitações' }}
+      >
         {props => <EventRequestsTopTabRoutes {...props} route={route} />}
       </EventStackTab.Screen>
 

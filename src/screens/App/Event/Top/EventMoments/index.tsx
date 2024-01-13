@@ -74,7 +74,7 @@ const EventMoments: React.FC<AppProps> = ({ navigation, route }) => {
   const keyExtractor = useCallback((item: IMoment) => `${item.id_moment}`, []);
 
   // const itemSeparatorComponent = useCallback(() => {
-  //   return <View style={{ height: 14 }} />;
+  //   return <View style={{ height: 5 }} />;
   // }, [data]);
 
   const onEndReached = () => {
@@ -92,18 +92,20 @@ const EventMoments: React.FC<AppProps> = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { paddingHorizontal: 0, paddingVertical: 0 }]}
+    >
       <FlatList
         data={data}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        // ItemSeparatorComponent={itemSeparatorComponent}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.9}
         ListFooterComponent={showLoader && listFooterComponent}
         showsHorizontalScrollIndicator={false}
         numColumns={3}
-        // columnWrapperStyle={styles.wrapper}
+        // ItemSeparatorComponent={itemSeparatorComponent}
+        // columnWrapperStyle={}
       />
     </View>
   );

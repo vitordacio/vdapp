@@ -9,7 +9,7 @@ const EventInviteStackTab = createNativeStackNavigator();
 export const EventInviteRoutes: React.FC<AppProps> = ({ route }) => {
   return (
     <EventInviteStackTab.Navigator
-      screenOptions={() => screenOptionsDefault({})}
+      screenOptions={() => screenOptionsDefault({ title: 'Convidar' })}
     >
       <EventInviteStackTab.Screen name="EventInviteScreen">
         {props => <EventInvite {...props} route={route} />}

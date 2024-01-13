@@ -3,14 +3,11 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    width: 136,
+    minWidth: 136,
     height: 136,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-
-    borderWidth: 0.5,
-    borderColor: '#000',
   },
   thumb: {
     width: '100%',

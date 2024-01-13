@@ -59,9 +59,9 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
       icon: 'plus_simple',
     },
     performer: {
-      title: 'Artista',
+      title: 'Artistas',
       redirect: 'UpdateEventPerformer',
-      description: `${event.performer || 'Informe um artista'}`,
+      // description: 'Adicionar/remover artistas',
     },
     club_name: {
       title: 'Nome do clube',
@@ -122,15 +122,17 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
                 ]}
               />
 
-              <CardUpdateOptions
-                navigation={navigation}
-                options={[
-                  options.performer,
-                  options.club_name,
-                  options.ticket_value,
-                  options.tickets_free,
-                ]}
-              />
+              {event.type.verified && (
+                <CardUpdateOptions
+                  navigation={navigation}
+                  options={[
+                    options.performer,
+                    options.club_name,
+                    options.ticket_value,
+                    options.tickets_free,
+                  ]}
+                />
+              )}
 
               <CardUpdateOptions
                 navigation={navigation}

@@ -18,13 +18,13 @@ export interface IEvent {
   tickets_free: string;
   ticket_value: string;
   club_name: string;
-  performer: string;
   author_id: string;
   address_id: string;
   private: boolean;
   type: IEventType;
   address: IAddress;
   author: IUser;
+  performers: IEventPerformer[];
   participations: IParticipation;
   participating_count: number;
   reacts_count: number;
@@ -44,4 +44,13 @@ export interface IEvent {
     | '';
   can_see_content: boolean;
   participating: boolean;
+}
+
+export interface IEventPerformer {
+  id_performer: string;
+  name: string;
+  user_id?: string;
+  user?: IUser;
+  event_id: string;
+  event: IEvent;
 }

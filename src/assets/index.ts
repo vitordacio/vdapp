@@ -60,6 +60,11 @@ import arrow_right from './arrow_right.svg';
 import more_horizontal from './more_horizontal.svg';
 import more_vertical from './more_vertical.svg';
 import trash from './trash.svg';
+import ticket from './ticket.svg';
+import mic from './mic.svg';
+import achievement from './achievement.svg';
+import club from './club.svg';
+import moments from './moments.svg';
 
 import ongoing from './Animation/ongoing.json';
 import loading from './Animation/loading.json';
@@ -128,4 +133,9 @@ export default {
   more_horizontal,
   more_vertical,
   trash,
+  ticket,
+  mic,
+  achievement,
+  club,
+  moments,
 };

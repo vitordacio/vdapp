@@ -84,7 +84,7 @@ export const TextInput = ({
                   : `${colors.GRAY_INPUT_PLACEHOLDER}`
               }`,
             },
-            lengthMax && { height: 96, paddingTop: 8 },
+            lengthMax && { minHeight: 136, paddingTop: 8 },
             icon
               ? { paddingLeft: 48, paddingRight: 48 }
               : { paddingLeft: 16, paddingRight: 16 },

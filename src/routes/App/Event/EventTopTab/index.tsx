@@ -1,3 +1,4 @@
+import { Icon } from '@components/Icon';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { AppProps } from '@routes/App/app.routes';
 import EventAchievements from '@screens/App/Event/Top/EventAchievements';
@@ -14,7 +15,9 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <EventTopTab.Screen
         name="EventMoments"
         options={{
-          tabBarLabel: 'Momentos',
+          tabBarLabel: () => {
+            return <Icon name="moments" />;
+          },
         }}
       >
         {props => <EventMoments {...props} route={route} />}
@@ -23,7 +26,9 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <EventTopTab.Screen
         name="EventParticipations"
         options={{
-          tabBarLabel: 'Participando',
+          tabBarLabel: () => {
+            return <Icon name="users" />;
+          },
         }}
       >
         {props => <EventParticipations {...props} route={route} />}
@@ -32,7 +37,9 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <EventTopTab.Screen
         name="EventReactsReceived"
         options={{
-          tabBarLabel: 'Reações',
+          tabBarLabel: () => {
+            return <Icon name="smile" />;
+          },
         }}
       >
         {props => <EventReactsReceived {...props} route={route} />}
@@ -41,7 +48,9 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <EventTopTab.Screen
         name="EventAchievements"
         options={{
-          tabBarLabel: 'Conquistas',
+          tabBarLabel: () => {
+            return <Icon name="achievement" />;
+          },
         }}
       >
         {props => <EventAchievements {...props} route={route} />}

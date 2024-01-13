@@ -4,7 +4,7 @@ import { View } from '@components/View';
 import { Text } from '@components/Text';
 import assets from '@assets/index';
 import { Image } from 'react-native';
-import { IEvent } from '@interfaces/event';
+import { IEvent, IEventPerformer } from '@interfaces/event';
 import { formatTimeRange } from '@utils/formaters';
 import { LineX } from '@components/Line';
 import { Pressable } from '@components/Pressable';
@@ -26,27 +26,12 @@ const CardEvent: React.FC<CardEventProps> = ({
 }) => {
   const { user } = route.params;
 
-  const {
-    type,
-    cover_photo,
-    name,
-    location,
-    start_time,
-    finish_time,
-    additional,
-    drink_preferences,
-    min_amount,
-    participating_count,
-    reacts_count,
-    author,
-    event_status,
-  } = event;
-
-  const hours = formatTimeRange(
-    new Date(start_time),
-    new Date(finish_time),
-    user.locale,
-  );
+  const handleProfilePerformer = (performer: IEventPerformer) => {
+    if (performer.user) {
+      route.params.user_profile = performer.user;
+      navigation.push('Profile');
+    }
+  };
 
   const onPress = () => {
     route.params.event = event;
@@ -56,16 +41,19 @@ const CardEvent: React.FC<CardEventProps> = ({
   return (
     <>
       {event && (
-        <Pressable style={styles.container} onPress={onPress}>
-          {cover_photo && (
+        <Pressable
+          style={[styles.container, event.type.verified && styles.verified]}
+          onPress={onPress}
+        >
+          {event.cover_photo && (
             <Image
-              source={{ uri: cover_photo }}
+              source={{ uri: event.cover_photo }}
               style={styles.cover_photo}
               resizeMode="cover"
             />
           )}
           <View style={styles.container_data}>
-            {event_status === 'ongoing' && (
+            {event.event_status === 'ongoing' && (
               <LottieView
                 style={styles.status}
                 source={assets.ongoing}
@@ -75,71 +63,188 @@ const CardEvent: React.FC<CardEventProps> = ({
             )}
 
             <View style={styles.container_event}>
-              {name && (
-                <View style={styles.data_text}>
-                  {type && <Icon name={type.name} />}
-                  <Text style={[styles.text_default_color, styles.text_large]}>
-                    {name}
-                  </Text>
-                </View>
-              )}
-              {location && (
-                <View style={styles.data_text}>
-                  <Icon name="location" />
-                  <Text style={[styles.text_default_color, styles.text_medium]}>
-                    {location}
-                  </Text>
-                </View>
-              )}
-              {hours && (
-                <View style={styles.data_text}>
-                  <Icon name="clock" />
-                  <Text style={[styles.text_default_color, styles.text_medium]}>
-                    {hours}
-                  </Text>
-                </View>
-              )}
-              {additional && (
-                <View style={styles.data_text}>
-                  <Icon name="attach" />
-                  <Text style={[styles.text_gray_color, styles.text_medium]}>
-                    {additional}
-                  </Text>
-                </View>
-              )}
-              {drink_preferences && (
-                <View style={styles.data_text}>
-                  <Icon name="drink" />
-                  <Text style={[styles.text_gray_color, styles.text_medium]}>
-                    {drink_preferences}
-                  </Text>
-                </View>
-              )}
-              {min_amount && (
-                <View style={styles.data_text}>
+              <View style={styles.event_data}>
+                <Icon
+                  name={event.type.name}
+                  tintColor={event.type.verified && '#F2C94D'}
+                />
+                <Text
+                  style={[
+                    styles.data_text,
+                    event.type.verified
+                      ? styles.text_gold_color
+                      : styles.text_default_color,
+                    styles.text_large,
+                  ]}
+                >
+                  {event.name || '--'}
+                </Text>
+              </View>
+
+              <View style={styles.event_data}>
+                <Icon name="location" />
+
+                <Text
+                  style={[
+                    styles.data_text,
+                    styles.text_default_color,
+                    styles.text_large,
+                  ]}
+                >
+                  {event.location || '--'}
+                </Text>
+              </View>
+
+              <View style={styles.event_data}>
+                <Icon name="clock" />
+
+                <Text
+                  style={[
+                    styles.data_text,
+                    styles.text_default_color,
+                    styles.text_large,
+                  ]}
+                >
+                  {formatTimeRange(
+                    new Date(event.start_time),
+                    new Date(event.finish_time),
+                    user.locale,
+                  ) || '--'}
+                </Text>
+              </View>
+
+              <View style={styles.event_data}>
+                <Icon name="attach" />
+
+                <Text
+                  style={[
+                    styles.data_text,
+                    styles.text_default_color,
+                    styles.text_medium,
+                  ]}
+                >
+                  {event.additional || '--'}
+                </Text>
+              </View>
+
+              <View style={styles.event_data}>
+                <Icon name="drink" />
+
+                <Text
+                  style={[
+                    styles.data_text,
+                    styles.text_default_color,
+                    styles.text_medium,
+                  ]}
+                >
+                  {event.drink_preferences || '--'}
+                </Text>
+              </View>
+
+              {event.min_amount && (
+                <View style={styles.event_data}>
                   <Icon name="coin" />
-                  <Text style={[styles.text_gray_color, styles.text_medium]}>
-                    {min_amount}
+
+                  <Text
+                    style={[
+                      styles.data_text,
+                      styles.text_default_color,
+                      styles.text_medium,
+                    ]}
+                  >
+                    {event.min_amount}
                   </Text>
                 </View>
+              )}
+
+              {event.type.verified && (
+                <>
+                  {event.club_name && (
+                    <View style={styles.event_data}>
+                      <Icon name="club" />
+
+                      <Text
+                        style={[
+                          styles.data_text,
+                          styles.text_default_color,
+                          styles.text_medium,
+                        ]}
+                      >
+                        {event.club_name}
+                      </Text>
+                    </View>
+                  )}
+
+                  {event.ticket_value && (
+                    <View style={styles.event_data}>
+                      <Icon name="ticket" />
+
+                      <Text
+                        style={[
+                          styles.data_text,
+                          styles.text_default_color,
+                          styles.text_medium,
+                        ]}
+                      >
+                        {event.ticket_value}
+                      </Text>
+                    </View>
+                  )}
+
+                  {event.performers.length !== 0 && (
+                    <View style={styles.event_data}>
+                      <Icon name="mic" style={{ marginRight: 10 }} />
+                      {event.performers.map((performer, index) => (
+                        <React.Fragment key={performer.id_performer}>
+                          {index > 0 && (
+                            <Text style={styles.performer_name}>,</Text>
+                          )}
+                          {performer.user ? (
+                            <Pressable
+                              onPress={() => handleProfilePerformer(performer)}
+                            >
+                              <Text
+                                style={[
+                                  styles.text_link_color,
+                                  styles.text_large,
+                                ]}
+                              >
+                                {performer.name}
+                              </Text>
+                            </Pressable>
+                          ) : (
+                            <Text
+                              style={[
+                                styles.text_default_color,
+                                styles.text_large,
+                              ]}
+                            >
+                              {performer.name}
+                            </Text>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </View>
+                  )}
+                </>
               )}
             </View>
 
-            {author && !hideAuthor && (
+            {event.author && !hideAuthor && (
               <View style={styles.container_author}>
-                <Picture card={true} picture={author.picture} />
+                <Picture card={true} picture={event.author.picture} />
                 <View style={styles.data_author}>
-                  {author.username && (
+                  {event.author.username && (
                     <Text
                       style={[styles.text_default_color, styles.text_medium]}
                     >
-                      {author.username}
+                      {event.author.username}
                     </Text>
                   )}
 
-                  {author.name && (
+                  {event.author.name && (
                     <Text style={[styles.text_gray_color, styles.text_medium]}>
-                      {author.name}
+                      {event.author.name}
                     </Text>
                   )}
                 </View>
@@ -152,13 +257,13 @@ const CardEvent: React.FC<CardEventProps> = ({
               <View style={styles.data_counts}>
                 <Icon name="smile" />
                 <Text style={[styles.text_default_color, styles.text_medium]}>
-                  {reacts_count}
+                  {event.reacts_count}
                 </Text>
               </View>
               <View style={styles.data_counts}>
                 <Icon name="users" />
                 <Text style={[styles.text_default_color, styles.text_medium]}>
-                  {participating_count}
+                  {event.participating_count}
                 </Text>
               </View>
             </View>
