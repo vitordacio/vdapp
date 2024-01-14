@@ -9,6 +9,7 @@ import { EventManageRoutes } from './EventManageStackTab';
 import { EventRequestsTopTabRoutes } from './EventRequestsTopTab';
 import { EventSettingsRoutes } from './EventSettingsStackTab';
 import EventHeaderRight from './EventHeaderRight/HeaderRight';
+import { EventMomentsRoutes } from './EventMomentsStackTab';
 
 const EventStackTab = createNativeStackNavigator();
 
@@ -32,6 +33,13 @@ export const EventRoutes: React.FC<AppProps> = ({ navigation, route }) => {
       </EventStackTab.Screen>
 
       <EventStackTab.Screen
+        name="EventMoments"
+        options={{ headerShown: false }}
+      >
+        {props => <EventMomentsRoutes {...props} route={route} />}
+      </EventStackTab.Screen>
+
+      <EventStackTab.Screen
         name="EventRequests"
         options={{ headerTitle: 'Solicitações' }}
       >
@@ -43,7 +51,6 @@ export const EventRoutes: React.FC<AppProps> = ({ navigation, route }) => {
       </EventStackTab.Screen>
 
       <EventStackTab.Screen name="EventInbox" component={Custom} />
-      <EventStackTab.Screen name="EventLists" component={Custom} />
 
       <EventStackTab.Screen
         name="EventSettings"

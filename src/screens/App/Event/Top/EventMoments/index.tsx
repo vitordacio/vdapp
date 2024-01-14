@@ -65,7 +65,12 @@ const EventMoments: React.FC<AppProps> = ({ navigation, route }) => {
   const renderItem = useCallback(
     ({ item }) => {
       return (
-        <CardMomentThumb route={route} navigation={navigation} moment={item} />
+        <CardMomentThumb
+          route={route}
+          navigation={navigation}
+          moment={item}
+          moments={data}
+        />
       );
     },
     [data],
@@ -92,9 +97,7 @@ const EventMoments: React.FC<AppProps> = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View
-      style={[styles.container, { paddingHorizontal: 0, paddingVertical: 0 }]}
-    >
+    <View style={[styles.container, { alignItems: 'center' }]}>
       <FlatList
         data={data}
         renderItem={renderItem}

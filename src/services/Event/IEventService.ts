@@ -63,11 +63,6 @@ export interface IUpdateMinAmount {
   min_amount: string;
 }
 
-export interface IUpdatePerformer {
-  event_id: string;
-  performer: string;
-}
-
 export interface IUpdateClubName {
   event_id: string;
   club_name: string;
@@ -86,4 +81,10 @@ export interface IUpdateTicketsFree {
 export interface IUpdateAddress {
   event_id: string;
   address_id: string;
+}
+
+export interface ICreatePerformer {
+  event_id: string;
+  user_id?: string;
+  name?: string;
 }

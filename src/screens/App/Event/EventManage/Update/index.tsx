@@ -6,10 +6,11 @@ import {
   CardUpdateOptions,
   ICardUpdateOption,
 } from '@components/Card/UpdateOptions';
+import { formatTimeRange } from '@utils/formaters';
 import styles from './styles';
 
 const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
-  const { event } = route.params;
+  const { event, user } = route.params;
 
   const options = {
     name: {
@@ -25,7 +26,11 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
     hours: {
       title: 'Horário',
       redirect: 'UpdateEventHours',
-      description: `${event.start_time} | ${event.finish_time}`,
+      description: formatTimeRange(
+        new Date(event.start_time),
+        new Date(event.finish_time),
+        user.locale,
+      ),
     },
     privacy: {
       title: 'Privacidade',
@@ -58,11 +63,10 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
       redirect: 'UpdateEventMinAmount',
       icon: 'plus_simple',
     },
-    performer: {
-      title: 'Artistas',
-      redirect: 'UpdateEventPerformer',
-      // description: 'Adicionar/remover artistas',
-    },
+    // performer: {
+    //   title: 'Artistas',
+    //   redirect: 'UpdateEventPerformer',
+    // },
     club_name: {
       title: 'Nome do clube',
       redirect: 'UpdateEventClubName',
@@ -87,7 +91,7 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
     additional: ICardUpdateOption;
     drink_preferences: ICardUpdateOption;
     min_amount: ICardUpdateOption;
-    performer: ICardUpdateOption;
+    // performer: ICardUpdateOption;
     club_name: ICardUpdateOption;
     ticket_value: ICardUpdateOption;
     tickets_free: ICardUpdateOption;
@@ -126,7 +130,6 @@ const UpdateEvent: React.FC<AppProps> = ({ navigation, route }) => {
                 <CardUpdateOptions
                   navigation={navigation}
                   options={[
-                    options.performer,
                     options.club_name,
                     options.ticket_value,
                     options.tickets_free,

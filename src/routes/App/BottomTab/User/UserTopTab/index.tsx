@@ -5,6 +5,7 @@ import UserEvents from '@screens/App/User/Top/UserEvents';
 import UserParticipations from '@screens/App/User/Top/UserParticipations';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
 import UserReactsSent from '@screens/App/User/Top/UserReactsSent';
+import { Icon } from '@components/Icon';
 
 const UserTopTab = createMaterialTopTabNavigator();
 
@@ -14,7 +15,9 @@ export const UserTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <UserTopTab.Screen
         name="UserEvents"
         options={{
-          tabBarLabel: 'Eventos',
+          tabBarLabel: () => {
+            return <Icon name="party" />;
+          },
         }}
       >
         {props => <UserEvents {...props} route={route} />}
@@ -23,7 +26,9 @@ export const UserTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <UserTopTab.Screen
         name="UserParticipations"
         options={{
-          tabBarLabel: 'Participações',
+          tabBarLabel: () => {
+            return <Icon name="users" />;
+          },
         }}
       >
         {props => <UserParticipations {...props} route={route} />}
@@ -32,7 +37,9 @@ export const UserTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <UserTopTab.Screen
         name="UserReactsSent"
         options={{
-          tabBarLabel: 'Reações Realizadas',
+          tabBarLabel: () => {
+            return <Icon name="smile" />;
+          },
         }}
       >
         {props => <UserReactsSent {...props} route={route} />}
@@ -41,7 +48,9 @@ export const UserTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <UserTopTab.Screen
         name="UserAchievements"
         options={{
-          tabBarLabel: 'Conquistas',
+          tabBarLabel: () => {
+            return <Icon name="achievement" />;
+          },
         }}
       >
         {props => <UserAchievements {...props} route={route} />}

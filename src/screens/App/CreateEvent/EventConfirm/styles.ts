@@ -30,10 +30,6 @@ const styles = StyleSheet.create({
     gap: 10,
     marginBottom: 8,
   },
-  icon: {
-    width: 21,
-    height: 21,
-  },
   text_large: {
     flex: 1,
     fontSize: 18,

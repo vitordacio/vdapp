@@ -8,7 +8,7 @@ import { Icon } from '@components/Icon';
 import { Pressable } from '@components/Pressable';
 import styles from './styles';
 
-const EventManage: React.FC<AppProps> = ({ navigation }) => {
+const EventManage: React.FC<AppProps> = ({ navigation, route }) => {
   return (
     <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -23,6 +23,17 @@ const EventManage: React.FC<AppProps> = ({ navigation }) => {
               </Text>
               <Icon name="chevron" />
             </Pressable>
+
+            {route.params.event.type.verified && (
+              <Pressable
+                style={styles.card}
+                onPress={() => navigation.push('UpdateEventPerformer')}
+              >
+                <Text style={[styles.text, styles.text_default]}>Artistas</Text>
+                <Icon name="chevron" />
+              </Pressable>
+            )}
+
             <Pressable
               style={styles.card}
               onPress={() => navigation.push('FinishEvent')}
@@ -32,6 +43,7 @@ const EventManage: React.FC<AppProps> = ({ navigation }) => {
               </Text>
               <Icon name="chevron" />
             </Pressable>
+
             <Pressable
               style={styles.card}
               onPress={() => navigation.push('DeleteEvent')}

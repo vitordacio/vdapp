@@ -11,7 +11,7 @@ import { IUpdateLocation } from '@services/User/IUserService';
 import styles from '../styles';
 
 const schema = yup.object({
-  location: yup.string().max(30, 'A localização deve ter no máximo 30 dígitos'),
+  location: yup.string().max(80, 'A localização deve ter no máximo 80 dígitos'),
 });
 
 type LocationFormData = yup.InferType<typeof schema>;
@@ -49,7 +49,7 @@ const UpdateLocation: React.FC<AppProps> = ({ navigation, route }) => {
         placeholder="Informe sua localização"
         defaultValue={user.location}
         error={errors.location}
-        maxLength={30}
+        maxLength={80}
       />
       <View style={styles.confirm_button_wrapper}>
         <Button onPress={handleSubmit(handleLocation)} title="Continuar" />

@@ -6,26 +6,37 @@ import { IUpdateTicketsValue } from '@services/Event/IEventService';
 import colors from '@styles/colors';
 import { AppProps } from '@routes/App/app.routes';
 import { ViewUpdate } from '@components/View/ViewUpdate';
+import useMessage from '@contexts/message';
 import styles from './styles';
 
 const UpdateEventTicketsValue: React.FC<AppProps> = ({ navigation, route }) => {
   const { event } = route.params;
+  const { throwError } = useMessage();
 
   const [moneyValue, setMoneyValue] = useState('');
   const [isTicketValueFocused, setIsTicketValueFocused] = useState(false);
   const [isTicketValueFilled, setIsTicketValueFilled] = useState(false);
 
   const handleTicketValue = async () => {
-    route.params.updateEventConfirm = {
-      name: 'Valor de entrada',
-      description: 'Tem certeza que deseja mudar o valor de entrada do evento?',
-      type: 'tickets_value',
-      data: {
-        event_id: event.id_event,
-        tickets_value: !moneyValue.includes('NaN') ? moneyValue : undefined,
-      } as IUpdateTicketsValue,
-    };
-    navigation.push('UpdateEventConfirm');
+    const value = moneyValue.split(/(?:\s| )+/)[1].replace(',', '.');
+
+    const isValid = value && !Number.isNaN(Number(value));
+
+    if (isValid) {
+      route.params.updateEventConfirm = {
+        name: 'Valor de entrada',
+        description:
+          'Tem certeza que deseja mudar o valor de entrada do evento?',
+        type: 'tickets_value',
+        data: {
+          event_id: event.id_event,
+          tickets_value: value,
+        } as IUpdateTicketsValue,
+      };
+      navigation.push('UpdateEventConfirm');
+    } else {
+      throwError('Informe um número válido');
+    }
   };
 
   const formatMoney = (value: string) => {
@@ -33,11 +44,15 @@ const UpdateEventTicketsValue: React.FC<AppProps> = ({ navigation, route }) => {
 
     const floatValue = parseFloat(numericValue) / 100;
 
-    const formattedValue = floatValue.toLocaleString('pt-BR', {
+    let formattedValue = floatValue.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
       minimumFractionDigits: 2,
     });
+
+    if (formattedValue.includes('NaN')) {
+      formattedValue = formattedValue.replace('NaN', '');
+    }
 
     return formattedValue;
   };

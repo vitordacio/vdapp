@@ -5,6 +5,7 @@ import ProfileEvents from '@screens/App/Profile/Top/ProfileEvents';
 import ProfileParticipations from '@screens/App/Profile/Top/ProfileParticipations';
 import { screenOptionsTopDefault } from '@styles/screenOptions';
 import ProfileReactsSent from '@screens/App/Profile/Top/ProfileReactsSent';
+import { Icon } from '@components/Icon';
 
 const ProfileTopTab = createMaterialTopTabNavigator();
 
@@ -14,7 +15,9 @@ export const ProfileTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <ProfileTopTab.Screen
         name="ProfileEvents"
         options={{
-          tabBarLabel: 'Eventos',
+          tabBarLabel: () => {
+            return <Icon name="party" />;
+          },
         }}
       >
         {props => <ProfileEvents {...props} route={route} />}
@@ -23,7 +26,9 @@ export const ProfileTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <ProfileTopTab.Screen
         name="ProfileParticipations"
         options={{
-          tabBarLabel: 'Participações',
+          tabBarLabel: () => {
+            return <Icon name="users" />;
+          },
         }}
       >
         {props => <ProfileParticipations {...props} route={route} />}
@@ -32,7 +37,9 @@ export const ProfileTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <ProfileTopTab.Screen
         name="ProfileReactsSent"
         options={{
-          tabBarLabel: 'Reações Realizadas',
+          tabBarLabel: () => {
+            return <Icon name="smile" />;
+          },
         }}
       >
         {props => <ProfileReactsSent {...props} route={route} />}
@@ -41,7 +48,9 @@ export const ProfileTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       <ProfileTopTab.Screen
         name="ProfileAchievements"
         options={{
-          tabBarLabel: 'Conquistas',
+          tabBarLabel: () => {
+            return <Icon name="achievement" />;
+          },
         }}
       >
         {props => <ProfileAchievements {...props} route={route} />}

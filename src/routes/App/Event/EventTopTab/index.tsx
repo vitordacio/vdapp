@@ -13,7 +13,7 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
   return (
     <EventTopTab.Navigator screenOptions={() => screenOptionsTopDefault({})}>
       <EventTopTab.Screen
-        name="EventMoments"
+        name="EventTopTabMoments"
         options={{
           tabBarLabel: () => {
             return <Icon name="moments" />;
@@ -24,7 +24,7 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       </EventTopTab.Screen>
 
       <EventTopTab.Screen
-        name="EventParticipations"
+        name="EventTopTabParticipations"
         options={{
           tabBarLabel: () => {
             return <Icon name="users" />;
@@ -35,7 +35,7 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       </EventTopTab.Screen>
 
       <EventTopTab.Screen
-        name="EventReactsReceived"
+        name="EventTopTabReactsReceived"
         options={{
           tabBarLabel: () => {
             return <Icon name="smile" />;
@@ -46,7 +46,7 @@ export const EventTopTabRoutes: React.FC<AppProps> = ({ route }) => {
       </EventTopTab.Screen>
 
       <EventTopTab.Screen
-        name="EventAchievements"
+        name="EventTopTabAchievements"
         options={{
           tabBarLabel: () => {
             return <Icon name="achievement" />;

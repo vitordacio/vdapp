@@ -1,10 +1,10 @@
-import Feather from 'react-native-vector-icons/Feather';
 import React, { useState } from 'react';
 import {
   TextInputProps,
   TextInput as NativeTextInput,
   TouchableOpacity,
 } from 'react-native';
+import { Icon } from '@components/Icon';
 import { Text } from '@components/Text';
 import { View } from '@components/View';
 import { Control, FieldValues, FieldError, Controller } from 'react-hook-form';
@@ -13,7 +13,7 @@ import styles from './styles';
 
 export type ITextInputProps = TextInputProps & {
   onChange?: (e: string) => void;
-  icon?: React.ComponentProps<typeof Feather>['name'];
+  icon?: string;
   value?: string;
   title?: string;
   status?: (data: string) => Promise<boolean>;
@@ -62,10 +62,10 @@ export const TextInput = ({
       >
         {icon && (
           <View style={[styles.icon_container, styles.left]}>
-            <Feather
+            <Icon
               name={icon}
               size={24}
-              color={
+              tintColor={
                 isFocused || isFilled
                   ? `${colors.WHITE}`
                   : `${colors.GRAY_INPUT_PLACEHOLDER}`
@@ -112,10 +112,10 @@ export const TextInput = ({
             style={[styles.icon_container, styles.right]}
             onPress={() => setIsSecurity(!isSecurity)}
           >
-            <Feather
+            <Icon
               name={isSecurity ? 'eye' : 'eye-off'}
               size={24}
-              color={
+              tintColor={
                 isFocused || isFilled
                   ? `${colors.WHITE}`
                   : `${colors.GRAY_INPUT_PLACEHOLDER}`
@@ -127,9 +127,9 @@ export const TextInput = ({
         {status && (
           <View style={[styles.icon_container, styles.right]}>
             {isValid ? (
-              <Feather name="check" size={24} color="green" />
+              <Icon name="check" size={24} tintColor="green" />
             ) : (
-              <Feather name="x" size={24} color="red" />
+              <Icon name="x" size={24} tintColor="red" />
             )}
           </View>
         )}

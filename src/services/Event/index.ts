@@ -14,10 +14,10 @@ import {
   IUpdateLocation,
   IUpdateMinAmount,
   IUpdateName,
-  IUpdatePerformer,
   IUpdatePrivacy,
   IUpdateTicketsFree,
   IUpdateTicketsValue,
+  ICreatePerformer,
 } from './IEventService';
 
 interface IEventService {
@@ -33,11 +33,12 @@ interface IEventService {
   updateAdditional: (data: IUpdateAdditional) => Promise<IEvent>;
   updateDrinkPreferences: (data: IUpdateDrinkPreferences) => Promise<IEvent>;
   updateMinAmount: (data: IUpdateMinAmount) => Promise<IEvent>;
-  updatePerformer: (data: IUpdatePerformer) => Promise<IEvent>;
   updateClubName: (data: IUpdateClubName) => Promise<IEvent>;
   updateTicketsValue: (data: IUpdateTicketsValue) => Promise<IEvent>;
   updateTicketsFree: (data: IUpdateTicketsFree) => Promise<IEvent>;
   updateAddress: (data: IUpdateAddress) => Promise<IEvent>;
+  createPerformer: (data: ICreatePerformer) => Promise<IEvent>;
+  deletePerformer: (data: string) => Promise<void>;
   deleteEvent: (data: string) => Promise<void>;
 }
 
@@ -113,13 +114,6 @@ const service: IEventService = {
     );
     return response.data;
   },
-  updatePerformer: async (data: IUpdatePerformer): Promise<IEvent> => {
-    const response: AxiosResponse<IEvent> = await api.put(
-      '/event/performer',
-      data,
-    );
-    return response.data;
-  },
   updateClubName: async (data: IUpdateClubName): Promise<IEvent> => {
     const response: AxiosResponse<IEvent> = await api.put(
       '/event/club_name',
@@ -145,6 +139,19 @@ const service: IEventService = {
     const response: AxiosResponse<IEvent> = await api.put(
       '/event/address',
       data,
+    );
+    return response.data;
+  },
+  createPerformer: async (data: ICreatePerformer): Promise<IEvent> => {
+    const response: AxiosResponse<IEvent> = await api.post(
+      '/event/performer',
+      data,
+    );
+    return response.data;
+  },
+  deletePerformer: async (data: string): Promise<void> => {
+    const response: AxiosResponse<void> = await api.delete(
+      `/event/performer/${data}`,
     );
     return response.data;
   },

@@ -8,6 +8,7 @@ import Inbox from '@screens/App/Inbox';
 import { IUser } from '@interfaces/user';
 import { ParamListBase } from '@react-navigation/native';
 import { UpdateUserConfirmProps } from '@screens/App/User/Update/UpdateUserConfirm';
+import { CreateEventProps } from '@screens/App/CreateEvent';
 import {
   screenOptionsDefault,
   screenOptionsFriendsTitle,
@@ -21,21 +22,27 @@ import { ProfileRoutes } from '@routes/App/Profile/profile.routes';
 import { ReactRoutes } from '@routes/App/React/react.routes';
 import { IEmoji } from '@interfaces/emoji';
 import { IReact } from '@interfaces/react';
+import { IMoment } from '@interfaces/moment';
 import ReactsReceived from '@screens/App/ReactsReceived';
+import { UpdatEventPerformerProps } from '@screens/App/Event/EventManage/Update/UpdateEventPerformer';
 import { ReactUserViewRoutes } from './React/ReactUserViewRoutes';
 
 export type AppProps = NativeStackScreenProps<ParamListBase> & {
   route: {
     params: {
       user: IUser;
-      onUpdateUser?: (data: IUser) => void;
-      updateUserConfirm?: UpdateUserConfirmProps;
       event?: IEvent;
-      onUpdateEvent?: (data: IEvent) => void;
+      createEvent?: CreateEventProps;
+      updateUserConfirm?: UpdateUserConfirmProps;
       updateEventConfirm?: UpdatEventConfirmProps;
+      updateEventPerformer?: UpdatEventPerformerProps;
       user_profile?: IUser;
       user_invite?: IUser;
       user_friends?: IUser;
+      event_moments: {
+        moments: IMoment[];
+        selected_moment: IMoment;
+      };
       user_reacts_received?: IUser;
       react: {
         type: 'user' | 'event';
@@ -50,23 +57,7 @@ export type AppProps = NativeStackScreenProps<ParamListBase> & {
 
 const App = createNativeStackNavigator();
 
-const AppRoutes: React.FC<AppProps> = ({ navigation, route }) => {
-  const onUpdateUser = (data: IUser) => {
-    navigation.setParams({
-      ...route.params,
-      user: { ...route.params.user, ...data },
-    });
-  };
-  route.params.onUpdateUser = onUpdateUser;
-
-  const onUpdateEvent = (data: IEvent) => {
-    navigation.setParams({
-      ...route.params,
-      event: { ...route.params.event, ...data },
-    });
-  };
-  route.params.onUpdateEvent = onUpdateEvent;
-
+const AppRoutes: React.FC<AppProps> = ({ route }) => {
   return (
     <App.Navigator
       screenOptions={() => screenOptionsDefault({})}

@@ -52,7 +52,6 @@ const UpdateEventLocation: React.FC<AppProps> = ({ navigation, route }) => {
       <ControlledTextInput
         name="location"
         control={control}
-        icon="map-pin"
         placeholder="Informe o local do evento"
         defaultValue={event.location}
         error={errors.location}

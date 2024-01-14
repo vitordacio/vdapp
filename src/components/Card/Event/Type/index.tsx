@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Text } from '@components/Text';
-
 import assets from '@assets/index';
 import { ImageBackground, TouchableOpacity } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ParamListBase } from '@react-navigation/native';
 import { IEventType } from '@interfaces/types';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
 
-type CardProps = Partial<NativeStackScreenProps<ParamListBase>> & {
+type CardProps = AppProps & {
   eventType: IEventType;
   index: number;
 };
 
-const CardEventType = ({ eventType, index, navigation }: CardProps) => {
+const CardEventType = ({ eventType, index, navigation, route }: CardProps) => {
   const { name } = eventType;
   const [verified, setVerified] = useState<boolean>(false);
   const [customName, setCustomName] = useState<string>('');
   const [aplyMargin, setAplyMargin] = useState<boolean>(false);
   const [color, setColor] = useState<string>();
+
+  const handleGoToRequireds = () => {
+    route.params.createEvent = {
+      eventType,
+    };
+    return navigation.push('CreateEventRequireds');
+  };
 
   useEffect(() => {
     let handleVerified = false;
@@ -59,7 +64,7 @@ const CardEventType = ({ eventType, index, navigation }: CardProps) => {
       {eventType && (
         <TouchableOpacity
           style={[styles.container, aplyMargin && { marginRight: 14 }]}
-          onPress={() => navigation.push('CreateEventRequireds', { eventType })}
+          onPress={handleGoToRequireds}
         >
           {verified && (
             <ImageBackground

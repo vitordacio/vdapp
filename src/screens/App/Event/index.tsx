@@ -68,7 +68,6 @@ const Event: React.FC<AppProps> = ({ navigation, route }) => {
 
     try {
       dataEvent = await eventService.findById(event_id);
-
       setEvent(dataEvent);
 
       const handleParticipationStatus = eventParticipationHandler({

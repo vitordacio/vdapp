@@ -11,14 +11,14 @@ export default StyleSheet.create({
     backgroundColor: `${colors.BLACK}`,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   content: {
     marginLeft: 19,
     justifyContent: 'center',
     fontSize: 16,
     flexDirection: 'column',
-    width: '100%',
+    flex: 1,
   },
   name: {
     color: `${colors.TEXT_DEFAULT}`,

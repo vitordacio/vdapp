@@ -20,7 +20,7 @@ const CardUser: React.FC<AppProps & { user: IUser }> = ({
   navigation,
   route,
 }) => {
-  const { user: self, onUpdateUser } = route.params;
+  const { user: self } = route.params;
   const { throwInfo, throwError } = useMessage();
   const [friendshipLoader, setFriendshipLoader] = useState<boolean>(false);
   const [friendshipStatus, setFriendshipStatus] = useState(
@@ -69,7 +69,9 @@ const CardUser: React.FC<AppProps & { user: IUser }> = ({
       status = userFriendshipHandler(status);
       setFriendshipStatus(status);
 
-      if (updatedUser !== self) onUpdateUser(updatedUser);
+      if (updatedUser !== self) {
+        route.params.user = { ...self, ...updatedUser };
+      }
       // if (updatedProfile !== user) user = { ...user, ...updatedProfile };
       throwInfo(message);
 

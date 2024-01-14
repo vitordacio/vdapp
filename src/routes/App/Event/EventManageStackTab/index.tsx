@@ -5,6 +5,7 @@ import DeleteEvent from '@screens/App/Event/EventManage/Delete';
 import FinishEvent from '@screens/App/Event/EventManage/Finish';
 import { AppProps } from '@routes/App/app.routes';
 import { UpdateEventRoutes } from '../UpdateEventStackTab';
+import { UpdateEventPerformerRoutes } from './UpdateEventPerformerStackTab';
 
 const EventManageStackTab = createNativeStackNavigator();
 
@@ -22,6 +23,13 @@ export const EventManageRoutes: React.FC<AppProps> = ({ route }) => {
         options={{ headerShown: false }}
       >
         {props => <UpdateEventRoutes {...props} route={route} />}
+      </EventManageStackTab.Screen>
+
+      <EventManageStackTab.Screen
+        name="UpdateEventPerformer"
+        options={{ headerShown: false }}
+      >
+        {props => <UpdateEventPerformerRoutes {...props} route={route} />}
       </EventManageStackTab.Screen>
 
       <EventManageStackTab.Screen

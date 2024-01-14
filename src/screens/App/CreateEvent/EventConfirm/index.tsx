@@ -1,49 +1,43 @@
 import React, { useState } from 'react';
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
-import { ParamListBase, useRoute } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppView, View } from '@components/View';
-import { ImageBackground, ScrollView, Image } from 'react-native';
-import { ICreateEvent } from '@services/Event/IEventService';
+import { ScrollView } from 'react-native';
 import { eventService } from '@services/Event';
-import assets from '@assets/index';
-import { IEventType } from '@interfaces/types';
 import { formatTimeRange } from '@utils/formaters';
+import { AppProps } from '@routes/App/app.routes';
+import useMessage from '@contexts/message';
+import { IEvent } from '@interfaces/event';
+import { Icon } from '@components/Icon';
 import styles from './styles';
 
-type EventParams = ParamListBase & {
-  form: ICreateEvent;
-  eventType: IEventType;
-};
-
-// club_name
-// ticket_value
-// performer
-
-const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+const CreateEventConfirm: React.FC<AppProps> = ({ navigation, route }) => {
+  const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
-  const route = useRoute();
-  const { form, eventType } = route.params as EventParams;
+  const { form, eventType } = route.params.createEvent;
 
   const handleCreateEvent = async () => {
     setLoading(true);
+    let event: IEvent;
+    let message: string;
     try {
-      const event = await eventService.createEvent(form);
-
+      event = await eventService.createEvent(form);
       event.type = eventType;
 
+      message = 'Evento criado com sucesso!';
+      setLoading(false);
+    } catch (error) {
+      throwError(error.response.data.message);
+    }
+
+    if (event) {
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
-      navigation.navigate('Event', { event });
-      setLoading(false);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      route.params.event = event;
+      throwInfo(message);
+      navigation.navigate('Event');
     }
   };
 
@@ -56,71 +50,62 @@ const CreateEventConfirm: React.FC<NativeStackScreenProps<ParamListBase>> = ({
         </Text>
 
         <View style={styles.data_text}>
-          <Image
-            style={styles.icon}
-            source={assets[eventType.name]}
-            resizeMode="contain"
-            tintColor="#fff"
+          <Icon
+            name={eventType.name}
+            tintColor={eventType.verified && '#F2C94D'}
           />
+
           <Text style={[styles.text_default_color, styles.text_large]}>
             Nome: {form.name}
           </Text>
         </View>
         <View style={styles.data_text}>
-          <ImageBackground
-            style={styles.icon}
-            source={assets.location}
-            resizeMode="contain"
-            tintColor="#fff"
-          />
+          <Icon name="location" />
           <Text style={[styles.text_default_color, styles.text_large]}>
             Local: {form.location}
           </Text>
         </View>
         <View style={styles.data_text}>
-          <ImageBackground
-            style={styles.icon}
-            source={assets.clock}
-            resizeMode="contain"
-            tintColor="#fff"
-          />
+          <Icon name="clock" />
           <Text style={[styles.text_default_color, styles.text_large]}>
             Horário: {formatTimeRange(form.start_time, form.finish_time)}
           </Text>
         </View>
         <View style={styles.data_text}>
-          <ImageBackground
-            style={styles.icon}
-            source={assets.attach}
-            resizeMode="contain"
-            tintColor="#fff"
-          />
+          <Icon name="attach" />
           <Text style={[styles.text_gray_color, styles.text_large]}>
             Adicional: {form.additional || '--'}
           </Text>
         </View>
         <View style={styles.data_text}>
-          <ImageBackground
-            style={styles.icon}
-            source={assets.drink}
-            resizeMode="contain"
-            tintColor="#fff"
-          />
+          <Icon name="drink" />
           <Text style={[styles.text_gray_color, styles.text_large]}>
             Preferência de bebidas: {form.drink_preferences || '--'}
           </Text>
         </View>
         <View style={styles.data_text}>
-          <ImageBackground
-            style={styles.icon}
-            source={assets.coin}
-            resizeMode="contain"
-            tintColor="#fff"
-          />
+          <Icon name="coin" />
           <Text style={[styles.text_gray_color, styles.text_large]}>
             Valor mínimo recomendado: {form.min_amount || '--'}
           </Text>
         </View>
+
+        {eventType.verified && (
+          <>
+            <View style={styles.data_text}>
+              <Icon name="club" />
+              <Text style={[styles.text_gray_color, styles.text_large]}>
+                Nome do clube: {form.club_name || '--'}
+              </Text>
+            </View>
+            <View style={styles.data_text}>
+              <Icon name="ticket" />
+              <Text style={[styles.text_gray_color, styles.text_large]}>
+                Valor de entrada: {form.ticket_value || '--'}
+              </Text>
+            </View>
+          </>
+        )}
 
         <View style={styles.confirm_button_wrapper}>
           <Button

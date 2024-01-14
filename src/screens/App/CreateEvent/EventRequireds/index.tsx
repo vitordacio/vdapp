@@ -5,10 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput, TextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
-import { ParamListBase, useRoute } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppView, View } from '@components/View';
-import { IEventType } from '@interfaces/types';
 import {
   ScrollView,
   TouchableOpacity,
@@ -20,12 +17,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { RadioInput } from '@components/Input/RadioInput';
 import { ICreateEvent } from '@services/Event/IEventService';
 import { formatTimeRange } from '@utils/formaters';
-import useAuth from '@contexts/auth';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
-
-type EventParams = ParamListBase & {
-  eventType: IEventType;
-};
 
 const schema = yup.object({
   name: yup
@@ -40,10 +33,8 @@ const schema = yup.object({
 
 type EventFormRequireds = yup.InferType<typeof schema>;
 
-const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
-  const { user } = useAuth();
+const CreateEventRequireds: React.FC<AppProps> = ({ navigation, route }) => {
+  const { user, createEvent } = route.params;
 
   const currentTime = new Date();
   const currentFinishTime = new Date(currentTime);
@@ -59,12 +50,9 @@ const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
   const [privacy, setPrivacy] = useState(false);
 
-  const route = useRoute();
-  const { eventType } = route.params as EventParams;
-
   const handleRequireds = async (data: EventFormRequireds) => {
     const form: ICreateEvent = {
-      type_id: eventType.id_event_type,
+      type_id: createEvent.eventType.id_event_type,
       name: data.name,
       location: data.location,
       is_private: privacy,
@@ -80,7 +68,8 @@ const CreateEventRequireds: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       form.finish_time = new Date(finishTime);
     }
 
-    navigation.push('CreateEventOptionals', { form, eventType });
+    route.params.createEvent = { ...createEvent, form };
+    navigation.navigate('CreateEventOptionals');
   };
 
   const toggleStartDatepicker = () => {

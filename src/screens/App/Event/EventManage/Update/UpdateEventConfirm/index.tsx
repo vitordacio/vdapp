@@ -11,7 +11,6 @@ import {
   IUpdateAdditional,
   IUpdateMinAmount,
   IUpdateClubName,
-  IUpdatePerformer,
   IUpdateTicketsFree,
   IUpdateTicketsValue,
 } from '@services/Event/IEventService';
@@ -31,7 +30,6 @@ export type UpdatEventConfirmProps = {
     | IUpdateAdditional
     | IUpdateDrinkPreferences
     | IUpdateMinAmount
-    | IUpdatePerformer
     | IUpdateClubName
     | IUpdateTicketsValue
     | IUpdateTicketsFree
@@ -44,7 +42,6 @@ export type UpdatEventConfirmProps = {
     | 'additional'
     | 'drink_preferences'
     | 'min_amount'
-    | 'performer'
     | 'club_name'
     | 'tickets_value'
     | 'tickets_free'
@@ -55,7 +52,7 @@ export const UpdateEventConfirm: React.FC<AppProps> = ({
   navigation,
   route,
 }) => {
-  const { onUpdateEvent, updateEventConfirm } = route.params;
+  const { updateEventConfirm } = route.params;
 
   const { throwInfo, throwError } = useMessage();
   const [loading, setLoading] = useState(false);
@@ -107,12 +104,7 @@ export const UpdateEventConfirm: React.FC<AppProps> = ({
         );
         message = 'Valor mínimo recomendado alterado com sucesso!';
       }
-      if (type === 'performer') {
-        updatedEvent = await eventService.updatePerformer(
-          data as IUpdatePerformer,
-        );
-        message = 'Artista alterado com sucesso!';
-      }
+
       if (type === 'club_name') {
         updatedEvent = await eventService.updateClubName(
           data as IUpdateClubName,
@@ -136,7 +128,7 @@ export const UpdateEventConfirm: React.FC<AppProps> = ({
     }
 
     if (updatedEvent) {
-      onUpdateEvent(updatedEvent);
+      route.params.event = updatedEvent;
       throwInfo(message);
     }
 

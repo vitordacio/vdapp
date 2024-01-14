@@ -5,19 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ControlledTextInput } from '@components/Input/TextInput';
 import { Button } from '@components/Button';
 import { Text } from '@components/Text';
-import { ParamListBase, useRoute } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppView, View } from '@components/View';
 import { ScrollView, TextInput } from 'react-native';
 import { ICreateEvent } from '@services/Event/IEventService';
-import { IEventType } from '@interfaces/types';
 import colors from '@styles/colors';
+import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
-
-type EventParams = ParamListBase & {
-  form: ICreateEvent;
-  eventType: IEventType;
-};
 
 const schema = yup.object({
   additional: yup
@@ -30,25 +23,23 @@ const schema = yup.object({
 
 type EventFormOptionals = yup.InferType<typeof schema>;
 
-const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+const CreateEventOptionals: React.FC<AppProps> = ({ navigation, route }) => {
   const [moneyValue, setMoneyValue] = useState('');
   const [isMinAmountFocused, setIsMinAmountFocused] = useState(false);
   const [isMinAmountFilled, setIsMinAmountFilled] = useState(false);
 
-  const route = useRoute();
-  const { form: formRequireds, eventType } = route.params as EventParams;
+  const { form: formRequireds, eventType } = route.params.createEvent;
 
   const handleOptionals = async (data: EventFormOptionals) => {
     const form: ICreateEvent = {
       ...formRequireds,
       additional: data.additional,
       drink_preferences: data.drink_preferences,
-      min_amount: !moneyValue.includes('NaN') ? moneyValue : undefined,
+      min_amount: moneyValue || undefined,
     };
 
-    navigation.push('CreateEventConfirm', { form, eventType });
+    route.params.createEvent = { eventType, form };
+    navigation.navigate('CreateEventConfirm');
   };
 
   const formatMoney = (value: string) => {
@@ -56,11 +47,15 @@ const CreateEventOptionals: React.FC<NativeStackScreenProps<ParamListBase>> = ({
 
     const floatValue = parseFloat(numericValue) / 100;
 
-    const formattedValue = floatValue.toLocaleString('pt-BR', {
+    let formattedValue = floatValue.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
       minimumFractionDigits: 2,
     });
+
+    if (formattedValue.includes('NaN')) {
+      formattedValue = formattedValue.replace('NaN', '');
+    }
 
     return formattedValue;
   };

@@ -11,4 +11,5 @@ export interface IMoment {
   author_id: string;
   author: IUser;
   event: IEvent;
+  created_at: Date;
 }

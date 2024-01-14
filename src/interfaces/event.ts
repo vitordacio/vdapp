@@ -53,4 +53,5 @@ export interface IEventPerformer {
   user?: IUser;
   event_id: string;
   event: IEvent;
+  created_at: Date;
 }

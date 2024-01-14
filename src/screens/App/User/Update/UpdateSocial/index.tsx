@@ -16,7 +16,6 @@ import useMessage from '@contexts/message';
 import { ICreateSocial } from '@services/User/IUserService';
 import { Social } from '@components/Socials';
 import { Loading } from '@components/View/Loading';
-import generalstyle from '../styles';
 import styles from './styles';
 
 const schema = yup.object({

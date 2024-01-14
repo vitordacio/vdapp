@@ -6,7 +6,6 @@ import UpdateEventDrinkPreferences from '@screens/App/Event/EventManage/Update/U
 import UpdateEventLocation from '@screens/App/Event/EventManage/Update/UpdateEventLocation';
 import UpdateEventMinAmount from '@screens/App/Event/EventManage/Update/UpdateEventMinAmount';
 import UpdateEventName from '@screens/App/Event/EventManage/Update/UpdateEventName';
-import UpdateEventPerformer from '@screens/App/Event/EventManage/Update/UpdateEventPerformer';
 import UpdateEventPrivacy from '@screens/App/Event/EventManage/Update/UpdateEventPrivacy';
 import UpdateEventTicketsFree from '@screens/App/Event/EventManage/Update/UpdateEventTicketsFree';
 import UpdateEventTicketsValue from '@screens/App/Event/EventManage/Update/UpdateEventTicketsValue';
@@ -52,10 +51,6 @@ export const UpdateEventRoutes: React.FC<AppProps> = ({ route }) => {
 
       <UpdateEventStackTab.Screen name="UpdateEventMinAmount">
         {props => <UpdateEventMinAmount {...props} route={route} />}
-      </UpdateEventStackTab.Screen>
-
-      <UpdateEventStackTab.Screen name="UpdateEventPerformer">
-        {props => <UpdateEventPerformer {...props} route={route} />}
       </UpdateEventStackTab.Screen>
 
       <UpdateEventStackTab.Screen name="UpdateEventClubName">

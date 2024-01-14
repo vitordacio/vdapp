@@ -54,13 +54,9 @@ export const BottomTabRoutes: React.FC<AppProps> = ({ route }) => {
         {props => <SearchRoutes {...props} route={route} />}
       </BottomTab.Screen>
 
-      <BottomTab.Screen
-        name="CreateEvent"
-        component={CreateEventRoutes}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <BottomTab.Screen name="CreateEvent" options={{ headerShown: false }}>
+        {props => <CreateEventRoutes {...props} route={route} />}
+      </BottomTab.Screen>
 
       <BottomTab.Screen
         name="Notifications"

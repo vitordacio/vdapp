@@ -1,7 +1,5 @@
 import { Text } from '@components/Text';
 import { AppView, View } from '@components/View';
-import { ParamListBase } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, ScrollView } from 'react-native';
 import { IEventType } from '@interfaces/types';
@@ -9,11 +7,16 @@ import { eventService } from '@services/Event';
 import CardEventType from '@components/Card/Event/Type';
 import useMessage from '@contexts/message';
 import { Loading } from '@components/View/Loading';
+import { AppProps } from '@routes/App/app.routes';
+import { ICreateEvent } from '@services/Event/IEventService';
 import styles from './styles';
 
-const CreateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
-  navigation,
-}) => {
+export type CreateEventProps = {
+  eventType: IEventType;
+  form?: ICreateEvent;
+};
+
+const CreateEvent: React.FC<AppProps> = ({ navigation, route }) => {
   const { throwError } = useMessage();
   const [data, setData] = useState<IEventType[] | []>([]);
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -36,7 +39,12 @@ const CreateEvent: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   const renderItem = useCallback(
     ({ item, index }) => {
       return (
-        <CardEventType navigation={navigation} eventType={item} index={index} />
+        <CardEventType
+          route={route}
+          navigation={navigation}
+          eventType={item}
+          index={index}
+        />
       );
     },
     [data],

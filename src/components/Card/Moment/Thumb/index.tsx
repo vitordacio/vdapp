@@ -2,19 +2,18 @@ import { Pressable } from '@components/Pressable';
 import React from 'react';
 import { Image } from 'react-native';
 import { IMoment } from '@interfaces/moment';
-import useMessage from '@contexts/message';
 import { AppProps } from '@routes/App/app.routes';
 import styles from './styles';
 
-const CardMomentThumb: React.FC<AppProps & { moment: IMoment }> = ({
-  moment,
-  // navigation,
-  // route,
-}) => {
-  const { throwInfo } = useMessage();
-
+const CardMomentThumb: React.FC<
+  AppProps & { moment: IMoment; moments: IMoment[] }
+> = ({ moment, moments, navigation, route }) => {
   const handleOnPress = () => {
-    throwInfo('on press');
+    route.params.event_moments = {
+      moments,
+      selected_moment: moment,
+    };
+    return navigation.push('EventMoments');
   };
 
   return (
