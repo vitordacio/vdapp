@@ -65,6 +65,8 @@ import mic from './mic.svg';
 import achievement from './achievement.svg';
 import club from './club.svg';
 import moments from './moments.svg';
+import eye from './eye.svg';
+import eye_off from './eye_off.svg';
 
 import ongoing from './Animation/ongoing.json';
 import loading from './Animation/loading.json';
@@ -138,4 +140,6 @@ export default {
   achievement,
   club,
   moments,
+  eye,
+  eye_off,
 };

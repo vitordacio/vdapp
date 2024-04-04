@@ -113,7 +113,7 @@ export const TextInput = ({
             onPress={() => setIsSecurity(!isSecurity)}
           >
             <Icon
-              name={isSecurity ? 'eye' : 'eye-off'}
+              name={isSecurity ? 'eye' : 'eye_off'}
               size={24}
               tintColor={
                 isFocused || isFilled
