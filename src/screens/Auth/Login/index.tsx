@@ -10,9 +10,9 @@ import { Text } from '@components/Text';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
+  // TouchableWithoutFeedback,
+  // Keyboard,
+  // KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
@@ -53,60 +53,64 @@ const Login: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   return (
     <AppView>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <KeyboardAvoidingView behavior="position" enabled>
-            <Button
-              title="Entrar com Google"
-              type="social"
-              onPress={handleGoogle}
-            />
-            <View style={styles.transition}>
-              <View style={styles.half_line} />
-              <Text style={styles.or}>OU</Text>
-              <View style={styles.half_line} />
-            </View>
-            <>
-              <ControlledTextInput
-                name="login"
-                title="E-mail ou nome de usuário"
-                control={control}
-                icon="mail"
-                placeholder="E-mail ou nome de usuário"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                error={errors.login}
-              />
-              <ControlledTextInput
-                name="password"
-                title="Senha"
-                control={control}
-                icon="lock"
-                placeholder="Senha"
-                autoCapitalize="none"
-                autoCorrect={false}
-                secureTextEntry
-                error={errors.password}
-              />
-              {loginError && (
-                <Text style={{ color: 'red', textAlign: 'center' }}>
-                  {loginError}
-                </Text>
-              )}
-              <Button
-                title="Entrar"
-                onPress={handleSubmit(handleLogin)}
-                style={styles.button}
-              />
-            </>
+        {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+        {/* <KeyboardAvoidingView behavior="position" enabled> */}
 
-            <Text style={styles.signup_text}>
-              Não tem uma conta?
-              <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
-                <Text style={styles.signup_link}> Criar Conta</Text>
-              </TouchableOpacity>
+        <>
+          <ControlledTextInput
+            name="login"
+            title="E-mail ou nome de usuário"
+            control={control}
+            icon="mail"
+            placeholder="E-mail ou nome de usuário"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            error={errors.login}
+          />
+          <ControlledTextInput
+            name="password"
+            title="Senha"
+            control={control}
+            icon="lock"
+            placeholder="Senha"
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry
+            error={errors.password}
+          />
+          {loginError && (
+            <Text style={{ color: 'red', textAlign: 'center' }}>
+              {loginError}
             </Text>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
+          )}
+          <Button
+            title="Entrar"
+            onPress={handleSubmit(handleLogin)}
+            style={styles.button}
+          />
+        </>
+
+        <View style={styles.transition}>
+          <View style={styles.half_line} />
+          <Text style={styles.or}>OU</Text>
+          <View style={styles.half_line} />
+        </View>
+
+        <Button
+          title="Entrar com Google"
+          type="social"
+          onPress={handleGoogle}
+        />
+
+        <Text style={styles.signup_text}>
+          Não tem uma conta?
+          <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
+            <Text style={styles.signup_link}> Criar Conta</Text>
+          </TouchableOpacity>
+        </Text>
+
+        {/* </KeyboardAvoidingView> */}
+        {/* </TouchableWithoutFeedback> */}
       </ScrollView>
     </AppView>
   );

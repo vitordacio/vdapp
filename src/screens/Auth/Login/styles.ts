@@ -20,21 +20,27 @@ export default StyleSheet.create({
     height: 1,
   },
   or: {
-    color: '#fff',
+    color: `${colors.WHITE}`,
     marginLeft: 16,
     marginRight: 16,
   },
   signup_text: {
-    textAlign: 'center',
-    color: `${colors.TEXT_DEFAULT}`,
-  },
-  signup_link: {
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
+    color: `${colors.TEXT_DEFAULT}`,
+    marginTop: 48,
+  },
+  signup_link: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
     color: `${colors.BLUE_LINK}`,
   },
   button: {
     marginTop: 15,
-    marginBottom: 48,
+    // marginBottom: 48,
   },
 });

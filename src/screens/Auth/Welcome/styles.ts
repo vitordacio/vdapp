@@ -7,7 +7,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#000',
+    backgroundColor: `${colors.BLACK}`,
   },
   text_welcome: { fontSize: 36, color: `${colors.WHITE}`, marginBottom: 8 },
   text_app_name: { fontSize: 48, color: `${colors.WHITE}` },
