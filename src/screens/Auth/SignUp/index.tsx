@@ -8,13 +8,7 @@ import { ControlledTextInput } from '@components/Input/TextInput';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import {
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 import { userService } from '@services/User';
 import useMessage from '@contexts/message';
 import styles from './styles';
@@ -91,82 +85,78 @@ const SignUp: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   return (
     <AppView>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <KeyboardAvoidingView behavior="position" enabled>
-            <View style={styles.container}>
-              <>
-                <ControlledTextInput
-                  control={control}
-                  icon="user"
-                  name="name"
-                  title="Nome"
-                  placeholder="Nome"
-                  error={errors.name}
-                />
+        <View style={styles.container}>
+          <>
+            <ControlledTextInput
+              control={control}
+              icon="user"
+              name="name"
+              title="Nome"
+              placeholder="Nome"
+              error={errors.name}
+            />
 
-                <ControlledTextInput
-                  name="username"
-                  title="Nome de Usuário"
-                  control={control}
-                  icon="at-sign"
-                  placeholder="Nome de Usuário"
-                  autoCapitalize="none"
-                  error={errors.username}
-                  status={handleValid}
-                  maxLength={16}
-                />
+            <ControlledTextInput
+              name="username"
+              title="Nome de Usuário"
+              control={control}
+              icon="at-sign"
+              placeholder="Nome de Usuário"
+              autoCapitalize="none"
+              error={errors.username}
+              status={handleValid}
+              maxLength={16}
+            />
 
-                <ControlledTextInput
-                  name="email"
-                  title="E-mail"
-                  control={control}
-                  icon="mail"
-                  placeholder="E-mail"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  error={errors.email}
-                />
+            <ControlledTextInput
+              name="email"
+              title="E-mail"
+              control={control}
+              icon="mail"
+              placeholder="E-mail"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              error={errors.email}
+            />
 
-                <ControlledTextInput
-                  control={control}
-                  name="password"
-                  title="Senha"
-                  placeholder="Senha"
-                  icon="lock"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  secureTextEntry
-                  error={errors.password}
-                />
+            <ControlledTextInput
+              control={control}
+              name="password"
+              title="Senha"
+              placeholder="Senha"
+              icon="lock"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry
+              error={errors.password}
+            />
 
-                <ControlledTextInput
-                  control={control}
-                  name="password_confirm"
-                  title="Confirmar Senha"
-                  placeholder="Confirmar Senha"
-                  icon="lock"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  secureTextEntry
-                  error={errors.password_confirm}
-                />
+            <ControlledTextInput
+              control={control}
+              name="password_confirm"
+              title="Confirmar Senha"
+              placeholder="Confirmar Senha"
+              icon="lock"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry
+              error={errors.password_confirm}
+            />
 
-                <Button
-                  title="Criar Conta"
-                  onPress={handleSubmit(handleSignUp)}
-                  style={styles.button}
-                />
-              </>
+            <Button
+              title="Criar Conta"
+              onPress={handleSubmit(handleSignUp)}
+              style={styles.button}
+            />
+          </>
 
-              <Text style={styles.login_text}>
-                Já tem uma conta?
-                <TouchableOpacity onPress={() => navigation.replace('Login')}>
-                  <Text style={styles.login_link}> Entrar</Text>
-                </TouchableOpacity>
-              </Text>
-            </View>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
+          <Text style={styles.login_text}>
+            Já tem uma conta?
+            <TouchableOpacity onPress={() => navigation.replace('Login')}>
+              <Text style={styles.login_link}> Entrar</Text>
+            </TouchableOpacity>
+          </Text>
+        </View>
       </ScrollView>
     </AppView>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { Message } from '@components/Message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaView, ViewProps } from 'react-native';
+import { SafeAreaView, StatusBar, ViewProps } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { MessageProvider } from '@contexts/message';
 import { EventProvider } from '@contexts/event';
@@ -17,6 +17,7 @@ const RoutesView: React.FC<ViewProps> = ({ children }) => {
             backgroundColor: 'transparent',
           }}
         >
+          <StatusBar barStyle="light-content" backgroundColor="black" />
           <EventProvider>
             <MessageProvider>
               <Message />

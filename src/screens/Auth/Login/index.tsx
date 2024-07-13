@@ -53,42 +53,37 @@ const Login: React.FC<NativeStackScreenProps<ParamListBase>> = ({
   return (
     <AppView>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-        {/* <KeyboardAvoidingView behavior="position" enabled> */}
-
-        <>
-          <ControlledTextInput
-            name="login"
-            title="E-mail ou nome de usuário"
-            control={control}
-            icon="mail"
-            placeholder="E-mail ou nome de usuário"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            error={errors.login}
-          />
-          <ControlledTextInput
-            name="password"
-            title="Senha"
-            control={control}
-            icon="lock"
-            placeholder="Senha"
-            autoCapitalize="none"
-            autoCorrect={false}
-            secureTextEntry
-            error={errors.password}
-          />
-          {loginError && (
-            <Text style={{ color: 'red', textAlign: 'center' }}>
-              {loginError}
-            </Text>
-          )}
-          <Button
-            title="Entrar"
-            onPress={handleSubmit(handleLogin)}
-            style={styles.button}
-          />
-        </>
+        <ControlledTextInput
+          name="login"
+          title="E-mail ou nome de usuário"
+          control={control}
+          icon="mail"
+          placeholder="E-mail ou nome de usuário"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          error={errors.login}
+        />
+        <ControlledTextInput
+          name="password"
+          title="Senha"
+          control={control}
+          icon="lock"
+          placeholder="Senha"
+          autoCapitalize="none"
+          autoCorrect={false}
+          secureTextEntry
+          error={errors.password}
+        />
+        {loginError && (
+          <Text style={{ color: 'red', textAlign: 'center' }}>
+            {loginError}
+          </Text>
+        )}
+        <Button
+          title="Entrar"
+          onPress={handleSubmit(handleLogin)}
+          style={styles.button}
+        />
 
         <View style={styles.transition}>
           <View style={styles.half_line} />
@@ -108,9 +103,6 @@ const Login: React.FC<NativeStackScreenProps<ParamListBase>> = ({
             <Text style={styles.signup_link}> Criar Conta</Text>
           </TouchableOpacity>
         </Text>
-
-        {/* </KeyboardAvoidingView> */}
-        {/* </TouchableWithoutFeedback> */}
       </ScrollView>
     </AppView>
   );
