@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '@screens/Auth/Login';
 import SignUp from '@screens/Auth/SignUp';
-import TestDate from '@screens/Auth/TestDate';
 import Welcome from '@screens/Auth/Welcome';
 import { screenOptionsDefault } from '@styles/screenOptions';
 
@@ -29,11 +28,6 @@ const AuthRoutes: React.FC = () => {
         name="SignUp"
         component={SignUp}
         options={{ headerTitle: 'Criar Conta' }}
-      />
-      <Auth.Screen
-        name="TestDate"
-        component={TestDate}
-        options={{ headerTitle: 'TestDate' }}
       />
     </Auth.Navigator>
   );

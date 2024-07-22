@@ -18,10 +18,6 @@ const Welcome: React.FC<NativeStackScreenProps<ParamListBase>> = ({
       <View style={styles.buttons}>
         <Button title="Entrar" onPress={() => navigation.navigate('Login')} />
         <Button
-          title="TestDate"
-          onPress={() => navigation.navigate('TestDate')}
-        />
-        <Button
           title="Criar Conta"
           onPress={() => navigation.navigate('SignUp')}
           type="dark"
